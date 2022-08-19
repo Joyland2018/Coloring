@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>cat_bottle_block</key>
+	<string>{-58,-9.5}</string>
+	<key>cat_beard_block</key>
+	<string>{-43,161.7}</string>
+	<key>cat_belly_block</key>
+	<string>{-61.4,-55.8}</string>
+	<key>cat_body_block</key>
+	<string>{-33.5,4}</string>
+	<key>cat_line</key>
+	<string>{-47,-8}</string>
+</dict>
+</plist>

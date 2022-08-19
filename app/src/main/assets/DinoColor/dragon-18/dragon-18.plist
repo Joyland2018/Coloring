@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fox_star_block</key>
+	<string>{-74.5,-162.6}</string>
+	<key>fox_slide_block</key>
+	<string>{-82,-138.5}</string>
+	<key>fox_body2_block</key>
+	<string>{3,-6}</string>
+	<key>fox_body1_block</key>
+	<string>{11.8,3.5}</string>
+	<key>fox_line</key>
+	<string>{-50,-6}</string>
+</dict>
+</plist>

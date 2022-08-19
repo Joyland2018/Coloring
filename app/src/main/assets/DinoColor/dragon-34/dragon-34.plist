@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>cow_fire1_block</key>
+	<string>{-207,88}</string>
+	<key>cow_fire_block</key>
+	<string>{-208,182}</string>
+	<key>cow_angle_block</key>
+	<string>{-44,-12}</string>
+	<key>cow_body_block</key>
+	<string>{-30,-44.5}</string>
+	<key>cow_line</key>
+	<string>{-52,4}</string>
+</dict>
+</plist>

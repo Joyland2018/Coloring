@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ants_socks_block</key>
+	<string>{-44,-142.5}</string>
+	<key>ants_musical_block</key>
+	<string>{-126,-5}</string>
+	<key>ants_body_block</key>
+	<string>{-48.5,-9}</string>
+	<key>ants_line</key>
+	<string>{-52,-3}</string>
+</dict>
+</plist>

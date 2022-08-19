@@ -1,0 +1,3 @@
+include ':app'
+//include ':library'
+//include ':cocos2dx', ':cocos2dx/platform/third_party/android/prebuilt/libcurl', ':CocosDenshion/android'

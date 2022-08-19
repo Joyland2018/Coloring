@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>chick_cord_block</key>
+	<string>{-57.6,-158.5}</string>
+	<key>chick_belly_block</key>
+	<string>{-51.3,2.5}</string>
+	<key>chick_body_block</key>
+	<string>{-56.2,-20}</string>
+	<key>chick_line</key>
+	<string>{-50,-5}</string>
+</dict>
+</plist>

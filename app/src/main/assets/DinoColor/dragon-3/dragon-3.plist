@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PT_body_block</key>
+	<string>{3.878,-24.577}</string>
+	<key>PT_beely_block</key>
+	<string>{16.978,-10.39}</string>
+	<key>PT_horn_block</key>
+	<string>{-101.526,252.439}</string>
+	<key>PT_wing_block</key>
+	<string>{-17.806,-53.64}</string>
+	<key>PT_tongue_block</key>
+	<string>{5.627,114.815}</string>
+	<key>PT_line</key>
+	<string>{-19,-3}</string>
+</dict>
+</plist>

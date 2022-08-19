@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>horse_ear_block</key>
+	<string>{-56,29}</string>
+	<key>horse_hair_block</key>
+	<string>{6.4,0.5}</string>
+	<key>horse_body_block</key>
+	<string>{-65,-3.5}</string>
+	<key>horse_line</key>
+	<string>{-54,-3}</string>
+</dict>
+</plist>

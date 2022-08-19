@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>panda_ball_block</key>
+	<string>{-23,-62}</string>
+	<key>panda_flower_block</key>
+	<string>{-18.5,-52.5}</string>
+	<key>panda_body_block</key>
+	<string>{-59.5,98}</string>
+	<key>panda_line</key>
+	<string>{-49,0}</string>
+</dict>
+</plist>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>leopard_ear_block</key>
+	<string>{-48,81}</string>
+	<key>leopard_blind_block</key>
+	<string>{-45,68}</string>
+	<key>leopard_ball_block</key>
+	<string>{-44,-186}</string>
+	<key>leopard_board_block</key>
+	<string>{-45,-145}</string>
+	<key>leopard_balloon_block</key>
+	<string>{-50,147}</string>
+	<key>leopard_belly_block</key>
+	<string>{-20,-48}</string>
+	<key>leopard_body_block</key>
+	<string>{-42.5,-18.5}</string>
+	<key>leopard_line</key>
+	<string>{-50,-1}</string>
+</dict>
+</plist>

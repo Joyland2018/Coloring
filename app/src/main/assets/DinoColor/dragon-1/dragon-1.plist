@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>TR_body_block</key>
+	<string>{21.15,-169.672}</string>
+	<key>TR_pattern_block</key>
+	<string>{1.53,-194.289}</string>
+	<key>TR_belly_block</key>
+	<string>{26.721,-198.454}</string>
+	<key>TR_horn_block</key>
+	<string>{-46.936,122.815}</string>
+	<key>TR_head_block</key>
+	<string>{-44.969,24.336}</string>
+	<key>TR_face_block</key>
+	<string>{-24.033,-17.266}</string>
+	<key>TR_mouth_block</key>
+	<string>{-22.632,-66.602}</string>
+	<key>TR_line</key>
+	<string>{-19,-3}</string>
+</dict>
+</plist>

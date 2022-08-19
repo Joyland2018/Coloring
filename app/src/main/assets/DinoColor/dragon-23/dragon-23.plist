@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>kangaroo_nose_block</key>
+	<string>{-65,125}</string>
+	<key>kangaroo_bed1_block</key>
+	<string>{-51,-98}</string>
+	<key>kangaroo_bed_block</key>
+	<string>{-51,-145}</string>
+	<key>kangaroo_belly_block</key>
+	<string>{-62,62}</string>
+	<key>kangaroo_body_block</key>
+	<string>{-53,58}</string>
+	<key>kangaroo_line</key>
+	<string>{-51,5}</string>
+</dict>
+</plist>

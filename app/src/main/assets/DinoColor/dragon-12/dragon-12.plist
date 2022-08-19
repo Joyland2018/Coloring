@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>camel_plate_block</key>
+	<string>{-49.5,76.5}</string>
+	<key>camel_hair_block</key>
+	<string>{-49,-37}</string>
+	<key>camel_belly_block</key>
+	<string>{-59,-60}</string>
+	<key>camel_body_block</key>
+	<string>{-62.5,-20}</string>
+	<key>camel_line</key>
+	<string>{-53,0}</string>
+</dict>
+</plist>

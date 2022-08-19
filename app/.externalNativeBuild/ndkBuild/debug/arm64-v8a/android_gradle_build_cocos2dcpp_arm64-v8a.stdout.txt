@@ -1,0 +1,37 @@
+Android NDK: WARNING: Ignoring unknown import directory: /Users/lixiaofei/AndroidStudioProjects/JoyLand/app/src/main/jni/cocos2dx/platform/third_party/android/prebuilt    
+Android NDK: WARNING: Deprecated NDK_TOOLCHAIN_VERSION value: 4.9. GCC is no longer supported and will be removed in the next release. See https://android.googlesource.com/platform/ndk/+/master/docs/ClangMigration.md.    
+Android NDK: WARNING:/Users/lixiaofei/AndroidStudioProjects/Coloring/app/src/main/jni/cocos2dx/Android.mk:cocos2dx_static: LOCAL_LDLIBS is always ignored for static libraries    
+[arm64-v8a] Compile++      : cocos2dcpp_shared <= main.cpp
+[arm64-v8a] Compile++      : cocos2dcpp_shared <= AppDelegate.cpp
+[arm64-v8a] Compile++      : cocos2dcpp_shared <= LogoScene.cpp
+[arm64-v8a] Compile++      : cocos2dcpp_shared <= GameManager.cpp
+[arm64-v8a] Compile++      : cocos2dcpp_shared <= HelloWorldScene.cpp
+[arm64-v8a] Compile++      : cocos2dcpp_shared <= BuyPage.cpp
+[arm64-v8a] Compile++      : cocos2dcpp_shared <= SelectAnimalScene.cpp
+[arm64-v8a] Compile++      : cocos2dcpp_shared <= ColorManager.cpp
+[arm64-v8a] Compile++      : cocos2dcpp_shared <= ColorCanvasView.cpp
+[arm64-v8a] Compile++      : cocos2dcpp_shared <= ChooseColorLayer.cpp
+[arm64-v8a] Compile++      : cocos2dcpp_shared <= SelectBrushLayer.cpp
+[arm64-v8a] Compile++      : cocos2dcpp_shared <= ColorSprite.cpp
+[arm64-v8a] Compile++      : cocos_extension_static <= AssetsManager.cpp
+[arm64-v8a] Compile++      : cocos_extension_static <= CCBFileLoader.cpp
+[arm64-v8a] Compile++      : cocos_extension_static <= CCBReader.cpp
+[arm64-v8a] Compile++      : cocos_extension_static <= CCControlButtonLoader.cpp
+[arm64-v8a] Compile++      : cocos_extension_static <= CCControlLoader.cpp
+[arm64-v8a] Compile++      : cocos_extension_static <= CCLabelBMFontLoader.cpp
+[arm64-v8a] Compile++      : cocos_extension_static <= CCLabelTTFLoader.cpp
+[arm64-v8a] Compile++      : cocos_extension_static <= CCLayerColorLoader.cpp
+[arm64-v8a] Compile++      : cocos_extension_static <= CCLayerGradientLoader.cpp
+[arm64-v8a] Compile++      : cocos_extension_static <= CCLayerLoader.cpp
+[arm64-v8a] Compile++      : cocos_extension_static <= CCMenuItemImageLoader.cpp
+[arm64-v8a] Compile++      : cocos_extension_static <= CCMenuItemLoader.cpp
+[arm64-v8a] Compile++      : cocos_extension_static <= CCNodeLoader.cpp
+[arm64-v8a] Compile++      : cocos_extension_static <= CCNodeLoaderLibrary.cpp
+[arm64-v8a] Compile++      : cocos_extension_static <= CCParticleSystemQuadLoader.cpp
+[arm64-v8a] Compile++      : cocos_extension_static <= CCScale9SpriteLoader.cpp
+[arm64-v8a] Compile++      : cocos_extension_static <= CCScrollViewLoader.cpp
+[arm64-v8a] Compile++      : cocos_extension_static <= CCSpriteLoader.cpp
+[arm64-v8a] Compile++      : cocos_extension_static <= CCBAnimationManager.cpp
+[arm64-v8a] Compile++      : cocos_extension_static <= CCBKeyframe.cpp
+[arm64-v8a] Compile++      : cocos_extension_static <= CCBSequence.cpp
+[arm64-v8a] Compile++      : cocos_extension_static <= CCBSequenceProperty.cpp
