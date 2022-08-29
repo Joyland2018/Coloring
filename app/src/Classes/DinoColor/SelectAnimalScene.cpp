@@ -169,11 +169,11 @@ void SelectAnimalScene::initAnimals()
 //                                                     CCCallFuncN::create(this, callfuncN_selector(SelectAnimalScene::resetAniPos)),
 //                                                     NULL));
         
-        if (i !=0 && i!=8 && i!=27 && i!=5 && i!=15 && i!=16 && i!=23 && i!=31 && i!=32 && (!CCUserDefault::sharedUserDefault()->getBoolForKey("purchased"))) {
+        if (i !=0 && i!=8 && i!=27 && (!CCUserDefault::sharedUserDefault()->getBoolForKey("purchased"))) {
             this->addLock(tmp2, i);
         }
         
-        if ((i ==0 || i==8 || i==27 || i==5 || i==15 || i==16 || i== 23 || i== 31 || i==32) && (!CCUserDefault::sharedUserDefault()->getBoolForKey("purchased"))) {
+        if ((i ==0 || i==8 || i==27) && (!CCUserDefault::sharedUserDefault()->getBoolForKey("purchased"))) {
             CCSprite* freeTag = CCSprite::create("background/free.png");
             freeTag->setPosition(ccp(tmp2->getContentSize().width-50,tmp2->getContentSize().height-20));
 //            freeTag->setScale(1.5);
