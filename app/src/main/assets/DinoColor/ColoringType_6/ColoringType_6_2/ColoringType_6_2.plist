@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>transport_crane_arm</key>
+	<string>{-80,-6}</string>
+	<key>transport_crane_head</key>
+	<string>{-80,-6}</string>
+	<key>transport_crane_window</key>
+	<string>{-80,-6}</string>
+	<key>transport_crane_door</key>
+	<string>{-80,-6}</string>
+	<key>transport_crane_part</key>
+	<string>{-80,-6}</string>
+	<key>transport_crane_chin</key>
+	<string>{-80,-6}</string>
+	<key>transport_crane_wheels</key>
+	<string>{-80,-6}</string>
+	<key>transport_crane_wheel</key>
+	<string>{-80,-6}</string>
+	<key>transport_crane_hook</key>
+	<string>{-80,-6}</string>
+	<key>transport_crane_board</key>
+	<string>{-80,-6}</string>
+	<key>coloringType_line</key>
+	<string>{-80,-6}</string>
+</dict>
+</plist>

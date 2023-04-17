@@ -4,7 +4,7 @@
 //#include "DeviceManager.h"
 #include "LogoScene.h"
 #include "SimpleAudioEngine.h"
-#include "ColorManager.h"
+#include "ColorManager.hpp"
 //#include "ColorManager.h"
 //#include "BarberShop/SalonManager.hpp"
 USING_NS_CC;

@@ -8,10 +8,11 @@
 #include "GameManager.h"
 #include "LogoScene.h"
 #include "platform/CCFileUtils.h"
+#include "SelectColorTheme.hpp"
 //#include "IceShopScene.h"
 //#include "SelectSalonAnim.hpp"
 
-#include "SelectAnimalScene.h"
+
 
 #define  LOG_TAG    "main"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
@@ -101,7 +102,7 @@ void Java_color_games_kids_free_JoyPreschool_onIAPLifetimeCallback(JNIEnv* env, 
 void Java_color_games_kids_free_JoyPreschool_onIAPChangeScene(JNIEnv* env, jobject thiz){
 //    CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(0.5, ShiningScene::sceneWithId(0), ccWHITE));
 //    if(!GameManager::sharedManager()->ShowGuide){
-        CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(0.5, SelectAnimalScene::scene(), ccWHITE));
+        CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(0.5, SelectColorTheme::scene(), ccWHITE));
 //    }
 
 }

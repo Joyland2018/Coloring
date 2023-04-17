@@ -78,7 +78,7 @@ bool HelloWorld::init()
     poszero = CCDirector::sharedDirector()->getVisibleOrigin();
     this->setKeypadEnabled(true);
     //背景
-    CCSprite* bg = CCSprite::create("background/game_bg.png");
+    CCSprite* bg = CCSprite::create("DinoColor/background/game_bg.png");
     bg->setPosition(ccp(winsize.width/2+poszero.x,winsize.height/2));
     this->addChild(bg);
 
@@ -87,10 +87,10 @@ bool HelloWorld::init()
     }
 
     //play button
-    CCSprite* tmp = CCSprite::create("background/beginButton.png");
+    CCSprite* tmp = CCSprite::create("DinoColor/background/beginButton.png");
     CCSize size = tmp->getContentSize();
     CCRect insetRect = CCRectMake(0,0,size.width-4, size.height-4);
-    CCScale9Sprite* sprite = CCScale9Sprite::create("background/beginButton.png", insetRect);
+    CCScale9Sprite* sprite = CCScale9Sprite::create("DinoColor/background/beginButton.png", insetRect);
     CCControlButton* playbut = CCControlButton::create(sprite);
     playbut->setPosition(ccp(winsize.width-130+poszero.x, 100));
     playbut->setPreferredSize(CCSize(137,139));
@@ -103,16 +103,16 @@ bool HelloWorld::init()
     ccLanguageType la = CCApplication::sharedApplication()->getCurrentLanguage();
     switch (la){
         case kLanguageFrench:
-            titleSprite = CCSprite::create("background/gameName_fr.png");
+            titleSprite = CCSprite::create("DinoColor/background/gameName_fr.png");
             break;
         case kLanguageGerman:
-            titleSprite = CCSprite::create("background/gameName_de.png");
+            titleSprite = CCSprite::create("DinoColor/background/gameName_de.png");
             break;
         case kLanguageSpanish:
-            titleSprite = CCSprite::create("background/gameName_es.png");
+            titleSprite = CCSprite::create("DinoColor/background/gameName_es.png");
             break;
         default:
-            titleSprite = CCSprite::create("background/gameName_en.png");
+            titleSprite = CCSprite::create("DinoColor/background/gameName_en.png");
             break;
     }
     titleSprite->setPosition(ccp(winsize.width/2+poszero.x, winsize.height/3*2+30));

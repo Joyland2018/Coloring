@@ -41,10 +41,15 @@ GameManager* GameManager::sharedManager()
 {
     if (!gm) {
         gm = new GameManager() ;
-        gm->minIndex = 1;
+        gm->isiphoneX = false ;
+        gm->isFullAndroidPad = false;
+        gm->lastTime = 0;
+        gm->lastMin = 0;
+        gm->selectColorPen = 0;
+        gm->iapDisplayCount = 0;
     }
-    
-    
+
+
     return gm ;
 }
 

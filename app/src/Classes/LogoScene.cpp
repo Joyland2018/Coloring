@@ -9,6 +9,7 @@
 #include "LogoScene.h"
 #include "GameManager.h"
 #include "HelloWorldScene.h"
+
 //#include "ShiningScene.h"
 //#include "IceShopScene.h"
 //#include "LandScene.h"
@@ -28,9 +29,8 @@
 #include <sys/stat.h>
 #include <vector>
 //#include "CodingStageScene.h"
-#include "SelectAnimalScene.h"
+#include "SelectColorTheme.hpp"
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-#include "DeviceManager.h"
 #endif
 
 using namespace std;
@@ -93,9 +93,7 @@ bool LogoScene::init(){
 
 void LogoScene::runGame(){
     
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    DeviceManager::sharedManager()->getIAPInfo();
-#endif
+
     if (GameManager::sharedManager()->lastTime == 0) {
         GameManager::sharedManager()->setLastTime();
     }
@@ -112,7 +110,7 @@ void LogoScene::runGame(){
 //    CCTransitionFade *action = CCTransitionFade::create(0.5, LetterCover::scene(), ccWHITE);
 //    CCTransitionFade *action = CCTransitionFade::create(0.5, WorldScene::scene(), ccWHITE);
 //    CCTransitionFade *action = CCTransitionFade::create(0.5, ClockDrogLayer::scene(), ccWHITE);
-    CCTransitionFade *action = CCTransitionFade::create(0.5, SelectAnimalScene::scene(), ccWHITE);
+    CCTransitionFade *action = CCTransitionFade::create(0.5, SelectColorTheme::scene(), ccWHITE);
 
     CCDirector::sharedDirector()->replaceScene(action);
 }

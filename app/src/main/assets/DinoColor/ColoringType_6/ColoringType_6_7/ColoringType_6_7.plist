@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>transport_submarine_part</key>
+	<string>{-100,-6}</string>
+	<key>transport_submarine_body</key>
+	<string>{-100,-6}</string>
+	<key>transport_submarine_wheel</key>
+	<string>{-100,-6}</string>
+	<key>transport_submarine_circle</key>
+	<string>{-100,-6}</string>
+	<key>transport_submarine_board</key>
+	<string>{-100,-6}</string>
+	<key>transport_submarine_head</key>
+	<string>{-100,-6}</string>
+	<key>transport_submarine_arm</key>
+	<string>{-100,-6}</string>
+	<key>transport_submarine_jing</key>
+	<string>{-100,-6}</string>
+	<key>coloringType_line</key>
+	<string>{-100,-6}</string>
+</dict>
+</plist>

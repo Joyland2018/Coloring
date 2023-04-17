@@ -1,5 +1,4 @@
 LOCAL_PATH := $(call my-dir)
-
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := cocos2dcpp_shared
@@ -12,12 +11,18 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                                       ../../Classes/GameManager.cpp \
                                       ../../Classes/HelloWorldScene.cpp \
                                       ../../Classes/BuyPage.cpp \
-                                      ../../Classes/DinoColor/SelectAnimalScene.cpp \
                                       ../../Classes/DinoColor/ColorManager.cpp \
                                       ../../Classes/DinoColor/ColorCanvasView.cpp \
                                       ../../Classes/DinoColor/ChooseColorLayer.cpp \
                                       ../../Classes/DinoColor/SelectBrushLayer.cpp \
                                       ../../Classes/DinoColor/ColorSprite/ColorSprite.cpp \
+                                      ../../Classes/DinoColor/ColorSprite/ColorNode.cpp \
+                                      ../../Classes/DinoColor/ColorSprite/ColoringClippingNode.cpp \
+                                      ../../Classes/DinoColor/SelectColorAniScene.cpp \
+                                      ../../Classes/DinoColor/SelectColorTheme.cpp \
+
+
+
 
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes \

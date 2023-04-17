@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>transport_plane_body</key>
+	<string>{-80,-6}</string>
+	<key>transport_plane_board</key>
+	<string>{-80,-6}</string>
+	<key>transport_plane_fly</key>
+	<string>{-80,-6}</string>
+	<key>transport_plane_part</key>
+	<string>{-80,-6}</string>
+	<key>coloringType_line</key>
+	<string>{-80,-6}</string>
+</dict>
+</plist>

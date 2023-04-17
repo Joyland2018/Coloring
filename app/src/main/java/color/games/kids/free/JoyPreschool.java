@@ -1,26 +1,22 @@
 /****************************************************************************
-Copyright (c) 2010-2011 cocos2d-x.org
-
-http://www.cocos2d-x.org
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
+ Copyright (c) 2010-2011 cocos2d-x.org
+ http://www.cocos2d-x.org
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
 package color.games.kids.free;
 
 import java.io.File;
@@ -33,6 +29,8 @@ import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.android.billingclient.api.ProductDetails;
+import com.android.billingclient.api.ProductDetailsResponseListener;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.AcknowledgePurchaseParams;
 import com.android.billingclient.api.AcknowledgePurchaseResponseListener;
@@ -109,22 +107,27 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedListener {
-	
-//	public SampleIapManager sampleIapManager;
-	// Does the user have the premium upgrade?
+
+    //	public SampleIapManager sampleIapManager;
+    // Does the user have the premium upgrade?
     boolean mIsPremium = false;
-	String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlPOc2kJSoxdG+kuekvqOUy2OB7f/hTw/yexNpjCkyfIjLBJq7AEG7AG3kLqSi4ulUNsMkq7d0LlBDWHLOhWF/0gQncIz0G0vaVtvPq4h3ygB1TKM/CLoKs2NqMOD4wvrGCgD8nbvAdheT20PxU9ZhDEvnbDMnu94m2lCjS5Iq+jzwo+3GHhYT+x3hWGSyvQpXTIXIM6vs83ctOND2tYhCsSYAl2LSIHucEuT5DYYcO4qFNOFg+8TdYE29wbusb9WYUS4U4XzrnBrZd4I9JZRm7KLJnVASZTVb8B6mzuxk3FkdRnNRQXBfy544kszB0uzdSDq6lUDSjXAAExpScydbwIDAQAB";
-	// The helper object
+    String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlPOc2kJSoxdG+kuekvqOUy2OB7f/hTw/yexNpjCkyfIjLBJq7AEG7AG3kLqSi4ulUNsMkq7d0LlBDWHLOhWF/0gQncIz0G0vaVtvPq4h3ygB1TKM/CLoKs2NqMOD4wvrGCgD8nbvAdheT20PxU9ZhDEvnbDMnu94m2lCjS5Iq+jzwo+3GHhYT+x3hWGSyvQpXTIXIM6vs83ctOND2tYhCsSYAl2LSIHucEuT5DYYcO4qFNOFg+8TdYE29wbusb9WYUS4U4XzrnBrZd4I9JZRm7KLJnVASZTVb8B6mzuxk3FkdRnNRQXBfy544kszB0uzdSDq6lUDSjXAAExpScydbwIDAQAB";
+    // The helper object
 //    IabHelper mHelper;
 //
     public AdManager mAdManager;
     public IAPManager mIAPManager;
-    public SkuDetails allLifetimeSkuDetails;
+    public ProductDetails allLifetimeSkuDetails;
+    public ProductDetails flashSaleSkuDetails;
+    public ProductDetails yearlySkuDetails;
+    public ProductDetails monthlySkuDetails;
+
     public int connectFailCount = 0;
     public int connectErrorCount = 0;
     public BillingClientStateListener billingClientStateListener;
-    public SkuDetailsResponseListener skuDetailsResponseListener;
-//    // Provides purchase notification while this app is running
+//    public SkuDetailsResponseListener skuDetailsResponseListener;
+public ProductDetailsResponseListener skuDetailsResponseListener;
+    //    // Provides purchase notification while this app is running
 //    IabBroadcastReceiver mBroadcastReceiver;
     // Does the user have an active subscription to the infinite gas plan?
     boolean mSubscribedToInfiniteGas = false;
@@ -139,41 +142,41 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
 
     // Used to select between purchasing gas on a monthly or yearly basis
     String mSelectedSubscriptionPeriod = "";
- // SKUs for our products: the premium upgrade (non-consumable) and gas (consumable)
+    // SKUs for our products: the premium upgrade (non-consumable) and gas (consumable)
 //    static final String SKU_PREMIUM = "premium";
 //    static final String SKU_GAS = "gas";
 
     // SKU for our subscription (infinite gas)
 //    static final String SKU_INFINITE_GAS_MONTHLY = "month.joyland.sub";
 //    static final String SKU_INFINITE_GAS_YEARLY = "year.joyland.sub";
- // (arbitrary) request code for the purchase flow
+    // (arbitrary) request code for the purchase flow
     static final int RC_REQUEST = 10001;
-    
- // How many units (1/4 tank is our unit) fill in the tank.
+
+    // How many units (1/4 tank is our unit) fill in the tank.
     static final int TANK_MAX = 4;
 
     // Current amount of gas in tank, in units
     int mTank;
-    
-	public static JoyPreschool joylandInstance;
-	public int _buySceneIndex;
-	public boolean _isBegin;
+
+    public static JoyPreschool joylandInstance;
+    public int _buySceneIndex;
+    public boolean _isBegin;
     public AdView bannerView;
     public static native void onRewardAdsCallBack();
     public InterstitialAd InterstitialAd;
     public RewardedAd RewardedAds;
     public boolean isCanGetReward;
 
-     //IAP
-//    public BillingClient billingClient;
-//    public SkuDetails noAdsSkuDetails;      //非消耗型产品ID-1
-//    public SkuDetails noAdsSkuDetails2;      //非消耗型产品ID-2
-//    public SkuDetails scripSkuDetails1;      //订阅产品ID-1
-//    public SkuDetails scripSkuDetails2;      //订阅产品ID-2
-//    public MixpanelAPI mixpanelInstance;    //埋点工具
-//    public int mBuyIndex;       //0为NoAds,1为Prime;
-//	public static String FATE_OBB_PATH = "";
-	
+    public int mBuyIndex;
+
+    public SkuDetails noAdsSkuDetails;
+    public SkuDetails primeSkuDetails;
+
+    public int mGameIndex;
+    public void cppSetTrack(String _trackStr){
+        setMixpanelTrack(_trackStr,"");
+    }
+
     protected void onCreate(Bundle savedInstanceState){
         //获取obb 路径
 //        requestPermission();
@@ -198,8 +201,8 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
 
 //		connectToTapjoy();
 //		setupIAPOnCreate();
-		
-		Log.d(TAG, "Creating IAB helper.");
+
+        Log.d(TAG, "Creating IAB helper.");
 //        mHelper = new IabHelper(this, base64EncodedPublicKey);
 //
 //        // enable debug logging (for a production application, you should set this to false).
@@ -241,8 +244,8 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
 //                }
 //            }
 //        });
-		//IAP
-		joylandInstance = this;
+        //IAP
+        joylandInstance = this;
 //        connectMixpanel();
 //        billingClient = BillingClient.newBuilder(this).enablePendingPurchases().setListener(this).build();
 //        billingClient.startConnection(new BillingClientStateListener() {
@@ -260,7 +263,7 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
 //
 //            }
 //        });
-	}
+    }
 
 //	//OBB
 //    private void requestPermission(){
@@ -304,7 +307,7 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
         String urlStr = "";
 //        switch (_index)
 //        {
-         urlStr = "https://play.google.com/store/apps/details?id=dr.dinosaur.games.kids.free";
+        urlStr = "https://play.google.com/store/apps/details?id=dr.dinosaur.games.kids.free";
 //                break;
 //        }
         try {
@@ -625,29 +628,56 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
             List<String> subscripList = new ArrayList<>();
 
             skuList.add(IAPManager.ALL_LIFETIME_PRODUCT);
-//            skuList.add(IAPManager.FLASH_SALE_PRODUCT);
-//            subscripList.add(IAPManager.SUB_YEARLY_PRODUCT);
-//            subscripList.add(IAPManager.SUB_MONTHLY_PRODUCT);
+            skuList.add(IAPManager.FLASH_SALE_PRODUCT);
+            subscripList.add(IAPManager.SUB_YEARLY_PRODUCT);
+            subscripList.add(IAPManager.SUB_MONTHLY_PRODUCT);
 
             if (skuDetailsResponseListener != null) {
                 skuDetailsResponseListener = null;
             }
-            skuDetailsResponseListener = new SkuDetailsResponseListener() {
-                @Override
-                public void onSkuDetailsResponse(BillingResult billingResult, List<SkuDetails> skuDetailsList) {
-                    if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && skuDetailsList != null) {
-                        for (SkuDetails skuDetails : skuDetailsList) {
-                            if (skuDetails != null) {
-                                if (skuDetails.getSku().equals(IAPManager.ALL_LIFETIME_PRODUCT)) {
-                                    allLifetimeSkuDetails = skuDetails;
-//                                } else if (skuDetails.getSku().equals(IAPManager.FLASH_SALE_PRODUCT)) {
-//                                    flashSaleSkuDetails = skuDetails;
-                                }
-//                                else if (skuDetails.getSku().equals(IAPManager.SUB_YEARLY_PRODUCT)) {
-//                                    yearlySkuDetails = skuDetails;
-//                                } else if (skuDetails.getSku().equals(IAPManager.SUB_MONTHLY_PRODUCT)) {
-//                                    monthlySkuDetails = skuDetails;
+//                skuDetailsResponseListener = new SkuDetailsResponseListener() {
+//                    @Override
+//                    public void onSkuDetailsResponse(BillingResult billingResult, List<SkuDetails> skuDetailsList) {
+//                        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && skuDetailsList != null) {
+//                            for (SkuDetails skuDetails : skuDetailsList) {
+//                                if (skuDetails != null) {
+//                                    if (skuDetails.getSku().equals(IAPManager.ALL_LIFETIME_PRODUCT)) {
+//                                        allLifetimeSkuDetails = skuDetails;
+//                                    } else if (skuDetails.getSku().equals(IAPManager.FLASH_SALE_PRODUCT)) {
+//                                        flashSaleSkuDetails = skuDetails;
+//                                    }
+//                                    else if (skuDetails.getSku().equals(IAPManager.SUB_YEARLY_PRODUCT)) {
+//                                        yearlySkuDetails = skuDetails;
+//                                    } else if (skuDetails.getSku().equals(IAPManager.SUB_MONTHLY_PRODUCT)) {
+//                                        monthlySkuDetails = skuDetails;
+//                                    }
 //                                }
+//                            }
+//                        }else {
+//                            String debugMsgStr = billingResult.getDebugMessage();
+////                            Toast.makeText(JoyPreschool.this,debugMsgStr,Toast.LENGTH_SHORT).show();
+//                            setMixpanelTrack(debugMsgStr,"");
+//                        }
+//                        JoyPreschool.finishLoadedItemCallback(10);
+//                    }
+//                };
+
+            skuDetailsResponseListener = new ProductDetailsResponseListener() {
+                @Override
+                public void onProductDetailsResponse(@NonNull BillingResult billingResult, @NonNull List<ProductDetails> list) {
+                    if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && list != null) {
+                        for (ProductDetails skuDetails : list) {
+                            if (skuDetails != null) {
+                                if (skuDetails.getProductId().equals(IAPManager.ALL_LIFETIME_PRODUCT)) {
+                                    allLifetimeSkuDetails = skuDetails;
+                                } else if (skuDetails.getProductId().equals(IAPManager.FLASH_SALE_PRODUCT)) {
+                                    flashSaleSkuDetails = skuDetails;
+                                }
+                                else if (skuDetails.getProductId().equals(IAPManager.SUB_YEARLY_PRODUCT)) {
+                                    yearlySkuDetails = skuDetails;
+                                } else if (skuDetails.getProductId().equals(IAPManager.SUB_MONTHLY_PRODUCT)) {
+                                    monthlySkuDetails = skuDetails;
+                                }
                             }
                         }
                     }else {
@@ -655,11 +685,12 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
 //                            Toast.makeText(JoyPreschool.this,debugMsgStr,Toast.LENGTH_SHORT).show();
                         setMixpanelTrack(debugMsgStr,"");
                     }
+                  //  JoyPreschool.finishLoadedItemCallback(10);
                 }
             };
 
-            mIAPManager.querySkuDetails(skuList, BillingClient.SkuType.INAPP, skuDetailsResponseListener);
-//            mIAPManager.querySkuDetails(subscripList, BillingClient.SkuType.SUBS, skuDetailsResponseListener);
+            mIAPManager.querySkuDetails(skuList, BillingClient.ProductType.INAPP, skuDetailsResponseListener);
+            mIAPManager.querySkuDetails(subscripList, BillingClient.ProductType.SUBS, skuDetailsResponseListener);
 
 
 //            }
@@ -669,71 +700,70 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
     public void goToBuy(int _buyIndex){
 //        int buyIndex = (int)(Math.random()*100);
 //        buyIndex = buyIndex%2;
-        if (allLifetimeSkuDetails != null && mIAPManager != null){
-            setMixpanelTrack("Show NoAds IAP","");
-            mIAPManager.lauchFlowToIAP(joylandInstance,allLifetimeSkuDetails);
-        }else if (allLifetimeSkuDetails == null && mIAPManager != null){
-            setMixpanelTrack("NoAds IAP is NULL","");
-            Toast.makeText(JoyPreschool.this,"Connect failed.Please try to restart connect Google Play.",Toast.LENGTH_SHORT).show();
-            if (mIAPManager != null){
-                queryInAPPOrScripSkuDetails();
+
+        switch (_buyIndex){
+            case 0:
+            {
+                if (allLifetimeSkuDetails != null && mIAPManager != null){
+                    setMixpanelTrack("Show NoAds IAP","");
+                    mIAPManager.lauchFlowToIAP(joylandInstance,allLifetimeSkuDetails);
+                }else if (allLifetimeSkuDetails == null && mIAPManager != null){
+                    setMixpanelTrack("NoAds IAP is NULL","");
+                    Toast.makeText(JoyPreschool.this,"Connect failed.Please try to restart connect Google Play.",Toast.LENGTH_SHORT).show();
+                    if (mIAPManager != null){
+                        queryInAPPOrScripSkuDetails();
+                    }
+                }
             }
+            break;
+            case 1:
+            {
+                if (flashSaleSkuDetails != null && mIAPManager != null){
+                    setMixpanelTrack("Show Prime IAP","");
+                    mIAPManager.lauchFlowToIAP(joylandInstance,flashSaleSkuDetails);
+                }else if (flashSaleSkuDetails == null && mIAPManager != null){
+                    setMixpanelTrack("Prime IAP is NULL","");
+                    Toast.makeText(JoyPreschool.this,"Connect failed.Please try to restart connect Google Play.",Toast.LENGTH_SHORT).show();
+                    if (mIAPManager != null){
+                        queryInAPPOrScripSkuDetails();
+                    }
+                }
+            }
+            break;
+            case 2:
+            {
+                if (yearlySkuDetails != null && mIAPManager != null){
+                    setMixpanelTrack("Show Member IAP","");
+                    mIAPManager.lauchFlowToIAP(joylandInstance,yearlySkuDetails);
+                }else if (yearlySkuDetails == null && mIAPManager != null){
+                    setMixpanelTrack("Member IAP is NULL","");
+                    Toast.makeText(JoyPreschool.this,"Connect failed.Please try to restart connect Google Play.",Toast.LENGTH_SHORT).show();
+                    if (mIAPManager != null){
+                        queryInAPPOrScripSkuDetails();
+                    }
+                }
+            }
+            break;
+            case 3:
+            {
+                if (monthlySkuDetails != null && mIAPManager != null){
+                    setMixpanelTrack("Show Member IAP","");
+                    mIAPManager.lauchFlowToIAP(joylandInstance,monthlySkuDetails);
+                }else if (monthlySkuDetails == null && mIAPManager != null){
+                    setMixpanelTrack("Member IAP is NULL","");
+                    Toast.makeText(JoyPreschool.this,"Connect failed.Please try to restart connect Google Play.",Toast.LENGTH_SHORT).show();
+                    if (mIAPManager != null){
+                        queryInAPPOrScripSkuDetails();
+                    }
+                }
+            }
+            break;
+            default:
+                break;
         }
-//        switch (_buyIndex){
-//            case 0:
-//            {
-//
-//            }
-//            break;
-//            case 1:
-//            {
-//                if (flashSaleSkuDetails != null && mIAPManager != null){
-//                    setMixpanelTrack("Show Prime IAP","");
-//                    mIAPManager.lauchFlowToIAP(joylandInstance,flashSaleSkuDetails);
-//                }else if (flashSaleSkuDetails == null && mIAPManager != null){
-//                    setMixpanelTrack("Prime IAP is NULL","");
-//                    Toast.makeText(JoyPreschool.this,"Connect failed.Please try to restart connect Google Play.",Toast.LENGTH_SHORT).show();
-//                    if (mIAPManager != null){
-//                        queryInAPPOrScripSkuDetails();
-//                    }
-//                }
-//            }
-//            break;
-//            case 2:
-//            {
-//                if (yearlySkuDetails != null && mIAPManager != null){
-//                    setMixpanelTrack("Show Member IAP","");
-//                    mIAPManager.lauchFlowToIAP(joylandInstance,yearlySkuDetails);
-//                }else if (yearlySkuDetails == null && mIAPManager != null){
-//                    setMixpanelTrack("Member IAP is NULL","");
-//                    Toast.makeText(JoyPreschool.this,"Connect failed.Please try to restart connect Google Play.",Toast.LENGTH_SHORT).show();
-//                    if (mIAPManager != null){
-//                        queryInAPPOrScripSkuDetails();
-//                    }
-//                }
-//            }
-//            break;
-//            case 3:
-//            {
-//                if (monthlySkuDetails != null && mIAPManager != null){
-//                    setMixpanelTrack("Show Member IAP","");
-//                    mIAPManager.lauchFlowToIAP(joylandInstance,monthlySkuDetails);
-//                }else if (monthlySkuDetails == null && mIAPManager != null){
-//                    setMixpanelTrack("Member IAP is NULL","");
-//                    Toast.makeText(JoyPreschool.this,"Connect failed.Please try to restart connect Google Play.",Toast.LENGTH_SHORT).show();
-//                    if (mIAPManager != null){
-//                        queryInAPPOrScripSkuDetails();
-//                    }
-//                }
-//            }
-//            break;
-//            default:
-//                break;
-//        }
 
 
     }
-
     Runnable onBuyProductThread = new Runnable() {
         @Override
         public void run() {
@@ -1266,13 +1296,13 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
 
 
     //激励视频
-     public void createAndLoadRewardedAds(){
+    public void createAndLoadRewardedAds(){
 //         if (RewardedAds!=null){                                                                 //强制设置为空
 //             RewardedAds = null;
 //         }
 //         RewardedAds = new RewardedAd(this, "ca-app-pub-1842167763606474/7493016755");
 //         loadRewardedAds();
-     }
+    }
 //
 //     public void loadRewardedAds(){
 //         RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
@@ -1431,10 +1461,10 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
 
 
     /**
-	 * Attempts to connect to Tapjoy
-	 */
+     * Attempts to connect to Tapjoy
+     */
 //	private void connectToTapjoy() {
-		// OPTIONAL: For custom startup flags.
+    // OPTIONAL: For custom startup flags.
 //		Hashtable<String, Object> connectFlags = new Hashtable<String, Object>();
 //		connectFlags.put(TapjoyConnectFlag.ENABLE_LOGGING, "true");
 //
@@ -1462,11 +1492,11 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
 //			}
 //		});
 //	}
-    
+
 //
 
-    
- // Listener that's called when we finish querying the items and subscriptions we own
+
+    // Listener that's called when we finish querying the items and subscriptions we own
 //    IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
 //        public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
 //            Log.d(TAG, "Query inventory finished.");
@@ -1539,7 +1569,7 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
 //            Log.d(TAG, "Initial inventory query finished; enabling main UI.");
 //        }
 //    };
-    
+
     /**
      * Setup for IAP SDK called from onCreate. Sets up {@link SampleIapManager}
      * to handle InAppPurchasing logic and {@link SamplePurchasingListener} for
@@ -1554,11 +1584,11 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
 //    }
 
     public Cocos2dxGLSurfaceView onCreateView() {
-    	Cocos2dxGLSurfaceView glSurfaceView = new Cocos2dxGLSurfaceView(this);
-    	// JoyPreschool should create stencil buffer
-    	glSurfaceView.setEGLConfigChooser(5, 6, 5, 0, 16, 8);
-    	
-    	return glSurfaceView;
+        Cocos2dxGLSurfaceView glSurfaceView = new Cocos2dxGLSurfaceView(this);
+        // JoyPreschool should create stencil buffer
+        glSurfaceView.setEGLConfigChooser(5, 6, 5, 0, 16, 8);
+
+        return glSurfaceView;
     }
 
     public void hideNavigationBar(){
@@ -1585,7 +1615,7 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
 //            productSkus.add(mySku.getSku());
 //        }
 //        PurchasingService.getProductData(productSkus);
-        
+
 //        Tapjoy.onActivityStart(this);
     }
     /**
@@ -1613,14 +1643,14 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
         super.onPause();
 //        sampleIapManager.deactivate();
     }
-    
+
     @Override
     protected void onStop() {
 //      Tapjoy.onActivityStop(this);
-      super.onStop();
+        super.onStop();
     }
-    
- // We're being destroyed. It's important to dispose of the helper here!
+
+    // We're being destroyed. It's important to dispose of the helper here!
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -1637,7 +1667,7 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
 //            mHelper = null;
 //        }
     }
-    
+
     /** Verifies the developer payload of a purchase. */
 //    boolean verifyDeveloperPayload(Purchase p) {
 //        String payload = p.getDeveloperPayload();
@@ -1667,9 +1697,9 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
 //
 //        return true;
 //    }
-    
+
 //    public static void onBuySomething(int itemID){
-        //do what you wanna
+    //do what you wanna
 //    	RequestId requestId = null;
 //    	Log.d(TAG, String.format("Sku===========%d", itemID));
 //        switch (itemID) {
@@ -1686,11 +1716,11 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
 //        }
 //
 //        Log.d(TAG, "onBuyMagazineClick: requestId (" + requestId + ")");
-    	
+
 //    }
-    
+
     public void onBuySomething(int itemID){
-    	Log.d(TAG, "Buy gas button clicked.");
+        Log.d(TAG, "Buy gas button clicked.");
 
         if (mSubscribedToInfiniteGas) {
             complain("No need! You're subscribed to infinite gas. Isn't that awesome?");
@@ -1720,11 +1750,11 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
 ////            setWaitScreen(false);
 //        }
     }
-    
+
     public void setBuyIndex(int _itemIndex){
-    	this._buySceneIndex = _itemIndex;
+        this._buySceneIndex = _itemIndex;
     }
-    
+
     public void alertExit(){
 //		AlertDialog alertDialog = new AlertDialog.Builder(this). 
 //             setTitle("Exit Joyland"). 
@@ -1764,12 +1794,12 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
 //			}
 //		}).create();
 //		alertDialog.show(); 
-	}
-    
+    }
+
     /**
      * Callback on failed purchase updates response
      * {@link PurchaseUpdatesRequestStatus#FAILED}
-     * 
+     *
      * @param requestId
      */
 //    public void onPurchaseUpdatesResponseFailed(final String requestId) {
@@ -1779,7 +1809,7 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
         Log.e(TAG, "**** TrivialDrive Error: " + message);
 //        alert("Error: " + message);
     }
-    
+
     void alert(String message) {
         AlertDialog.Builder bld = new AlertDialog.Builder(this);
         bld.setMessage(message);
@@ -1787,11 +1817,11 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
         Log.d(TAG, "Showing alert dialog: " + message);
         bld.create().show();
     }
-    
+
     private static final String TAG = "SampleIAPSubscriptionsApp";
     private static final String DOWNLOADTAG = "DownladAssetsManager";
-    
- // Called when consumption is complete
+
+    // Called when consumption is complete
 //    IabHelper.OnConsumeFinishedListener mConsumeFinishedListener = new IabHelper.OnConsumeFinishedListener() {
 //        public void onConsumeFinished(Purchase purchase, IabResult result) {
 //            Log.d(TAG, "Consumption finished. Purchase: " + purchase + ", result: " + result);
@@ -1875,8 +1905,8 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
 //            }
 //        }
 //    };
-    
- // "Subscribe to infinite gas" button clicked. Explain to user, then start purchase
+
+    // "Subscribe to infinite gas" button clicked. Explain to user, then start purchase
     // flow for subscription.
 //    public void onInfiniteGasButtonClicked(int itemID) {
 //        if (!mHelper.subscriptionsSupported()) {
@@ -1918,9 +1948,9 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
 //    }
 
     public void testCocos2dxAssetsManager(int _percent){
-       Log.e(DOWNLOADTAG,"downloading...."+_percent);
+        Log.e(DOWNLOADTAG,"downloading...."+_percent);
     }
-    
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
@@ -1937,10 +1967,10 @@ public class JoyPreschool extends Cocos2dxActivity implements PurchasesUpdatedLi
 //            Log.d(TAG, "onActivityResult handled by IABUtil.");
 //        }
     }
-    
+
     /**
      * Set the magazine subscription button status on UI
-     * 
+     *
      * @param productAvailable
      * @param userSubscribed
      */

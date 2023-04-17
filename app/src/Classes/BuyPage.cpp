@@ -5,6 +5,7 @@
 //  Created by LiXiaofei on 2018/2/7.
 //
 
+#include <ColorManager.hpp>
 #include "BuyPage.h"
 
 enum{
@@ -200,6 +201,7 @@ void BuyPage::initPrompt(cocos2d::CCObject *_parent){
 void BuyPage::buyClick(cocos2d::CCObject *pSender){
     this->removeAllChildrenWithCleanup(true);
     this->removeFromParentAndCleanup(true);
+    ColorManager::shared()->buyState=false;
     GameManager::sharedManager()->goToBuyIAP(0);
 }
 
@@ -225,7 +227,7 @@ void BuyPage::cancelBuy(CCObject* pSender){
     //        SelectScene* curParent = (SelectScene*)this->getParent();
     //        curParent->resetTouchScroll();
     //    }
-
+    ColorManager::shared()->buyState=false;
 
     this->removeAllChildrenWithCleanup(true);
     this->removeFromParentAndCleanup(true);

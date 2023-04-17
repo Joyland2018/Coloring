@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>pet_cat1_body</key>
+	<string>{-50,-6}</string>
+	<key>pet_cat1_foot</key>
+	<string>{-50,-6}</string>
+	<key>pet_cat1_face</key>
+	<string>{-50,-6}</string>
+	<key>pet_cat1_head</key>
+	<string>{-50,-6}</string>
+	<key>pet_cat1_mouth</key>
+	<string>{-50,-6}</string>
+	<key>pet_cat1_ear</key>
+	<string>{-50,-6}</string>
+	<key>pet_cat1_eye</key>
+	<string>{-50,-6}</string>
+	<key>coloringType_line</key>
+	<string>{-50,-6}</string>
+</dict>
+</plist>

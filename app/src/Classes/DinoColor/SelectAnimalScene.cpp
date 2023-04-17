@@ -8,18 +8,18 @@
 #include "SelectAnimalScene.h"
 #include "cocos-ext.h"
 #include "GameManager.h"
-#include "ColorManager.h"
+#include "ColorManager.hpp"
 #include "ColorCanvasView.h"
-//#include "HospitalScene.h"
+#include "HospitalScene.h"
 #include "BuyPage.h"
-//#include "PizzaManager.h"
-
+#include "PizzaManager.h"
+#include "DinoTownScene.h"
 #ifdef NEWDINO
 #include "ShiningScene.h"
 #endif
-//#if defined (NEWMAIN)
-//#include "DinoTownScene.h"
-//#endif
+#if defined (NEWMAIN)
+#include "DinoTownScene.h"
+#endif
 
 using namespace cocos2d::extension ;
 
@@ -57,26 +57,23 @@ bool SelectAnimalScene::init()
     CCPoint winCenter = GameManager::sharedManager()->getCenter();
      s = CCDirector::sharedDirector()->getVisibleSize();
     poszero = CCDirector::sharedDirector()->getVisibleOrigin();
-    CCSprite* bg = CCSprite::create("DinoColor/roles-bg.png");
-    bg->setPosition(winCenter);
-    this->addChild(bg);
-    
-    if (GameManager::sharedManager()->isIphoneX()) {
-        bg->setScale(1.3);
-    }
+//    CCSprite* bg = CCSprite::create("DinoColor/roles-bg.jpg");
+//    bg->setPosition(winCenter);
+//    this->addChild(bg);
+//
+//    if (GameManager::sharedManager()->isIphoneX()) {
+//        bg->setScale(1.3);
+//    }
    
     
-//    CCMenuItemImage* closeBtn = CCMenuItemImage::create("universal/back.png", "universal/back.png", this, menu_selector(SelectAnimalScene::backClick));
-//           //closeBtn->setScale(1.2);
-//       CCMenu* closeMenu = CCMenu::create();
-//       closeMenu->setPosition(ccp(poszero.x+50,s.height-50));
-//       closeMenu->addChild(closeBtn);
-//    this->addChild(closeMenu,999) ;
+    CCMenuItemImage* closeBtn = CCMenuItemImage::create("universal/back.png", "universal/back.png", this, menu_selector(SelectAnimalScene::backClick));
+           //closeBtn->setScale(1.2);
+       CCMenu* closeMenu = CCMenu::create();
+       closeMenu->setPosition(ccp(poszero.x+50,s.height-50));
+       closeMenu->addChild(closeBtn);
+    this->addChild(closeMenu,999) ;
     this->initAnimals();
     this->setTouchEnabled(true);
-//    if (!CCUserDefault::sharedUserDefault()->getBoolForKey("UnlockAll") && !CCUserDefault::sharedUserDefault()->getBoolForKey("purchased")) {
-//        GameManager::sharedManager()->showBanner(true);
-//    }
     return true ;
 }
 
@@ -86,7 +83,7 @@ void SelectAnimalScene::addLock(CCObject *_parent,int _index) {
     
     CCSprite* parentSpr = (CCSprite*)_parent;
     
-    CCSprite* locked = CCSprite::create(CCString::createWithFormat("background/%s.png",lockName)->getCString()) ;   //那么设置一个锁的精灵
+    CCSprite* locked = CCSprite::create(CCString::createWithFormat("iap/%s.png",lockName)->getCString()) ;   //那么设置一个锁的精灵
 //    locked->setScale(1.0) ;
     locked->setPosition(ccp(parentSpr->getContentSize().width/2, parentSpr->getContentSize().height/2-locked->getContentSize().height/3));
     locked->setTag(kLockTag);
@@ -95,112 +92,110 @@ void SelectAnimalScene::addLock(CCObject *_parent,int _index) {
 
 void SelectAnimalScene::initAnimals()
 {
-    SimpleAudioEngine::sharedEngine()->playBackgroundMusic("background/sinkBg.mp3", true);
-    //滑动屏幕
-//    containerLayer=CCLayer::create();
-//    scrollView = extension::CCScrollView::create();
-//    scrollView->setPosition(CCPointZero);
-//    scrollView->setViewSize(CCSizeMake(1136, 640));             //设置可视区域的大小
-//    containerLayer->setContentSize(CCSizeMake(1136, 3000));      //设置真实区域的大小
-////    containerLayer->setPosition(ccp(0, -3000));                  //初始位置
-//    scrollView->setContainer(containerLayer);
-////    CCLog("---%d---",ColorManager::shared()->yDis);
-//    scrollView->setContentOffset(ccp(0,ColorManager::shared()->yDis));
-//    scrollView->setTouchEnabled(true);
-//    scrollView->setDirection(cocos2d::extension::kCCScrollViewDirectionVertical);
-//    scrollView->setDelegate(this);                                 //开启代理
-//    scrollView->setBounceable(true);
-//    this->addChild(scrollView);
-//    containerLayer->setTouchEnabled(true);
-    
-//    aniPosArr = CCPointArray::create(35);
-    
-    if (ColorManager::shared()->firstPlayColor) {
-        for (int i=0; i<35; i++) {
-            for (int j=0; j<2; j++) {
-                if (j==0) {
-                    if (i<32) {
-                        ColorManager::shared()->aniPosArr[i][0]=260+200*(i%4);
-                    }else if(i>=32){
-                        ColorManager::shared()->aniPosArr[i][0]=360+200*(i%4);
-                    }else if(i>35){
-                        ColorManager::shared()->aniPosArr[i][0]=260+200*(i%4);
-                    }
-                }else if(j==1){
-                    ColorManager::shared()->aniPosArr[i][1]=420 -280*(i/4);
-                }
-
-            }
-        }
-    }
-    
-    
-    
-    float fix_w = 0 ;
-    if (GameManager::sharedManager()->isIphoneX()) {
-        fix_w = 100;
-    }else if(GameManager::sharedManager()->isAndroidPad()){
-        fix_w = -50;
-    }
-    for (int i = 0; i <35; i++) {
-          
-        CCString* name = CCString::createWithFormat("DinoColor/dinoballon/dragon-%d.png",(i+1)) ;
-        CCSprite* tmp2 = CCSprite::create(name->getCString());
-//        CCSize size2 = tmp2->getContentSize();
-//        CCRect insetRect2 = CCRectMake(2,2,size2.width-4, size2.height-4);
-//        CCScale9Sprite* sprite2 = CCScale9Sprite::create(name->getCString(), insetRect2) ;
-//        CCControlButton *button = CCControlButton::create(sprite2) ;
-//        button->setPreferredSize(size2) ;
-//        button->setTag(i+1);
-        
-//        CCLog("containHeight ====> %d",ColorManager::shared()->aniPosArr[i][1]);
-//        button->setPosition(ccp(aniPosArr[i][0], aniPosArr[i][1]));
-        tmp2->setTag(i+1);
-        if (i<32) {
-            tmp2->setPosition(ccp(260+200*(i%4)+fix_w, ColorManager::shared()->aniPosArr[i][1])) ;
-        }else if(i>=32) {
-            tmp2->setPosition(ccp(360+200*(i%4)+fix_w, ColorManager::shared()->aniPosArr[i][1])) ;
-        }
-
-        this->addChild(tmp2, 3) ;
-        
-//        containerLayer->runAction(CCMoveTo::create(600.0, ccp(0, 640)));
-//        containerLayer->runAction(CCSequence::create(CCMoveTo::create(600.0, ccp(0, 640)),
-//                                                     CCCallFuncN::create(this, callfuncN_selector(SelectAnimalScene::resetAniPos)),
-//                                                     NULL));
-        
-        if (i !=0 && i!=8 && i!=27 && (!CCUserDefault::sharedUserDefault()->getBoolForKey("purchased"))) {
-            this->addLock(tmp2, i);
-        }
-        
-        if ((i ==0 || i==8 || i==27) && (!CCUserDefault::sharedUserDefault()->getBoolForKey("purchased"))) {
-            CCSprite* freeTag = CCSprite::create("background/free.png");
-            freeTag->setPosition(ccp(tmp2->getContentSize().width-50,tmp2->getContentSize().height-20));
-//            freeTag->setScale(1.5);
-            tmp2->addChild(freeTag,9);
-        }
-        
-//        button->addTargetWithActionForControlEvents(this, cccontrol_selector(SelectAnimalScene::selectAni), CCControlEventTouchUpInside) ;//button 优先级高于ccmove
-       
-//        bubbleShake(button);
-    }
-//    if (touchEnd) {
-        scheduleUpdate();
+//    SimpleAudioEngine::sharedEngine()->playBackgroundMusic("mp3/sink/sinkBg.mp3", true);
+//    //滑动屏幕
+////    containerLayer=CCLayer::create();
+////    scrollView = extension::CCScrollView::create();
+////    scrollView->setPosition(CCPointZero);
+////    scrollView->setViewSize(CCSizeMake(1136, 640));             //设置可视区域的大小
+////    containerLayer->setContentSize(CCSizeMake(1136, 3000));      //设置真实区域的大小
+//////    containerLayer->setPosition(ccp(0, -3000));                  //初始位置
+////    scrollView->setContainer(containerLayer);
+//////    CCLog("---%d---",ColorManager::shared()->yDis);
+////    scrollView->setContentOffset(ccp(0,ColorManager::shared()->yDis));
+////    scrollView->setTouchEnabled(true);
+////    scrollView->setDirection(cocos2d::extension::kCCScrollViewDirectionVertical);
+////    scrollView->setDelegate(this);                                 //开启代理
+////    scrollView->setBounceable(true);
+////    this->addChild(scrollView);
+////    containerLayer->setTouchEnabled(true);
+//
+////    aniPosArr = CCPointArray::create(35);
+//
+//    if (ColorManager::shared()->firstPlayColor) {
+//        for (int i=0; i<43; i++) {
+//            for (int j=0; j<2; j++) {
+//                if (j==0) {
+//                    if (i<44) {
+//                        ColorManager::shared()->aniPosArr[i][0]=260+200*(i%4);
+//                    }else if(i>=44){
+//                        ColorManager::shared()->aniPosArr[i][0]=360+200*(i%4);
+//                    }else if(i>47){
+//                        ColorManager::shared()->aniPosArr[i][0]=260+200*(i%4);
+//                    }
+//                }else if(j==1){
+//                    ColorManager::shared()->aniPosArr[i][1]=420 -280*(i/4);
+//                }
+//
+//            }
+//        }
 //    }
-    
+//
+//
+//
+//    float fix_w = 0 ;
+//    if (GameManager::sharedManager()->isIphoneX()) {
+//        fix_w = 100;
+//    }
+//    for (int i = 0; i <43; i++) {
+//
+//        CCString* name = CCString::createWithFormat("DinoColor/dinoballon/dragon-%d.png",(i+1)) ;
+//        CCSprite* tmp2 = CCSprite::create(name->getCString());
+////        CCSize size2 = tmp2->getContentSize();
+////        CCRect insetRect2 = CCRectMake(2,2,size2.width-4, size2.height-4);
+////        CCScale9Sprite* sprite2 = CCScale9Sprite::create(name->getCString(), insetRect2) ;
+////        CCControlButton *button = CCControlButton::create(sprite2) ;
+////        button->setPreferredSize(size2) ;
+////        button->setTag(i+1);
+//
+////        CCLog("containHeight ====> %d",ColorManager::shared()->aniPosArr[i][1]);
+////        button->setPosition(ccp(aniPosArr[i][0], aniPosArr[i][1]));
+//        tmp2->setTag(i+1);
+//        if (i<40) {
+//            tmp2->setPosition(ccp(260+200*(i%4)+fix_w, ColorManager::shared()->aniPosArr[i][1])) ;
+//        }else if(i>=40) {
+//            tmp2->setPosition(ccp(360+200*(i%4)+fix_w, ColorManager::shared()->aniPosArr[i][1])) ;
+//        }
+//
+//        this->addChild(tmp2, 3) ;
+//
+////        containerLayer->runAction(CCMoveTo::create(600.0, ccp(0, 640)));
+////        containerLayer->runAction(CCSequence::create(CCMoveTo::create(600.0, ccp(0, 640)),
+////                                                     CCCallFuncN::create(this, callfuncN_selector(SelectAnimalScene::resetAniPos)),
+////                                                     NULL));
+//
+//        if (i !=0 && i!=8 && i!=27 && i != 32 && (!CCUserDefault::sharedUserDefault()->getBoolForKey("UnlockAll") && !CCUserDefault::sharedUserDefault()->getBoolForKey("purchased"))) {
+//            this->addLock(tmp2, i);
+//        }
+//
+//        if ((i ==0 || i==8 || i==27 || i == 32) && (!CCUserDefault::sharedUserDefault()->getBoolForKey("UnlockAll") && !CCUserDefault::sharedUserDefault()->getBoolForKey("purchased"))) {
+//            CCSprite* freeTag = CCSprite::create("dinohospital/free.png");
+//            freeTag->setPosition(ccp(tmp2->getContentSize().width-50,tmp2->getContentSize().height-20));
+////            freeTag->setScale(1.5);
+//            tmp2->addChild(freeTag,9);
+//        }
+//
+////        button->addTargetWithActionForControlEvents(this, cccontrol_selector(SelectAnimalScene::selectAni), CCControlEventTouchUpInside) ;//button 优先级高于ccmove
+//
+////        bubbleShake(button);
+//    }
+////    if (touchEnd) {
+////        scheduleUpdate();
+////    }
+//    this->schedule(schedule_selector(SelectAnimalScene::resetAniPos));
 }
 
 
 void SelectAnimalScene::update(float date){
 //    if(moveDisY==0){
-    for (int i=1; i<36; i++) {
+    for (int i=1; i<44; i++) {
         CCSprite* aniButton = (CCSprite*)this->getChildByTag(i);
 //        if (touchEnd) {
         aniButton->setPositionY(aniButton->getPosition().y+1);
-        CCLog("containHeight ====> %f",aniButton->getPosition().y);
-        if (aniButton->getPosition().y>700) {
+//        CCLog("containHeight ====> %f",aniButton->getPosition().y);
+        if (aniButton->getPosition().y>890) {
             
-                aniButton->setPositionY(-1820);
+                aniButton->setPositionY(-2200);
             
             
 //            int index = 700-aniButton->getPosition().y;
@@ -219,29 +214,32 @@ void SelectAnimalScene::update(float date){
 
 
 void SelectAnimalScene::resetAniPos(){
-    for (int i=1; i<36; i++) {
+    for (int i=1; i<44; i++) {
         CCSprite* aniButton = (CCSprite*)this->getChildByTag(i);
-        CCLog("containHeight ====> %d",ColorManager::shared()->aniPosArr[i-1][1]);
-        CCLog("containHeight ====> %f",aniButton->getPosition().y);
-        if (aniButton->getPosition().y>700) {                              //向上滑动
+//        CCLog("containHeight ====> %d",ColorManager::shared()->aniPosArr[i-1][1]);
+//        CCLog("containHeight ====> %f",aniButton->getPosition().y);
+        if (aniButton->getPosition().y>890) {                              //向上滑动
 //            aniButton->setPositionY(-1820+(moveDisY-(700-ColorManager::shared()->aniPosArr[i-1][1])));
-            int index = aniButton->getPosition().y-700;
+            int index = aniButton->getPosition().y-890;
 //            if(moveDisY==index){
 //                aniButton->setPositionY(-1820);
 //            }else
 //            if(moveDisY>=index){
                 int index1 = moveDisY+index;
-                aniButton->setPositionY(-1820+index1);
+                aniButton->setPositionY(-2200+index1);
 //            }
-        }else if(aniButton->getPosition().y<-1820){                         //向下滑动
-            int index = -1820-aniButton->getPosition().y;
+        }else if(aniButton->getPosition().y<-2200){                         //向下滑动
+            int index = -2200-aniButton->getPosition().y;
             int index1 = moveDisY-index;
 //            aniButton->setPositionY(700+(moveDisY+(-1820+ColorManager::shared()->aniPosArr[i-1][1])));
-            aniButton->setPositionY(700+index1);
-        }else if(aniButton->getPosition().y>=-1820 && aniButton->getPosition().y<=700){
-            aniButton->setPositionY(aniButton->getPosition().y+moveDisY);
+            aniButton->setPositionY(890+index1);
+        }else if(aniButton->getPosition().y>=-2200 && aniButton->getPosition().y<=890){
+            if (abs(moveDisY) < 10) {
+                aniButton->setPositionY(aniButton->getPosition().y+1);
+            }else {
+                aniButton->setPositionY(aniButton->getPosition().y+moveDisY);
+            }
         }
-        
         
         ColorManager::shared()->aniPosArr[i-1][1]=aniButton->getPosition().y;
     }
@@ -383,9 +381,7 @@ void SelectAnimalScene::selectAni(CCObject * sender)
             if (adLock != NULL) {
                 this->selectAdsOrIAP(2);
             } else {
-                if (!CCUserDefault::sharedUserDefault()->getBoolForKey("purchased")){
-                    GameManager::sharedManager()->showInterstitial();
-                }
+                
                 int tag = button->getTag() ;
                 ColorManager::shared()->m_AnimalTag = tag ;
                 CCDirector::sharedDirector()->replaceScene(CCTransitionCrossFade::create(0.5, ColorCanvasView::scene()));
@@ -401,7 +397,7 @@ void SelectAnimalScene::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent){
     CCPoint location = CCDirector::sharedDirector()->convertToGL(pTouch->getLocationInView());
     moveDisY=0;
     touchEnd=false;
-    unscheduleUpdate();
+//    unscheduleUpdate();
 }
 
 
@@ -412,14 +408,15 @@ void SelectAnimalScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
     beginPosY = preLocation.y;
     endPosY = location.y;
     moveDisY = endPosY-beginPosY;
+    this->unschedule(schedule_selector(SelectAnimalScene::resetAniPos));
     resetAniPos();
     if (!touchEnd) {
-        this->runAction(CCSequence::create(CCCallFunc::create(this, callfunc_selector(SelectAnimalScene::resetAniPos)),
-                                           
-                                           CCCallFunc::create(this, callfunc_selector(SelectAnimalScene::resetTouch)),
-                                           NULL));
+//        this->runAction(CCSequence::create(CCCallFunc::create(this, callfunc_selector(SelectAnimalScene::resetAniPos)),
+//                                           
+//                                           CCCallFunc::create(this, callfunc_selector(SelectAnimalScene::resetTouch)),
+//                                           NULL));
     }
-    unscheduleUpdate();
+//    unscheduleUpdate();
 }
 
 void SelectAnimalScene::resetTouch(){
@@ -428,7 +425,7 @@ void SelectAnimalScene::resetTouch(){
 }
 
 void SelectAnimalScene::clickMp3(){
-    SimpleAudioEngine::sharedEngine()->playEffect("background/buttonPop.mp3");
+    SimpleAudioEngine::sharedEngine()->playEffect("mp3/buttonPop.mp3");
 }
 
 void SelectAnimalScene::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent){
@@ -438,7 +435,7 @@ void SelectAnimalScene::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent){
 //        moveDisY=0;
 //    }
     
-    for (int i=1; i<36; i++) {
+    for (int i=1; i<44; i++) {
         CCSprite* aniPop = (CCSprite*)this->getChildByTag(i);
         if (aniPop && aniPop->boundingBox().containsPoint(location) && moveDisY==0) {
             aniPop->runAction(CCSequence::create(CCScaleTo::create(0.1, 1.2),
@@ -449,7 +446,12 @@ void SelectAnimalScene::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent){
                                                  NULL));
         }
     }
-    scheduleUpdate();
+//    else if(back && !back->boundingBox().containsPoint(location)){
+//            this->scheduleUpdate();
+    moveDisY = 0;
+        this->schedule(schedule_selector(SelectAnimalScene::resetAniPos));
+//    }
+//    scheduleUpdate();
 //    if (containerLayer->getPosition().y<=20) {
 //        containerLayer->runAction(CCCallFuncN::create(this, callfuncN_selector(SelectAnimalScene::resetAniPos)));
 //    }
@@ -460,11 +462,11 @@ void SelectAnimalScene::backClick()
 {
     
 //#if defined (NEWMAIN)
-//    CCTransitionCrossFade *trans = CCTransitionCrossFade::create(0.5, DinoTownScene::scene()) ;
+    CCTransitionCrossFade *trans = CCTransitionCrossFade::create(0.5, DinoTownScene::scene()) ;
 //#else
 //    CCTransitionCrossFade *trans = CCTransitionCrossFade::create(0.5, ShiningScene::sceneWithId(kCatDressTag+1)) ;
 //#endif
-//    CCDirector::sharedDirector()->replaceScene(trans) ;
+    CCDirector::sharedDirector()->replaceScene(trans) ;
 }
 
 void SelectAnimalScene::bubbleShake(cocos2d::CCObject *sender)

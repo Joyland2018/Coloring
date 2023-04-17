@@ -155,6 +155,7 @@ public:
     time_t lastMin;
 
     int minIndex;
+    int selectColorPen;
 
 private:
     void setMathInfo(int _sceneId);//设置match的配置信息
