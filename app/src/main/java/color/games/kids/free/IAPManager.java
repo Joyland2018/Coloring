@@ -26,14 +26,10 @@ public class IAPManager {
     public Context mContext;
     public String mSignatureBase64 = null;
 
-    public static final String NO_ADS_PRODUCT = "noads";
-    public static final String SUB_PRIME_PRODUCT = "prime";
-    public static final String SUB_MEMBER_PRODUCT = "member";
+
 
     public static final String ALL_LIFETIME_PRODUCT = "coloring.game.lifetime";
-    public static final String FLASH_SALE_PRODUCT = "flashsale";
-    public static final String SUB_YEARLY_PRODUCT = "dr.dino.yearly";
-    public static final String SUB_MONTHLY_PRODUCT = "dr.dino.monthly";
+
 
     public String productID;
 
@@ -91,7 +87,7 @@ public class IAPManager {
 //            params.setSkusList(_skuList).setType(_skuType);
 //
 //            mBillingClient.querySkuDetailsAsync(params.build(),listener);
-            ImmutableList<QueryProductDetailsParams.Product> productList = ImmutableList.of(QueryProductDetailsParams.Product.newBuilder().setProductId(_skuList.get(0)).setProductType(_skuType).build(), QueryProductDetailsParams.Product.newBuilder().setProductId(_skuList.get(1)).setProductType(_skuType).build());
+            ImmutableList<QueryProductDetailsParams.Product> productList = ImmutableList.of(QueryProductDetailsParams.Product.newBuilder().setProductId(_skuList.get(0)).setProductType(_skuType).build());
 
             QueryProductDetailsParams params = QueryProductDetailsParams.newBuilder().setProductList(productList).build();
 

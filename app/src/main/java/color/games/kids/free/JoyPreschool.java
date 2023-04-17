@@ -628,9 +628,7 @@ public ProductDetailsResponseListener skuDetailsResponseListener;
             List<String> subscripList = new ArrayList<>();
 
             skuList.add(IAPManager.ALL_LIFETIME_PRODUCT);
-            skuList.add(IAPManager.FLASH_SALE_PRODUCT);
-            subscripList.add(IAPManager.SUB_YEARLY_PRODUCT);
-            subscripList.add(IAPManager.SUB_MONTHLY_PRODUCT);
+
 
             if (skuDetailsResponseListener != null) {
                 skuDetailsResponseListener = null;
@@ -670,13 +668,6 @@ public ProductDetailsResponseListener skuDetailsResponseListener;
                             if (skuDetails != null) {
                                 if (skuDetails.getProductId().equals(IAPManager.ALL_LIFETIME_PRODUCT)) {
                                     allLifetimeSkuDetails = skuDetails;
-                                } else if (skuDetails.getProductId().equals(IAPManager.FLASH_SALE_PRODUCT)) {
-                                    flashSaleSkuDetails = skuDetails;
-                                }
-                                else if (skuDetails.getProductId().equals(IAPManager.SUB_YEARLY_PRODUCT)) {
-                                    yearlySkuDetails = skuDetails;
-                                } else if (skuDetails.getProductId().equals(IAPManager.SUB_MONTHLY_PRODUCT)) {
-                                    monthlySkuDetails = skuDetails;
                                 }
                             }
                         }
