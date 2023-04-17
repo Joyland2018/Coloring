@@ -625,7 +625,7 @@ public ProductDetailsResponseListener skuDetailsResponseListener;
 //                skuList.add(IAPManager.NO_ADS_PRODUCT);
 //                skuList.add(IAPManager.SUB_PRIME_PRODUCT);
 //                skuList.add(IAPManager.SUB_MEMBER_PRODUCT);
-            List<String> subscripList = new ArrayList<>();
+
 
             skuList.add(IAPManager.ALL_LIFETIME_PRODUCT);
 
@@ -681,7 +681,6 @@ public ProductDetailsResponseListener skuDetailsResponseListener;
             };
 
             mIAPManager.querySkuDetails(skuList, BillingClient.ProductType.INAPP, skuDetailsResponseListener);
-            mIAPManager.querySkuDetails(subscripList, BillingClient.ProductType.SUBS, skuDetailsResponseListener);
 
 
 //            }
