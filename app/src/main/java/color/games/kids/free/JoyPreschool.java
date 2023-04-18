@@ -525,7 +525,7 @@ public ProductDetailsResponseListener skuDetailsResponseListener;
                         if (inAppPurchaseList != null){
                             for (Purchase inAppPurchase : inAppPurchaseList){
 //                  5      if (inAppPurchase != null && (inAppPurchase.getSku().equals(IAPManager.ALL_LIFETIME_PRODUCT) || inAppPurchase.getSku().equals(IAPManager.FLASH_SALE_PRODUCT))){
-                                if (inAppPurchase != null && (IAPManager.ALL_LIFETIME_PRODUCT.equals(inAppPurchase.getSkus().get(0)))){
+                                if (inAppPurchase != null && (IAPManager.ALL_LIFETIME_PRODUCT.equals(inAppPurchase.getProducts().get(0)))){
 
                                     if (!inAppPurchase.isAcknowledged()){
                                         mIAPManager.handlePurchase(inAppPurchase,acknowledgePurchaseResponseListener);
