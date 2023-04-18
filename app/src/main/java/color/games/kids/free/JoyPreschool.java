@@ -518,7 +518,7 @@ public ProductDetailsResponseListener skuDetailsResponseListener;
 //                    }
 //                }
 
-                mIAPManager.queryPurchaseList(BillingClient.SkuType.INAPP, new PurchasesResponseListener() {
+                mIAPManager.queryPurchaseList(BillingClient.ProductType.INAPP, new PurchasesResponseListener() {
                     @Override
                     public void onQueryPurchasesResponse(@NonNull BillingResult billingResult, @NonNull List<Purchase> list) {
                         List<Purchase> inAppPurchaseList = list;
@@ -706,48 +706,7 @@ public ProductDetailsResponseListener skuDetailsResponseListener;
                 }
             }
             break;
-            case 1:
-            {
-                if (flashSaleSkuDetails != null && mIAPManager != null){
-                    setMixpanelTrack("Show Prime IAP","");
-                    mIAPManager.lauchFlowToIAP(joylandInstance,flashSaleSkuDetails);
-                }else if (flashSaleSkuDetails == null && mIAPManager != null){
-                    setMixpanelTrack("Prime IAP is NULL","");
-                    Toast.makeText(JoyPreschool.this,"Connect failed.Please try to restart connect Google Play.",Toast.LENGTH_SHORT).show();
-                    if (mIAPManager != null){
-                        queryInAPPOrScripSkuDetails();
-                    }
-                }
-            }
-            break;
-            case 2:
-            {
-                if (yearlySkuDetails != null && mIAPManager != null){
-                    setMixpanelTrack("Show Member IAP","");
-                    mIAPManager.lauchFlowToIAP(joylandInstance,yearlySkuDetails);
-                }else if (yearlySkuDetails == null && mIAPManager != null){
-                    setMixpanelTrack("Member IAP is NULL","");
-                    Toast.makeText(JoyPreschool.this,"Connect failed.Please try to restart connect Google Play.",Toast.LENGTH_SHORT).show();
-                    if (mIAPManager != null){
-                        queryInAPPOrScripSkuDetails();
-                    }
-                }
-            }
-            break;
-            case 3:
-            {
-                if (monthlySkuDetails != null && mIAPManager != null){
-                    setMixpanelTrack("Show Member IAP","");
-                    mIAPManager.lauchFlowToIAP(joylandInstance,monthlySkuDetails);
-                }else if (monthlySkuDetails == null && mIAPManager != null){
-                    setMixpanelTrack("Member IAP is NULL","");
-                    Toast.makeText(JoyPreschool.this,"Connect failed.Please try to restart connect Google Play.",Toast.LENGTH_SHORT).show();
-                    if (mIAPManager != null){
-                        queryInAPPOrScripSkuDetails();
-                    }
-                }
-            }
-            break;
+
             default:
                 break;
         }
