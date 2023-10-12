@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
     buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "color.games.kids.free"
         minSdkVersion 29
-        targetSdkVersion 31
-        versionCode  17
-        versionName "2.1"
+        targetSdkVersion 33
+        versionCode  20
+        versionName "2.5"
 //        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
 //            cmake {D:\NDKJ\android-ndk-r17c-windows-x86_64\
@@ -46,7 +46,10 @@ android {
             assets.srcDir 'src/main/assets'
         }
     }
-
+    // Temporary fix
+    packagingOptions {
+        exclude 'META-INF/com.android.tools/proguard/coroutines.pro'
+    }
 
 }
 
@@ -60,7 +63,7 @@ dependencies {
 
 //    implementation 'com.google.android.gms:play-services-ads:15.0.0'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     testImplementation 'junit:junit:4.12'
     implementation 'com.google.android.gms:play-services-ads:22.0.0'
 //    implementation 'com.google.ads.mediation:applovin:10.3.2.0'
@@ -68,9 +71,11 @@ dependencies {
 //    implementation 'com.google.ads.mediation:inmobi:9.2.0.0'
 //    implementation 'com.google.ads.mediation:ironsource:6.14.0.1.0'
     implementation 'com.android.billingclient:billing:5.1.0'
-    implementation "com.mixpanel.android:mixpanel-android:6.+"
+//    implementation "com.mixpanel.android:mixpanel-android:6.+"
     implementation 'com.android.support:multidex:1.0.3'
     implementation "com.google.guava:guava:31.0.1-android"
+    implementation 'com.google.android.gms:play-services-base:18.0.1'
+    implementation 'com.google.android.gms:play-services-tasks:18.0.1'
 //    implementation "com.google.firebase:firebase-messaging:20.1.4"
 //    implementation 'com.google.firebase:firebase-analytics:17.3.0'
 }

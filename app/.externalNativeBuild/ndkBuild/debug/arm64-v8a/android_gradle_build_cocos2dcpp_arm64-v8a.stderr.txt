@@ -1,3 +1,0 @@
-/Users/lixiaofei/AndroidStudioProjects/Coloring/app/src/main/jni/extensions/CCBReader/CCBReader.cpp:383:52: warning: multi-character character constant [-Wmultichar]
-     if(CC_SWAP_INT32_LITTLE_TO_HOST(magicBytes) != 'ccbi') {
-                                                    ^
