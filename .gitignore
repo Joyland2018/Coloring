@@ -1,0 +1,13 @@
+*.DS_Store
+/local.properties
+/build
+.externalNativeBuild
+/main/jni/cocos2dx/Android.mk
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+*.aab
+/captures
+.gradle
+.idea
+*.iml
