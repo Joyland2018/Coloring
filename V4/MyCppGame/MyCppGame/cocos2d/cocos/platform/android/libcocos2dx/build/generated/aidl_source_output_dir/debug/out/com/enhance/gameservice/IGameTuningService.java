@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Using: D:\Android\SDK\build-tools\35.0.0\aidl.exe -pD:\Android\SDK\platforms\android-28\framework.aidl -oD:\Cocos\MyCppGame\cocos2d\cocos\platform\android\libcocos2dx\build\generated\aidl_source_output_dir\debug\out -ID:\Cocos\MyCppGame\cocos2d\cocos\platform\android\libcocos2dx\src\main\aidl -ID:\Cocos\MyCppGame\cocos2d\cocos\platform\android\java\src -ID:\Cocos\MyCppGame\cocos2d\cocos\platform\android\libcocos2dx\src\debug\aidl -dC:\Users\PC\AppData\Local\Temp\aidl8617448413931618797.d D:\Cocos\MyCppGame\cocos2d\cocos\platform\android\java\src\com\enhance\gameservice\IGameTuningService.aidl
+ * Using: D:\Android\SDK\build-tools\35.0.0\aidl.exe -pD:\Android\SDK\platforms\android-28\framework.aidl -oD:\Cocos\Coloring\V4\MyCppGame\MyCppGame\cocos2d\cocos\platform\android\libcocos2dx\build\generated\aidl_source_output_dir\debug\out -ID:\Cocos\Coloring\V4\MyCppGame\MyCppGame\cocos2d\cocos\platform\android\libcocos2dx\src\main\aidl -ID:\Cocos\Coloring\V4\MyCppGame\MyCppGame\cocos2d\cocos\platform\android\java\src -ID:\Cocos\Coloring\V4\MyCppGame\MyCppGame\cocos2d\cocos\platform\android\libcocos2dx\src\debug\aidl -dC:\Users\PC\AppData\Local\Temp\aidl833094398274820106.d D:\Cocos\Coloring\V4\MyCppGame\MyCppGame\cocos2d\cocos\platform\android\java\src\com\enhance\gameservice\IGameTuningService.aidl
  */
 package com.enhance.gameservice;
 public interface IGameTuningService extends android.os.IInterface

@@ -58,10 +58,40 @@ endif()
 list(APPEND GAME_SOURCE
      Classes/AppDelegate.cpp
      Classes/HelloWorldScene.cpp
+     Classes/BuyPage.cpp
+     Classes/GameManager.cpp
+     Classes/LogoScene.cpp
+     Classes/DinoColor/ChooseColorLayer.cpp
+     Classes/DinoColor/ColorCanvasView.cpp
+     Classes/DinoColor/ColorSprite/ColoringClippingNode.cpp
+     Classes/DinoColor/ColorSprite/ColorNode.cpp
+     Classes/DinoColor/ColorSprite/ColorSprite.cpp
+     Classes/DinoColor/SelectBrushLayer.cpp
+     Classes/DinoColor/SelectColorAniScene.cpp
+     Classes/DinoColor/ColorManager.cpp
+#     Classes/DinoColor/BrushTools.cpp
+#     Classes/DinoColor/DinoColorScene.cpp
+#     Classes/DinoColor/DinoColorFastScene.cpp
+#     Classes/DinoColor/PenColorItem.cpp
      )
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
      Classes/HelloWorldScene.h
+     Classes/BuyPage.h
+     Classes/GameManager.h
+     Classes/LogoScene.h
+     Classes/DinoColor/ChooseColorLayer.hpp
+     Classes/DinoColor/ColorCanvasView.h
+     Classes/DinoColor/ColorSprite/ColoringClippingNode.h
+     Classes/DinoColor/ColorSprite/ColorNode.h
+     Classes/DinoColor/ColorSprite/ColorSprite.h
+     Classes/DinoColor/SelectBrushLayer.hpp
+     Classes/DinoColor/SelectColorAniScene.hpp
+     Classes/DinoColor/ColorManager.hpp
+#     Classes/DinoColor/BrushTools.hpp
+#     Classes/DinoColor/DinoColorScene.h
+#     Classes/DinoColor/DinoColorFastScene.hpp
+#     Classes/DinoColor/PenColorItem.hpp
      )
 
 if(ANDROID)
