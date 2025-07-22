@@ -15,11 +15,11 @@
 
 using namespace cocos2d;
 
-class LogoScene : public CCLayer {
+class LogoScene : public Layer {
 
     
 public:
-    static CCScene* scene();
+    static Scene* scene();
     
     virtual bool init();
     
@@ -29,10 +29,14 @@ public:
     virtual void onEnter();
     virtual void onExit();
     
+    bool onTouchBegan(Touch* touch, Event* event);
+    void gotoGameScene();
+    
     CREATE_FUNC(LogoScene);
     
 private:
-    void runGame();
+    bool isSetBackground;
+    int clickCount;
 };
 
 #endif /* LogoScene_h */

@@ -65,41 +65,41 @@ bool GameManager::getOpenGameTag(){
     return gameManagerInf.openGameTag;
 }
 
-CCPoint GameManager::getViewInitPos(){
-    return CCPoint(CCEGLView::sharedOpenGLView()->getVisibleOrigin().x, CCEGLView::sharedOpenGLView()->getVisibleOrigin().y);
+Vec2 GameManager::getViewInitPos(){
+    return Vec2(Director::getInstance()->getVisibleOrigin().x, Director::getInstance()->getVisibleOrigin().y);
 }
 
-CCSize GameManager::getViewVisibleSize(){
-    return CCSize(CCEGLView::sharedOpenGLView()->getVisibleSize().width, CCEGLView::sharedOpenGLView()->getVisibleSize().height);
+Size GameManager::getViewVisibleSize(){
+    return Size(Director::getInstance()->getVisibleSize().width, Director::getInstance()->getVisibleSize().height);
 }
 
-CCPoint GameManager::getLeftTopPos(){
-    CCPoint leftTopPos = CCPointZero;
-    leftTopPos = CCPoint(getViewInitPos().x, getViewInitPos().y+getViewVisibleSize().height);
+Vec2 GameManager::getLeftTopPos(){
+    Vec2 leftTopPos = Vec2::ZERO;
+    leftTopPos = Vec2(getViewInitPos().x, getViewInitPos().y+getViewVisibleSize().height);
     return leftTopPos;
 }
 
-CCPoint GameManager::getLeftBottomPos(){
-    CCPoint leftBottomPos = CCPointZero;
-    leftBottomPos = CCPoint(getViewInitPos().x, getViewInitPos().y);
+Vec2 GameManager::getLeftBottomPos(){
+    Vec2 leftBottomPos = Vec2::ZERO;
+    leftBottomPos = Vec2(getViewInitPos().x, getViewInitPos().y);
     return leftBottomPos;
 }
 
-CCPoint GameManager::getRightTopPos(){
-    CCPoint rightTopPos = CCPointZero;
-    rightTopPos = CCPoint(getViewInitPos().x+getViewVisibleSize().width, getViewInitPos().y+getViewVisibleSize().height);
+Vec2 GameManager::getRightTopPos(){
+    Vec2 rightTopPos = Vec2::ZERO;
+    rightTopPos = Vec2(getViewInitPos().x+getViewVisibleSize().width, getViewInitPos().y+getViewVisibleSize().height);
     return rightTopPos;
 }
 
-CCPoint GameManager::getRightBottomPos(){
-    CCPoint rightBottomPos = CCPointZero;
-    rightBottomPos = CCPoint(getViewInitPos().x+getViewVisibleSize().width, getViewInitPos().y);
+Vec2 GameManager::getRightBottomPos(){
+    Vec2 rightBottomPos = Vec2::ZERO;
+    rightBottomPos = Vec2(getViewInitPos().x+getViewVisibleSize().width, getViewInitPos().y);
     return rightBottomPos;
 }
 
-CCPoint GameManager::getCenter(){
-    CCPoint centerPos = CCPointZero;
-    centerPos = CCPoint(getViewInitPos().x+getViewVisibleSize().width/2, getViewInitPos().y+getViewVisibleSize().height/2);
+Vec2 GameManager::getCenter(){
+    Vec2 centerPos = Vec2::ZERO;
+    centerPos = Vec2(getViewInitPos().x+getViewVisibleSize().width/2, getViewInitPos().y+getViewVisibleSize().height/2);
     return centerPos;
 }
 
@@ -126,48 +126,47 @@ void GameManager::setResourceInfo(int _gameType){
             break;
     }
     
-    curResourceInfo = CCDictionary::createWithContentsOfFile(filePath);
-    CC_SAFE_RETAIN(curResourceInfo);
+    curResourceInfo = FileUtils::getInstance()->getValueMapFromFile(filePath);
     
 }
 
 
 void GameManager::setResourceVersion(int _index,std::string _version){
-    CCLog("<============set resource version============> %s",_version.c_str());
+    CCLOG("<============set resource version============> %s",_version.c_str());
     // _index = _index+1;
     switch (_index) {
         case kCatDressTag:
-            CCUserDefault::sharedUserDefault()->setStringForKey("CatVersion",_version.c_str());
+            UserDefault::getInstance()->setStringForKey("CatVersion",_version.c_str());
             break;
         case kMatchTag:
-            CCUserDefault::sharedUserDefault()->setStringForKey("MatchVersion",_version.c_str());
+            UserDefault::getInstance()->setStringForKey("MatchVersion",_version.c_str());
             break;
         case kUnitedStatesTag:
-            CCUserDefault::sharedUserDefault()->setStringForKey("UnitedVersion",_version.c_str());
+            UserDefault::getInstance()->setStringForKey("UnitedVersion",_version.c_str());
             break;
         case kCircusTag:
-            CCUserDefault::sharedUserDefault()->setStringForKey("CircusVersion",_version.c_str());
+            UserDefault::getInstance()->setStringForKey("CircusVersion",_version.c_str());
             break;
         case kMathTag:
-            CCUserDefault::sharedUserDefault()->setStringForKey("CircusVersion",_version.c_str());
+            UserDefault::getInstance()->setStringForKey("CircusVersion",_version.c_str());
             break;
         case kShapePuzzleTag:
-            CCUserDefault::sharedUserDefault()->setStringForKey("ShapeVersion",_version.c_str());
+            UserDefault::getInstance()->setStringForKey("ShapeVersion",_version.c_str());
             break;
         case kWorldTag:
-            CCUserDefault::sharedUserDefault()->setStringForKey("WorldVersion",_version.c_str());
+            UserDefault::getInstance()->setStringForKey("WorldVersion",_version.c_str());
             break;
         case kNumbersTag:
-            CCUserDefault::sharedUserDefault()->setStringForKey("CircusVersion",_version.c_str());
+            UserDefault::getInstance()->setStringForKey("CircusVersion",_version.c_str());
             break;
         case kWordFamilyTag:
-            CCUserDefault::sharedUserDefault()->setStringForKey("WordFamilyVersion",_version.c_str());
+            UserDefault::getInstance()->setStringForKey("WordFamilyVersion",_version.c_str());
             break;
         case kAnimalTag:
-            CCUserDefault::sharedUserDefault()->setStringForKey("CircusVersion",_version.c_str());
+            UserDefault::getInstance()->setStringForKey("CircusVersion",_version.c_str());
             break;
         case kSpellWordsTag:
-            CCUserDefault::sharedUserDefault()->setStringForKey("SpellVersion",_version.c_str());
+            UserDefault::getInstance()->setStringForKey("SpellVersion",_version.c_str());
             break;
         default:
             break;
@@ -177,41 +176,41 @@ void GameManager::setResourceVersion(int _index,std::string _version){
 std::string GameManager::getResourceVersion(int _index){
     std::string _version = "";
 
-    CCLog("<===========get resource version=============> %d",_index);
+    CCLOG("<===========get resource version=============> %d",_index);
     _index = _index - 1;
     switch (_index) {
         case kCatDressTag:
-            _version = CCUserDefault::sharedUserDefault()->getStringForKey("CatVersion");
+            _version = UserDefault::getInstance()->getStringForKey("CatVersion");
             break;
         case kMatchTag:
-            _version = CCUserDefault::sharedUserDefault()->getStringForKey("MatchVersion");
+            _version = UserDefault::getInstance()->getStringForKey("MatchVersion");
             break;
         case kUnitedStatesTag:
-            _version = CCUserDefault::sharedUserDefault()->getStringForKey("UnitedVersion");
+            _version = UserDefault::getInstance()->getStringForKey("UnitedVersion");
             break;
         case kCircusTag:
-            _version = CCUserDefault::sharedUserDefault()->getStringForKey("CircusVersion");
+            _version = UserDefault::getInstance()->getStringForKey("CircusVersion");
             break;
         case kMathTag:
-            _version = CCUserDefault::sharedUserDefault()->getStringForKey("CircusVersion");
+            _version = UserDefault::getInstance()->getStringForKey("CircusVersion");
             break;
         case kShapePuzzleTag:
-            _version = CCUserDefault::sharedUserDefault()->getStringForKey("ShapeVersion");
+            _version = UserDefault::getInstance()->getStringForKey("ShapeVersion");
             break;
         case kWorldTag:
-            _version = CCUserDefault::sharedUserDefault()->getStringForKey("WorldVersion");
+            _version = UserDefault::getInstance()->getStringForKey("WorldVersion");
             break;
         case kNumbersTag:
-            _version = CCUserDefault::sharedUserDefault()->getStringForKey("CircusVersion");
+            _version = UserDefault::getInstance()->getStringForKey("CircusVersion");
             break;
         case kWordFamilyTag:
-            _version = CCUserDefault::sharedUserDefault()->getStringForKey("WordFamilyVersion");
+            _version = UserDefault::getInstance()->getStringForKey("WordFamilyVersion");
             break;
         case kAnimalTag:
-            _version = CCUserDefault::sharedUserDefault()->getStringForKey("CircusVersion");
+            _version = UserDefault::getInstance()->getStringForKey("CircusVersion");
             break;
         case kSpellWordsTag:
-            _version = CCUserDefault::sharedUserDefault()->getStringForKey("SpellVersion");
+            _version = UserDefault::getInstance()->getStringForKey("SpellVersion");
             break;
         default:
             break;
@@ -240,18 +239,18 @@ void GameManager::initGameSystem(){
 //    
 //    WorldGameData::shareGameData();
     
-//    CCUserDefault::sharedUserDefault()->setBoolForKey("UnlockAll",true);
+//    UserDefault::getInstance()->setBoolForKey("UnlockAll",true);
     
-    CCUserDefault::sharedUserDefault()->setIntegerForKey("ClockIndex", 1);
+    UserDefault::getInstance()->setIntegerForKey("ClockIndex", 1);
     
-    int clock = CCUserDefault::sharedUserDefault()->getIntegerForKey("ClockIndex");
+    int clock = UserDefault::getInstance()->getIntegerForKey("ClockIndex");
     if (clock == 0) {
         clock = 1;
-        CCUserDefault::sharedUserDefault()->setIntegerForKey("ClockIndex", clock);
+        UserDefault::getInstance()->setIntegerForKey("ClockIndex", clock);
     }
     
-    if (!CCUserDefault::sharedUserDefault()->getIntegerForKey("GameLevel")) {
-        CCUserDefault::sharedUserDefault()->setIntegerForKey("GameLevel", 2);
+    if (!UserDefault::getInstance()->getIntegerForKey("GameLevel")) {
+        UserDefault::getInstance()->setIntegerForKey("GameLevel", 2);
     }
 }
 
@@ -281,38 +280,34 @@ void GameManager::setCurrentGameInfo(int _gameType){
             break;
     }
     
-    curGameInfo = CCDictionary::createWithContentsOfFile(filePath);
-    CC_SAFE_RETAIN(curGameInfo);
+    curGameInfo = FileUtils::getInstance()->getValueMapFromFile(filePath);
     
-    CCDictionary* curScenesInfo  = CCDictionary::createWithContentsOfFile("spellwords/mainscenes/scenesIcon/scenesInfo.plist");
+    ValueMap curScenesInfo = FileUtils::getInstance()->getValueMapFromFile("spellwords/mainscenes/scenesIcon/scenesInfo.plist");
         
-    sceneKeys = (CCArray*)curScenesInfo->objectForKey(infoKey);
-    CC_SAFE_RETAIN(sceneKeys);
+    sceneKeys = curScenesInfo.at(infoKey).asValueVector();
     
-    CCDictionary* curScenesKeyInfo  = CCDictionary::createWithContentsOfFile("spellwords/mainscenes/scenesInfo.plist");
+    ValueMap curScenesKeyInfo = FileUtils::getInstance()->getValueMapFromFile("spellwords/mainscenes/scenesInfo.plist");
     
-    sceneIndexKeys = (CCArray*)curScenesKeyInfo->objectForKey(infoKey);
-    CC_SAFE_RETAIN(sceneIndexKeys);
+    sceneIndexKeys = curScenesKeyInfo.at(infoKey).asValueVector();
     
-    for (int i = 0; i < sceneKeys->count(); i++) {
-        CCLog("=====index = %d,key = %s=====",i,((CCString*)sceneKeys->objectAtIndex(i))->getCString());
+    for (int i = 0; i < sceneKeys.size(); i++) {
+        CCLOG("=====index = %d,key = %s=====",i,sceneKeys[i].asString().c_str());
     }
     
-    CCDictionary* curHippoInfo  = CCDictionary::createWithContentsOfFile("spellwords/mainscenes/hippoAnim/hippoInfo.plist");
+    ValueMap curHippoInfo = FileUtils::getInstance()->getValueMapFromFile("spellwords/mainscenes/hippoAnim/hippoInfo.plist");
     
-    hippoInfo = (CCArray*)curHippoInfo->objectForKey(infoKey);
-    CC_SAFE_RETAIN(hippoInfo);
+    hippoInfo = curHippoInfo.at(infoKey).asValueVector();
 }
 
-CCSprite* GameManager::getIconSprite(int _iconId){
+Sprite* GameManager::getIconSprite(int _iconId){
     
-    const char* iconFile = ((CCString*)sceneKeys->objectAtIndex(_iconId))->getCString();
+    const char* iconFile = sceneKeys[_iconId].asString().c_str();
     
-    CCString* filePath = CCString::createWithFormat("spellwords/mainscenes/scenesIcon/%s.png",iconFile);
+    std::string filePath = StringUtils::format("spellwords/mainscenes/scenesIcon/%s.png",iconFile);
     
-    CCLog("------index = %d,imageName = %s------",_iconId,iconFile);
+    CCLOG("------index = %d,imageName = %s------",_iconId,iconFile);
     
-    CCSprite* trainIcon = CCSprite::create(filePath->getCString());
+    Sprite* trainIcon = Sprite::create(filePath);
     
     if (trainIcon != NULL) {
         return trainIcon;
@@ -323,18 +318,18 @@ CCSprite* GameManager::getIconSprite(int _iconId){
 }
 
 void GameManager::playIconRead(int _soundId){
-    const char* iconFile = ((CCString*)sceneIndexKeys->objectAtIndex(_soundId))->getCString();
+    const char* iconFile = sceneIndexKeys[_soundId].asString().c_str();
     
-    CCString* filePath = CCString::createWithFormat("spellwords/mainscenes/scenesIcon/sound/%s.mp3",iconFile);
+    std::string filePath = StringUtils::format("spellwords/mainscenes/scenesIcon/sound/%s.mp3",iconFile);
     
-    CCLog("------index = %d,imageName = %s------",_soundId,iconFile);
+    CCLOG("------index = %d,imageName = %s------",_soundId,iconFile);
 
-//    SimpleAudioEngine::sharedEngine()->playEffect(filePath->getCString());
+//    AudioEngine::play2d(filePath);
 }
 
 time_t GameManager::getCurTime(){
-    struct cc_timeval now;
-    CCTime::gettimeofdayCocos2d(&now, NULL);
+    struct timeval now;
+    gettimeofday(&now, NULL);
 
     time_t timep = now.tv_sec;
 
@@ -403,9 +398,9 @@ void GameManager::testSchedule(){
     bool isShow = this->isNeedShowIAP();
     
     if (isShow) {
-        CCLog("----------true----------");
+        CCLOG("----------true----------");
     } else {
-        CCLog("----------false----------");
+        CCLOG("----------false----------");
     }
 }
 
@@ -429,9 +424,9 @@ bool GameManager::isNeedShowInterstitial() {
     return false;
 }
 
-CCString* GameManager::getCurrentTime(){
-    struct cc_timeval now;
-    CCTime::gettimeofdayCocos2d(&now, NULL);
+std::string GameManager::getCurrentTime(){
+    struct timeval now;
+    gettimeofday(&now, NULL);
     
     struct tm *tm;
     time_t timep = now.tv_sec+7*24*60*60;
@@ -483,8 +478,8 @@ CCString* GameManager::getCurrentTime(){
             break;
     }
     
-//    CCString* curTime = CCString::createWithFormat("%d-%d-%d",year,month+1,day);
-    CCString* curTime = CCString::createWithFormat("%d.%d.%d",day,month+1,year);
+//    std::string curTime = StringUtils::format("%d-%d-%d",year,month+1,day);
+    std::string curTime = StringUtils::format("%d.%d.%d",day,month+1,year);
     return curTime;
 }
 
@@ -538,12 +533,12 @@ void GameManager::setCircusInfo(int _sceneId){
 
 void GameManager::setShapePuzzleInfo(int _sceneId){
     
-//    CCString* infoKey = (CCString*)sceneIndexKeys->objectAtIndex(_sceneId);
+//    std::string infoKey = sceneIndexKeys[_sceneId].asString();
 //
-//    CCDictionary* info = (CCDictionary*)curGameInfo->objectForKey(infoKey->getCString());
+//    ValueMap info = curGameInfo.at(infoKey).asValueMap();
 //
-//    int sceneIndex = info->valueForKey("currentSceneIndex")->intValue();
-//    int itemIndex = info->valueForKey("currentItemIndex")->intValue();
+//    int sceneIndex = info.at("currentSceneIndex").asInt();
+//    int itemIndex = info.at("currentItemIndex").asInt();
 //
 //    ShapePuzzleManager::shareGameManger()->setSceneIndex(sceneIndex);
 //    ShapePuzzleManager::shareGameManger()->setItemIndex(itemIndex);
@@ -552,11 +547,11 @@ void GameManager::setShapePuzzleInfo(int _sceneId){
 
 void GameManager::setMatchInfo(int _sceneId){
 //
-//    CCString* infoKey = (CCString*)sceneIndexKeys->objectAtIndex(_sceneId);
+//    std::string infoKey = sceneIndexKeys[_sceneId].asString();
 //
-//    CCDictionary* info = (CCDictionary*)curGameInfo->objectForKey(infoKey->getCString());
+//    ValueMap info = curGameInfo.at(infoKey).asValueMap();
 //
-//    gameInf.currentIndex = info->valueForKey("currentIndex")->intValue();
+//    gameInf.currentIndex = info.at("currentIndex").asInt();
 //
 }
 
@@ -564,12 +559,12 @@ void GameManager::setSpellWordsInfo(int _sceneId){
 //    spellInf.currentLevel = 1;
 //    spellInf.currentLanguage = 1;
 //
-//    CCString* infoKey = (CCString*)sceneIndexKeys->objectAtIndex(_sceneId);
+//    std::string infoKey = sceneIndexKeys[_sceneId].asString();
 //
-//    CCDictionary* info = (CCDictionary*)curGameInfo->objectForKey(infoKey->getCString());
+//    ValueMap info = curGameInfo.at(infoKey).asValueMap();
 //
-//    int curSceneIndex = info->valueForKey("currentSceneIndex")->intValue();
-//    int curNum = info->valueForKey("currentNum")->intValue();
+//    int curSceneIndex = info.at("currentSceneIndex").asInt();
+//    int curNum = info.at("currentNum").asInt();
 //
 //    if (spellInf.chooseSceneIndex != curSceneIndex || spellInf.currentNum != curNum) {
 //        spellInf.currentWord = 0;
@@ -581,13 +576,13 @@ void GameManager::setSpellWordsInfo(int _sceneId){
 
 //void GameManager::setJigsawPuzzleInfo(int _sceneId){
     
-//    CCString* infoKey = (CCString*)sceneIndexKeys->objectAtIndex(_sceneId);
+//    std::string infoKey = sceneIndexKeys[_sceneId].asString();
     
-//    JigsawPuzzleManager::shareGameManger()->currentAnimKey = infoKey->getCString();
-//
-//    CCDictionary* info = (CCDictionary*)curGameInfo->objectForKey(infoKey->getCString());
-//
-//    JigsawPuzzleManager::shareGameManger()->picImageName = info->valueForKey("imageName")->getCString();
+//    JigsawPuzzleManager::shareGameManger()->currentAnimKey = infoKey;
+
+//    ValueMap info = curGameInfo.at(infoKey).asValueMap();
+
+//    JigsawPuzzleManager::shareGameManger()->picImageName = info.at("imageName").asString();
 //}
 
 
@@ -676,11 +671,11 @@ void GameManager::setJigsawPuzzleInfo(int _sceneId){
 //            break;
 //    }
 //
-////    JigsawPuzzleManager::shareGameManger()->currentAnimKey = infoKey->getCString();
+////    JigsawPuzzleManager::shareGameManger()->currentAnimKey = infoKey;
 //
-//    CCString* info = (CCString*)curGameInfo->objectForKey(infoKey);
+//    std::string info = curGameInfo.at(infoKey).asString();
 //
-//    JigsawPuzzleManager::shareGameManger()->picImageName = info->getCString();
+//    JigsawPuzzleManager::shareGameManger()->picImageName = info;
 //    JigsawPuzzleManager::shareGameManger()->currentImageIndex = _sceneId;
 //
 
@@ -787,39 +782,39 @@ void GameManager::showReward() {
 }
 
 void GameManager::changeToGameScene() {
-//    CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(1.5f, CircusSelectScene::sceneWithID(_gameTag), ccWHITE));
-//    CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(1.5f, SearchScene::sceneWithID(gameIndex), ccWHITE));
-//    CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(1.5f, ABCcircusMatchScene::sceneWithID(gameIndex), ccWHITE));
-//    CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(1.5f, SongScene::scene(), ccWHITE));
+//    Director::getInstance()->replaceScene(TransitionFade::create(1.5f, CircusSelectScene::sceneWithID(_gameTag), Color3B::WHITE));
+//    Director::getInstance()->replaceScene(TransitionFade::create(1.5f, SearchScene::sceneWithID(gameIndex), Color3B::WHITE));
+//    Director::getInstance()->replaceScene(TransitionFade::create(1.5f, ABCcircusMatchScene::sceneWithID(gameIndex), Color3B::WHITE));
+//    Director::getInstance()->replaceScene(TransitionFade::create(1.5f, SongScene::scene(), Color3B::WHITE));
     switch (GameIndex) {
 //        case 0:
-////            CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(0.5, CircusSelectScene::sceneWithID(1), ccBLACK));
-//            CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(0.5, PlayScene::scene(), ccBLACK));
+////            Director::getInstance()->replaceScene(TransitionFade::create(0.5, CircusSelectScene::sceneWithID(1), Color3B::BLACK));
+//            Director::getInstance()->replaceScene(TransitionFade::create(0.5, PlayScene::scene(), Color3B::BLACK));
 //            break;
 //        case 1:
-////            CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(0.5, CircusSelectScene::sceneWithID(2), ccBLACK));
-//            CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(0.5, PlayScene::scene(), ccBLACK));
+////            Director::getInstance()->replaceScene(TransitionFade::create(0.5, CircusSelectScene::sceneWithID(2), Color3B::BLACK));
+//            Director::getInstance()->replaceScene(TransitionFade::create(0.5, PlayScene::scene(), Color3B::BLACK));
 //            break;
 //            //        case 2:
-//            //            CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(0.5, SelectScene::sceneWithID(3), ccBLACK));
+//            //            Director::getInstance()->replaceScene(TransitionFade::create(0.5, SelectScene::sceneWithID(3), Color3B::BLACK));
 //            //            break;
 //        case 2:
-//            CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(0.5, SearchScene::sceneWithID(0), ccBLACK));
+//            Director::getInstance()->replaceScene(TransitionFade::create(0.5, SearchScene::sceneWithID(0), Color3B::BLACK));
 //            break;
 //            //        case 4:
-//            //            CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(0.5, SearchNumScene::scene(), ccBLACK));
+//            //            Director::getInstance()->replaceScene(TransitionFade::create(0.5, SearchNumScene::scene(), Color3B::BLACK));
 //            //            break;
 //        case 3:
-//            CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(0.5, ABCMatchScene::sceneWithID(0), ccBLACK));
+//            Director::getInstance()->replaceScene(TransitionFade::create(0.5, ABCMatchScene::sceneWithID(0), Color3B::BLACK));
 //            break;
 //            //        case 6:
-//            //            CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(0.5, ABCMatchScene::sceneWithID(1), ccBLACK));
+//            //            Director::getInstance()->replaceScene(TransitionFade::create(0.5, ABCMatchScene::sceneWithID(1), Color3B::BLACK));
 //            //            break;
 //        case 4:
-//            CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(0.5, SongScene::scene(), ccBLACK));
+//            Director::getInstance()->replaceScene(TransitionFade::create(0.5, SongScene::scene(), Color3B::BLACK));
 //            break;
 //            //        case 8:
-//            ////            CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(0.5, TextScene::scene(), ccBLACK));
+//            ////            Director::getInstance()->replaceScene(TransitionFade::create(0.5, TextScene::scene(), Color3B::BLACK));
 //            //            break;
 //        default:
 //            break;
@@ -1088,57 +1083,53 @@ void GameManager::goToBuyIAP(int _buyIndex) {
 #endif
 }
 
-CCArray* GameManager::getFreeIndexArr(int _dayValue) {
-    CCArray* freeIndexArr = CCArray::create();
+ValueVector GameManager::getFreeIndexArr(int _dayValue) {
+    ValueVector freeIndexArr;
 
-    if (freeIndexArr != NULL){
-        CCDictionary* freeIndexDic = CCDictionary::createWithContentsOfFile("dinohospital/dailyFreeInfo.plist");
-        const char* indexKey = "";
-        switch (_dayValue){
-            case 1:
-            {
-                indexKey = "Sun";
-            }
-                break;
-            case 2:
-            {
-                indexKey = "Mon";
-            }
-                break;
-            case 3:
-            {
-                indexKey = "Tue";
-            }
-                break;
-            case 4:
-            {
-                indexKey = "Wed";
-            }
-                break;
-            case 5:
-            {
-                indexKey = "Thu";
-            }
-                break;
-            case 6:
-            {
-                indexKey = "Fri";
-            }
-                break;
-            case 7:
-            {
-                indexKey = "Sat";
-            }
-                break;
-            default:
-                break;
+    ValueMap freeIndexMap = FileUtils::getInstance()->getValueMapFromFile("dinohospital/dailyFreeInfo.plist");
+    const char* indexKey = "";
+    switch (_dayValue){
+        case 1:
+        {
+            indexKey = "Sun";
         }
-
-        freeIndexArr = (CCArray*)freeIndexDic->objectForKey(indexKey);
-
-        return freeIndexArr;
+            break;
+        case 2:
+        {
+            indexKey = "Mon";
+        }
+            break;
+        case 3:
+        {
+            indexKey = "Tue";
+        }
+            break;
+        case 4:
+        {
+            indexKey = "Wed";
+        }
+            break;
+        case 5:
+        {
+            indexKey = "Thu";
+        }
+            break;
+        case 6:
+        {
+            indexKey = "Fri";
+        }
+            break;
+        case 7:
+        {
+            indexKey = "Sat";
+        }
+            break;
+        default:
+            break;
     }
 
-    return NULL;
+    freeIndexArr = freeIndexMap.at(indexKey).asValueVector();
+
+    return freeIndexArr;
 }
 

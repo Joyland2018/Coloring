@@ -11,7 +11,7 @@
 #include "cocos2d.h"
 #include "GameManager.h"
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include "BuyPage.h"
+
 #include <jni.h>
 #include "platform/android/jni/JniHelper.h"
 #include <android/log.h>
@@ -22,7 +22,7 @@ using namespace cocos2d;
 #define kRemoveSelf "buylayer.remove"
 #define kGetAll "buypage.getall"
 
-class BuyPage : public CCLayer {
+class BuyPage : public Layer {
 public:
     static BuyPage* nodeWithID(int tag);
     bool initWithID(int tag);
@@ -34,29 +34,27 @@ public:
     const char* getCommodityType(int tag);
     void selectProductID(int tag,bool isRestore);
 
-    void buyClick(CCObject* pSender);
-    void watchAdsClick(CCObject* pSender);
-//    void restoreClick(CCObject* pSender);
+    void buyClick(Ref* pSender);
+    void watchAdsClick(Ref* pSender);
+//    void restoreClick(Ref* pSender);
 
-    void cancelBuy(CCObject* pSender);
+    void cancelBuy(Ref* pSender);
 
-    virtual void ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent);
-    virtual void ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent);
-    virtual void ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent);
-
-    virtual void registerWithTouchDispatcher();
+    virtual void onTouchesBegan(const std::vector<Touch*>& touches, Event* event);
+    virtual void onTouchesMoved(const std::vector<Touch*>& touches, Event* event);
+    virtual void onTouchesEnded(const std::vector<Touch*>& touches, Event* event);
 
     void initNotification();
     void timeout();
     void contactHud();
-    void initPurchase(CCString* productID);
+    void initPurchase(const std::string& productID);
     void restorePurchase();
     void createParentsLock();
-    void parentsLockCallback(CCObject *sender);
+    void parentsLockCallback(Ref *sender);
 
-    void productsLoaded(CCNotificationObserver* notification);
-    void productPurchased(CCNotificationObserver* notification);
-    void productPurchaseFailed(CCNotificationObserver *notification);
+    void productsLoaded(EventCustom* event);
+    void productPurchased(EventCustom* event);
+    void productPurchaseFailed(EventCustom *event);
 
     static void setPageIndex(int _pageIndex);
 
@@ -65,16 +63,16 @@ public:
     void setAllVersion();
 
 private:
-    void termsLinkClick(CCObject* pSender);
+    void termsLinkClick(Ref* pSender);
 
-    void initPrompt(CCObject* _parent);
+    void initPrompt(Ref* _parent);
 
     static int _curPageIndex;
 public:
     bool isBuying;
     bool isTouchTerms;
 
-    CCCallFunc* func;
+    CallFunc* func;
 
     int storeIndex;
     int dogIndex;

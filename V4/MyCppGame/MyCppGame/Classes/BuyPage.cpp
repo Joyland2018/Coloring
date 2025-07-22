@@ -5,8 +5,8 @@
 //  Created by LiXiaofei on 2018/2/7.
 //
 
-#include <ColorManager.hpp>
 #include "BuyPage.h"
+#include "DinoColor/ColorManager.hpp"
 
 enum{
     kBgTag = 60,
@@ -50,7 +50,7 @@ BuyPage* BuyPage::nodeWithID(int tag){
 }
 
 bool BuyPage::initWithID(int tag){
-    if (!CCLayer::init()) {
+    if (!Layer::init()) {
         return false;
     }
 
@@ -59,26 +59,26 @@ bool BuyPage::initWithID(int tag){
     isTouchBuy = false;
     isTouchTerms = false;
 
-    CCSize winSize = CCEGLView::sharedOpenGLView()->getVisibleSize();
-    CCPoint center = GameManager::sharedManager()->getCenter();
-    CCPoint rightBottom = GameManager::sharedManager()->getRightBottomPos();
+    Size winSize = Director::getInstance()->getVisibleSize();
+    Vec2 center = GameManager::sharedManager()->getCenter();
+    Vec2 rightBottom = GameManager::sharedManager()->getRightBottomPos();
 
-//    CCNotificationCenter::sharedNotificationCenter()->removeObserver(this, kRemoveSelf);
+//    NotificationCenter::getInstance()->removeObserver(this, kRemoveSelf);
 
-    CCSprite* background = CCSprite::create("iap/iapPage1_Bg.png");
+    Sprite* background = Sprite::create("iap/iapPage1_Bg.png");
     background->setPosition(center);
     background->setTag(kBgTag);
     this->addChild(background);
 
-    CCSprite* cancel = CCSprite::create("iap/iapPageClose.png");
-    //    CCString* target = CCString::createWithFormat("%s",CCFileUtils::sharedFileUtils()->getResourceDirectory());
-    //    if (target->isEqual(CCString::create("hd/"))) {
-    //    }else if (target->isEqual(CCString::create("ip/"))) {
-    //        cancel->setPosition(ccp(winSize.width*3/4+5, winSize.height*20/21));
+    Sprite* cancel = Sprite::create("iap/iapPageClose.png");
+    //    String* target = String::createWithFormat("%s",FileUtils::getInstance()->getResourceDirectory());
+    //    if (target->isEqual(String::create("hd/"))) {
+    //    }else if (target->isEqual(String::create("ip/"))) {
+    //        cancel->setPosition(Vec2(winSize.width*3/4+5, winSize.height*20/21));
     //    }
-    CCMenuItemSprite* cancelBt = CCMenuItemSprite::create(cancel, cancel, this, menu_selector(BuyPage::cancelBuy));
-    CCMenu* menu = CCMenu::create(cancelBt,NULL);
-    menu->setPosition(ccp(background->getPosition().x+background->getContentSize().width/2-10,background->getPosition().y+background->getContentSize().height/2-10));
+    MenuItemSprite* cancelBt = MenuItemSprite::create(cancel, cancel, CC_CALLBACK_1(BuyPage::cancelBuy, this));
+    Menu* menu = Menu::create(cancelBt,NULL);
+    menu->setPosition(Vec2(background->getPosition().x+background->getContentSize().width/2-10,background->getPosition().y+background->getContentSize().height/2-10));
     menu->setScale(1.5);
     menu->setTag(kCancelTag);
     background->addChild(menu,20);
@@ -86,8 +86,13 @@ bool BuyPage::initWithID(int tag){
     this->loadIAPStore(tag);
     dogIndex = tag;
 
-    this->setTouchPriority(-130);
-    this->setTouchEnabled(true);
+    this->setLocalZOrder(-130);
+    
+    auto touchListener = EventListenerTouchAllAtOnce::create();
+    touchListener->onTouchesBegan = CC_CALLBACK_2(BuyPage::onTouchesBegan, this);
+    touchListener->onTouchesMoved = CC_CALLBACK_2(BuyPage::onTouchesMoved, this);
+    touchListener->onTouchesEnded = CC_CALLBACK_2(BuyPage::onTouchesEnded, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
 //    GameManager::sharedManager()->clickAdLockCount++;
 
@@ -99,7 +104,7 @@ void BuyPage::setInitPageIndex(int _index){
 }
 
 void BuyPage::setPageIndex(int _pageIndex){
-//    CCUserDefault::sharedUserDefault()->setIntegerForKey("_curPageIndex", _pageIndex);
+//    UserDefault::getInstance()->setIntegerForKey("_curPageIndex", _pageIndex);
 //    CCLOG("<=================PAGEINDEX = %d=====================>",_curPageIndex);
 //#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 //    JniMethodInfo minfo;
@@ -139,73 +144,67 @@ void BuyPage::setPageIndex(int _pageIndex){
 //#endif
 }
 
-void BuyPage::registerWithTouchDispatcher()
-{
-    // priority比-128小就可以了
-    CCDirector::sharedDirector()->getTouchDispatcher()->addStandardDelegate(this, -150);
-}
-
 void BuyPage::loadIAPStore(int tag){
 
-    CCSprite* background = (CCSprite*)this->getChildByTag(kBgTag);
+    Sprite* background = (Sprite*)this->getChildByTag(kBgTag);
 
     if (background != NULL) {
-//        const char* fileName = CCString::createWithFormat("iap/iapPage%d_Btn.png",1)->getCString();
-//        CCMenuItemImage* iapBtn = CCMenuItemImage::create(fileName,fileName,this,menu_selector(BuyPage::buyClick));
-////        CCMenuItemImage* watchAdsBtn = CCMenuItemImage::create("iap/iapPageWatch.png","iap/iapPageWatch.png",this,menu_selector(BuyPage::watchAdsClick));
+//        const char* fileName = String::createWithFormat("iap/iapPage%d_Btn.png",1)->getCString();
+//        MenuItemImage* iapBtn = MenuItemImage::create(fileName,fileName,CC_CALLBACK_1(BuyPage::buyClick, this));
+////        MenuItemImage* watchAdsBtn = MenuItemImage::create("iap/iapPageWatch.png","iap/iapPageWatch.png",CC_CALLBACK_1(BuyPage::watchAdsClick, this));
 //
-//        iapBtn->setPosition(ccp(background->getContentSize().width/2,background->getContentSize().height/4));
-////        watchAdsBtn->setPosition(ccp(447,91));
-//        CCMenu* btnMenu = CCMenu::create(iapBtn,NULL);
-//        btnMenu->setPosition(ccp(0,-20));
+//        iapBtn->setPosition(Vec2(background->getContentSize().width/2,background->getContentSize().height/4));
+////        watchAdsBtn->setPosition(Vec2(447,91));
+//        Menu* btnMenu = Menu::create(iapBtn,NULL);
+//        btnMenu->setPosition(Vec2(0,-20));
 //        background->addChild(btnMenu);
 
         const char* btnPathStr = "iap/iapPageBuy_1.png";
-        auto item1= CCMenuItemImage::create(btnPathStr, btnPathStr, this,menu_selector(BuyPage::buyClick));
-        auto menu = CCMenu::create(item1, NULL);
+        auto item1= MenuItemImage::create(btnPathStr, btnPathStr, CC_CALLBACK_1(BuyPage::buyClick, this));
+        auto menu = Menu::create(item1, NULL);
 
-        menu->setPosition(ccp(background->getContentSize().width / 2, 91));
+        menu->setPosition(Vec2(background->getContentSize().width / 2, 91));
         background->addChild(menu);
 
-        CCSprite* unlock = CCSprite::create("iap/iapPage_NoAdsTitle.png");
-        unlock->setPosition(ccp(background->getContentSize().width/2,background->getContentSize().height/2));
+        Sprite* unlock = Sprite::create("iap/iapPage_NoAdsTitle.png");
+        unlock->setPosition(Vec2(background->getContentSize().width/2,background->getContentSize().height/2));
         background->addChild(unlock);
 
-        CCSprite* logo = CCSprite::create("iap/iapPageLogo.png");
-        logo->setPosition(ccp(background->getContentSize().width/2,background->getContentSize().height/1.3));
+        Sprite* logo = Sprite::create("iap/iapPageLogo.png");
+        logo->setPosition(Vec2(background->getContentSize().width/2,background->getContentSize().height/1.3));
         background->addChild(logo);
 
     }
 }
 
-void BuyPage::initPrompt(cocos2d::CCObject *_parent){
-    CCSprite* background = (CCSprite*)this->getChildByTag(kBgTag);
-    CCMenu* buyMenu = (CCMenu*)_parent;
+void BuyPage::initPrompt(cocos2d::Ref *_parent){
+    Sprite* background = (Sprite*)this->getChildByTag(kBgTag);
+    Menu* buyMenu = (Menu*)_parent;
     if (background != NULL) {
-        CCSprite* tipHand = CCSprite::createWithSpriteFrameName("handclick_1.png");
-        tipHand->setPosition(ccp(buyMenu->getPosition().x, buyMenu->getPosition().y-80));
+        Sprite* tipHand = Sprite::createWithSpriteFrameName("handclick_1.png");
+        tipHand->setPosition(Vec2(buyMenu->getPosition().x, buyMenu->getPosition().y-80));
         tipHand->setScale(0.5);
         background->addChild(tipHand);
 
-        CCMoveBy* handMove = CCMoveBy::create(0.8, ccp(0, 30));
-        CCMoveBy* reMove = (CCMoveBy*)handMove->reverse();
+        MoveBy* handMove = MoveBy::create(0.8, Vec2(0, 30));
+        MoveBy* reMove = (MoveBy*)handMove->reverse();
 
-        CCSequence* handSeq = CCSequence::create(handMove,reMove,NULL);
+        Sequence* handSeq = Sequence::create(handMove,reMove,NULL);
 
-        CCRepeatForever* repeat = CCRepeatForever::create(handSeq);
+        RepeatForever* repeat = RepeatForever::create(handSeq);
 
         tipHand->runAction(repeat);
     }
 }
 
-void BuyPage::buyClick(cocos2d::CCObject *pSender){
+void BuyPage::buyClick(cocos2d::Ref *pSender){
     this->removeAllChildrenWithCleanup(true);
     this->removeFromParentAndCleanup(true);
     ColorManager::shared()->buyState=false;
     GameManager::sharedManager()->goToBuyIAP(0);
 }
 
-void BuyPage::watchAdsClick(CCObject *pSender) {
+void BuyPage::watchAdsClick(Ref *pSender) {
     this->removeAllChildrenWithCleanup(true);
     this->removeFromParentAndCleanup(true);
     GameManager::sharedManager()->showReward();
@@ -221,7 +220,7 @@ void BuyPage::setAllVersion(){
 //    GameManager::sharedManager()->setLastTime();
 }
 
-void BuyPage::cancelBuy(CCObject* pSender){
+void BuyPage::cancelBuy(Ref* pSender){
     CCLOG("cancel!!");
     //    if ([BuyControl sharedManager].isGaming == false) {
     //        SelectScene* curParent = (SelectScene*)this->getParent();
@@ -238,8 +237,8 @@ void BuyPage::cancelBuy(CCObject* pSender){
 //    }
 }
 
-void BuyPage::termsLinkClick(cocos2d::CCObject *pSender){
-    CCLayer *blacklayer = (CCLayer*)this->getChildByTag(kBackLayerTag);
+void BuyPage::termsLinkClick(cocos2d::Ref *pSender){
+    Layer *blacklayer = (Layer*)this->getChildByTag(kBackLayerTag);
 
 }
 
@@ -247,22 +246,22 @@ void BuyPage::selectProductID(int tag,bool isRestore){
 
 }
 
-void BuyPage::ccTouchesBegan(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent){
-    CCTouch* pTouch = (CCTouch*)pTouches->anyObject();
+void BuyPage::onTouchesBegan(const std::vector<Touch*>& touches, Event* event){
+    Touch* pTouch = touches[0];
 
-    CCPoint location = CCDirector::sharedDirector()->convertToGL(pTouch->getLocationInView());
-    CCLayer *blacklayer = (CCLayer*)this->getChildByTag(kBackLayerTag);
+    Vec2 location = Director::getInstance()->convertToGL(pTouch->getLocationInView());
+    Layer *blacklayer = (Layer*)this->getChildByTag(kBackLayerTag);
     CCLOG("=================touched=================");
     if (blacklayer == NULL) {
 
     }
 }
 
-void BuyPage::ccTouchesMoved(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent){
+void BuyPage::onTouchesMoved(const std::vector<Touch*>& touches, Event* event){
 
 }
 
-void BuyPage::ccTouchesEnded(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent){
+void BuyPage::onTouchesEnded(const std::vector<Touch*>& touches, Event* event){
 
 }
 
@@ -271,7 +270,7 @@ BuyPage::BuyPage(){
 }
 
 BuyPage::~BuyPage(){
-//    CCNotificationCenter::sharedNotificationCenter()->removeObserver(this, kRemoveSelf);
-//    CCNotificationCenter::sharedNotificationCenter()->removeObserver(this, kGetAll);
-//    CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+//    NotificationCenter::getInstance()->removeObserver(this, kRemoveSelf);
+//    NotificationCenter::getInstance()->removeObserver(this, kGetAll);
+//    Director::getInstance()->getTextureCache()->removeUnusedTextures();
 }

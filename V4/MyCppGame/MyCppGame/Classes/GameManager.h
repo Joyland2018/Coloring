@@ -66,11 +66,11 @@ class GameManager {
     
 public:
     
-    CCArray* sceneKeys;
-    CCArray* sceneIndexKeys;
-    CCArray* hippoInfo;
-    CCDictionary* curGameInfo;
-    CCDictionary* curResourceInfo;
+    ValueVector sceneKeys;
+    ValueVector sceneIndexKeys;
+    ValueVector hippoInfo;
+    ValueMap curGameInfo;
+    ValueMap curResourceInfo;
 
     int GameIndex;
 
@@ -83,13 +83,13 @@ public:
 
     static GameManager* sharedManager();
     
-    static CCPoint getLeftTopPos();
-    static CCPoint getLeftBottomPos();
-    static CCPoint getRightTopPos();
-    static CCPoint getRightBottomPos();
-    static CCPoint getCenter();
-    static CCPoint getViewInitPos();
-    static CCSize getViewVisibleSize();
+    static Vec2 getLeftTopPos();
+    static Vec2 getLeftBottomPos();
+    static Vec2 getRightTopPos();
+    static Vec2 getRightBottomPos();
+    static Vec2 getCenter();
+    static Vec2 getViewInitPos();
+    static Size getViewVisibleSize();
     
     static void initGameSystem();//初始化游戏配置
     
@@ -98,7 +98,7 @@ public:
     static void replaceToGameScenes();
     void setCurrentGameInfo(int _gameType);
     
-    CCSprite* getIconSprite(int _iconId);
+    Sprite* getIconSprite(int _iconId);
     void playIconRead(int _soundId);
 
     time_t getCurTime();
@@ -116,13 +116,13 @@ public:
 //    void showAdAndGetReward();
     void goToBuyIAP(int _buyIndex);
 
-    CCArray* getFreeIndexArr(int _dayValue);
+    ValueVector getFreeIndexArr(int _dayValue);
     int curDayOfWeekValue;
     bool isCanShowIAP1;
     static bool getOpenGameTag();
 
 
-    CCString* getCurrentTime();
+    std::string getCurrentTime();
     
     void setLastTime();
     void setReviewLastTime();  //reivew

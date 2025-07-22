@@ -29,15 +29,15 @@
 #include <sys/stat.h>
 #include <vector>
 //#include "CodingStageScene.h"
-#include "SelectColorTheme.hpp"
+#include "DinoColor/SelectColorTheme.hpp"
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #endif
 
 using namespace std;
 
-CCScene* LogoScene::scene(){
+Scene* LogoScene::scene(){
     
-    CCScene* scene = CCScene::create();
+    Scene* scene = Scene::create();
     
     LogoScene* layer = LogoScene::create();
     
@@ -49,70 +49,68 @@ CCScene* LogoScene::scene(){
 
 bool LogoScene::init(){
     
-    if (!CCLayer::init())
-    {
+    if (!Layer::init()) {
         return false;
     }
-    // CCFileUtils::sharedFileUtils()->setOBBPath();
-
-    std::string pathToSave = CCFileUtils::sharedFileUtils()->getWritablePath();
-    // pathToSave += "tmpDir";
-    DIR *pDir = NULL;
-    pDir = opendir(pathToSave.c_str());
-    if (!pDir) {
-        mkdir(pathToSave.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
-    }
-
-    //添加下载后的资源路径
-            vector<string> searchPaths = CCFileUtils::sharedFileUtils()->getSearchPaths();
-            vector<string>::iterator iter = searchPaths.begin();
-            searchPaths.insert(iter, pathToSave);
-            CCFileUtils::sharedFileUtils()->setSearchPaths(searchPaths);
-    CCPoint center = GameManager::sharedManager()->getCenter();
     
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-#ifdef AVOCADO
-    CCSprite* logo = CCSprite::create("universal/logo.png");
-#else
-    CCSprite* logo = CCSprite::create("universal/logo_old.png");
-#endif
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    CCSprite* logo = CCSprite::create("background/logo_old.png");
-#endif
-    logo->setPosition(ccp(center.x-1.3, center.y-1.3));
-    this->addChild(logo);
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    this->scheduleOnce(schedule_selector(LogoScene::runGame), 5.95);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    this->scheduleOnce(schedule_selector(LogoScene::runGame), 1.95);
-#endif
+    Size visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    Vec2 center = GameManager::sharedManager()->getCenter();
+    
+    isSetBackground = false;
+    
+//    Director::getInstance()->purgeCachedData();
+    
+    clickCount = 0;
+    
+    Sprite* background = Sprite::create("joyland/logo_bg.jpg");
+    background->setPosition(center);
+    background->setScale(MAX(visibleSize.width/background->getContentSize().width, visibleSize.height/background->getContentSize().height));
+    this->addChild(background,1);
+    
+//    Sprite* cloud = Sprite::create("bg/clouds.png");
+//    cloud->setPosition(Vec2(visibleSize.width/2, visibleSize.height*4/5));
+//    cloud->setScale(MAX(visibleSize.width/cloud->getContentSize().width, visibleSize.height/cloud->getContentSize().height));
+//    this->addChild(cloud,5);
+
+    Sprite* title = Sprite::create("joyland/Logo_title.png");
+    title->setPosition(Vec2(center.x, center.y+visibleSize.height/8));
+    this->addChild(title,6);
+    
+//    auto particleSystem = ParticleFireworks::create();
+//    particleSystem->setTexture(Director::getInstance()->getTextureCache()->addImage("fire.png"));
+//    particleSystem->setPosition(center);
+//    this->addChild(particleSystem, 10);
+    
+    
+    Sprite* logo = Sprite::create("joyland/companyLogo.png");
+    logo->setPosition(Vec2(center.x, center.y-visibleSize.height/4));
+    logo->setScale(0.6);
+    this->addChild(logo,7);
+    
+    
+    this->runAction(Sequence::create(DelayTime::create(3.0f), CallFunc::create(CC_CALLBACK_0(LogoScene::gotoGameScene, this)),NULL));
+    
+    auto touchListener = EventListenerTouchOneByOne::create();
+    touchListener->setSwallowTouches(true);
+    touchListener->onTouchBegan = CC_CALLBACK_2(LogoScene::onTouchBegan, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
     
     return true;
-    
 }
 
-void LogoScene::runGame(){
-    
-
-    if (GameManager::sharedManager()->lastTime == 0) {
-        GameManager::sharedManager()->setLastTime();
+bool LogoScene::onTouchBegan(Touch* touch, Event* event) {
+    if (!isSetBackground) {
+        this->gotoGameScene();
+        isSetBackground = true;
     }
-    
-//    DeviceManager::sharedManager()->setAnimalTrack();
-//CCTransitionFade *action = CCTransitionFade::create(0.5, ShiningScene::sceneWithId(0), ccWHITE);
-//    CCTransitionFade *action = CCTransitionFade::create(0.5, CodingStageScene::sceneWithId(0), ccWHITE);
-//    CCTransitionFade *action = CCTransitionFade::create(0.5, LandScene::scene(), ccWHITE);
-//    CCTransitionFade *action = CCTransitionFade::create(0.5, ChooseScene::scene(), ccWHITE);
-//    CCTransitionFade *action = CCTransitionFade::create(0.5, NEK_MazeLayer::scene(), ccWHITE);
-//    CCTransitionFade *action = CCTransitionFade::create(0.5, CoinScene::scene(), ccWHITE);
-//    CCTransitionFade *action = CCTransitionFade::create(0.5, MapScene::scene(), ccWHITE);
-//    CCTransitionFade *action = CCTransitionFade::create(0.5, CatSelectScene::sceneWithID(0), ccWHITE);
-//    CCTransitionFade *action = CCTransitionFade::create(0.5, LetterCover::scene(), ccWHITE);
-//    CCTransitionFade *action = CCTransitionFade::create(0.5, WorldScene::scene(), ccWHITE);
-//    CCTransitionFade *action = CCTransitionFade::create(0.5, ClockDrogLayer::scene(), ccWHITE);
-    CCTransitionFade *action = CCTransitionFade::create(0.5, SelectColorTheme::scene(), ccWHITE);
+    return true;
+}
 
-    CCDirector::sharedDirector()->replaceScene(action);
+void LogoScene::gotoGameScene() {
+//    CCUserDefault::sharedUserDefault()->setBoolForKey("gotoGameFromLogo",true);
+    Director::getInstance()->replaceScene(TransitionFade::create(0.5f, HelloWorld::createScene(), Color3B::BLACK));
+    
 }
 
 LogoScene::LogoScene(){
@@ -124,9 +122,9 @@ LogoScene::~LogoScene(){
 }
 
 void LogoScene::onEnter(){
-    CCLayer::onEnter();
+    Layer::onEnter();
 }
 
 void LogoScene::onExit(){
-    CCLayer::onExit();
+    Layer::onExit();
 }
