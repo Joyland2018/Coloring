@@ -11,3 +11,5 @@
 .gradle
 .idea
 *.iml
+/V4/MyCppGame/MyCppGame/proj.android/app/.cxx
+/V4/MyCppGame/MyCppGame/cocos2d/cocos/platform/android/libcocos2dx/build
