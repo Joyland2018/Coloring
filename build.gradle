@@ -10,13 +10,12 @@ buildscript {
 //        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.3'
-        classpath 'com.google.gms:google-services:4.3.8'
-        
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        // ... 其他 classpath 依赖
+        classpath 'com.android.tools.build:gradle:8.10.1' // 尝试一个较新的 8.1.x 版本
+        classpath 'com.google.gms:google-services:4.3.10' // 你可能也需要更新这个，见下文
+        // ... 其他 classpath 依赖
     }
+
 }
 
 allprojects {
