@@ -87,133 +87,133 @@ void ColorManager::initColorValue(){
 void ColorManager::changeCurColor()
 {
     int tag = SelectColorTag[SelectBrushTag-100];
-    ccColor3B colorVal;
+    Color3B colorVal;
     switch (tag) {
         case 1:
-            colorVal = ccc3(248,37,15);
+            colorVal = Color3B(248,37,15);
             break;
         case 2:
-            colorVal = ccc3(243,148,2);
+            colorVal = Color3B(243,148,2);
            break;
         case 3:
-            colorVal = ccc3(255,255,50);
+            colorVal = Color3B(255,255,50);
             break;
         case 4:
-            colorVal = ccc3(98,170,50);
+            colorVal = Color3B(98,170,50);
             break;
         case 5:
-            colorVal = ccc3(65,199,255);
+            colorVal = Color3B(65,199,255);
             break;
         case 6:
-            colorVal = ccc3(2,68,246);
+            colorVal = Color3B(2,68,246);
             break;
         case 7:
-            colorVal = ccc3(197,58,239);
+            colorVal = Color3B(197,58,239);
             break;
         case 8:
-            colorVal = ccc3(232,89,139);
+            colorVal = Color3B(232,89,139);
             break;
         case 9:
-            colorVal = ccc3(254,95,78);
+            colorVal = Color3B(254,95,78);
             break;
         case 10:
-            colorVal = ccc3(180,27,13);
+            colorVal = Color3B(180,27,13);
             break;
         case 11:
-            colorVal = ccc3(178,59,6);
+            colorVal = Color3B(178,59,6);
             break;
         case 12:
-            colorVal = ccc3(244,80,8);
+            colorVal = Color3B(244,80,8);
             break;
         case 13:
-            colorVal = ccc3(255,126,70);
+            colorVal = Color3B(255,126,70);
             break;
         case 14:
-            colorVal = ccc3(255,181,65);
+            colorVal = Color3B(255,181,65);
             break;
         case 15:
-            colorVal = ccc3(176,106,2);
+            colorVal = Color3B(176,106,2);
             break;
         case 16:
-            colorVal = ccc3(174,131,2);
+            colorVal = Color3B(174,131,2);
             break;
         case 17:
-            colorVal = ccc3(241,188,35);
+            colorVal = Color3B(241,188,35);
             break;
         case 18:
-            colorVal = ccc3(7,29,64);
+            colorVal = Color3B(7,29,64);
             break;
         case 19:
-            colorVal = ccc3(255,232,77);
+            colorVal = Color3B(255,232,77);
             break;
         case 20:
-            colorVal = ccc3(203,188,43);
+            colorVal = Color3B(203,188,43);
             break;
         case 21:
-            colorVal = ccc3(143,160,29);
+            colorVal = Color3B(143,160,29);
             break;
         case 22:
-            colorVal = ccc3(204,227,44);
+            colorVal = Color3B(204,227,44);
             break;
         case 23:
-            colorVal = ccc3(173,239,125);
+            colorVal = Color3B(173,239,125);
             break;
         case 24:
-            colorVal = ccc3(61,102,29);
+            colorVal = Color3B(61,102,29);
             break;
         case 25:
-            colorVal = ccc3(2,142,202);
+            colorVal = Color3B(2,142,202);
             break;
         case 26:
-            colorVal = ccc3(1,93,132);
+            colorVal = Color3B(1,93,132);
             break;
         case 27:
-            colorVal = ccc3(64,117,254);
+            colorVal = Color3B(64,117,254);
             break;
         case 28:
-            colorVal = ccc3(1,50,179);
+            colorVal = Color3B(1,50,179);
             break;
         case 29:
-            colorVal = ccc3(35,0,92);
+            colorVal = Color3B(35,0,92);
             break;
         case 30:
-            colorVal = ccc3(61,1,160);
+            colorVal = Color3B(61,1,160);
             break;
         case 31:
-            colorVal = ccc3(120,55,227);
+            colorVal = Color3B(120,55,227);
             break;
         case 32:
-            colorVal = ccc3(130,2,170);
+            colorVal = Color3B(130,2,170);
             break;
         case 33:
-            colorVal = ccc3(79,1,103);
+            colorVal = Color3B(79,1,103);
             break;
         case 34:
-            colorVal = ccc3(93,14,43);
+            colorVal = Color3B(93,14,43);
             break;
         case 35:
-            colorVal = ccc3(162,24,73);
+            colorVal = Color3B(162,24,73);
             break;
         case 36:
-            colorVal = ccc3(162,24,73);
+            colorVal = Color3B(162,24,73);
             break;
         case 37:
-            colorVal = ccc3(0,0,0);
+            colorVal = Color3B(0,0,0);
             break;
         case 38:
-            colorVal = ccc3(140,140,140);
+            colorVal = Color3B(140,140,140);
             break;
         case 39:
-            colorVal = ccc3(115,115,115);
+            colorVal = Color3B(115,115,115);
             break;
         case 40:
-            colorVal = ccc3(89,89,89);
+            colorVal = Color3B(89,89,89);
             break;
         case 41:
-            colorVal = ccc3(64,64,64);
+            colorVal = Color3B(64,64,64);
             break;
         case 42:
-            colorVal = ccc3(191,191,191);
+            colorVal = Color3B(191,191,191);
             break;
         default:
             break;
@@ -221,135 +221,135 @@ void ColorManager::changeCurColor()
     ColorManager::shared()->m_pColor = colorVal;
 }
 
-ccColor3B ColorManager::getCurColor(int _colorIndex)
+Color3B ColorManager::getCurColor(int _colorIndex)
 {
-    ccColor3B colorVal;
+    Color3B colorVal;
     switch (_colorIndex) {
         case 1:
-            colorVal = ccc3(248,37,15);
+            colorVal = Color3B(248,37,15);
             break;
         case 2:
-            colorVal = ccc3(243,148,2);
+            colorVal = Color3B(243,148,2);
            break;
         case 3:
-            colorVal = ccc3(255,255,50);
+            colorVal = Color3B(255,255,50);
             break;
         case 4:
-            colorVal = ccc3(98,170,50);
+            colorVal = Color3B(98,170,50);
             break;
         case 5:
-            colorVal = ccc3(65,199,255);
+            colorVal = Color3B(65,199,255);
             break;
         case 6:
-            colorVal = ccc3(2,68,246);
+            colorVal = Color3B(2,68,246);
             break;
         case 7:
-            colorVal = ccc3(197,58,239);
+            colorVal = Color3B(197,58,239);
             break;
         case 8:
-            colorVal = ccc3(232,89,139);
+            colorVal = Color3B(232,89,139);
             break;
         case 9:
-            colorVal = ccc3(254,95,78);
+            colorVal = Color3B(254,95,78);
             break;
         case 10:
-            colorVal = ccc3(180,27,13);
+            colorVal = Color3B(180,27,13);
             break;
         case 11:
-            colorVal = ccc3(178,59,6);
+            colorVal = Color3B(178,59,6);
             break;
         case 12:
-            colorVal = ccc3(244,80,8);
+            colorVal = Color3B(244,80,8);
             break;
         case 13:
-            colorVal = ccc3(255,126,70);
+            colorVal = Color3B(255,126,70);
             break;
         case 14:
-            colorVal = ccc3(255,181,65);
+            colorVal = Color3B(255,181,65);
             break;
         case 15:
-            colorVal = ccc3(176,106,2);
+            colorVal = Color3B(176,106,2);
             break;
         case 16:
-            colorVal = ccc3(174,131,2);
+            colorVal = Color3B(174,131,2);
             break;
         case 17:
-            colorVal = ccc3(241,188,35);
+            colorVal = Color3B(241,188,35);
             break;
         case 18:
-            colorVal = ccc3(7,29,64);
+            colorVal = Color3B(7,29,64);
             break;
         case 19:
-            colorVal = ccc3(255,232,77);
+            colorVal = Color3B(255,232,77);
             break;
         case 20:
-            colorVal = ccc3(203,188,43);
+            colorVal = Color3B(203,188,43);
             break;
         case 21:
-            colorVal = ccc3(143,160,29);
+            colorVal = Color3B(143,160,29);
             break;
         case 22:
-            colorVal = ccc3(204,227,44);
+            colorVal = Color3B(204,227,44);
             break;
         case 23:
-            colorVal = ccc3(173,239,125);
+            colorVal = Color3B(173,239,125);
             break;
         case 24:
-            colorVal = ccc3(61,102,29);
+            colorVal = Color3B(61,102,29);
             break;
         case 25:
-            colorVal = ccc3(2,142,202);
+            colorVal = Color3B(2,142,202);
             break;
         case 26:
-            colorVal = ccc3(1,93,132);
+            colorVal = Color3B(1,93,132);
             break;
         case 27:
-            colorVal = ccc3(64,117,254);
+            colorVal = Color3B(64,117,254);
             break;
         case 28:
-            colorVal = ccc3(1,50,179);
+            colorVal = Color3B(1,50,179);
             break;
         case 29:
-            colorVal = ccc3(35,0,92);
+            colorVal = Color3B(35,0,92);
             break;
         case 30:
-            colorVal = ccc3(61,1,160);
+            colorVal = Color3B(61,1,160);
             break;
         case 31:
-            colorVal = ccc3(120,55,227);
+            colorVal = Color3B(120,55,227);
             break;
         case 32:
-            colorVal = ccc3(130,2,170);
+            colorVal = Color3B(130,2,170);
             break;
         case 33:
-            colorVal = ccc3(79,1,103);
+            colorVal = Color3B(79,1,103);
             break;
         case 34:
-            colorVal = ccc3(93,14,43);
+            colorVal = Color3B(93,14,43);
             break;
         case 35:
-            colorVal = ccc3(162,24,73);
+            colorVal = Color3B(162,24,73);
             break;
         case 36:
-            colorVal = ccc3(162,24,73);
+            colorVal = Color3B(162,24,73);
             break;
         case 37:
-            colorVal = ccc3(0,0,0);
+            colorVal = Color3B(0,0,0);
             break;
         case 38:
-            colorVal = ccc3(140,140,140);
+            colorVal = Color3B(140,140,140);
             break;
         case 39:
-            colorVal = ccc3(115,115,115);
+            colorVal = Color3B(115,115,115);
             break;
         case 40:
-            colorVal = ccc3(89,89,89);
+            colorVal = Color3B(89,89,89);
             break;
         case 41:
-            colorVal = ccc3(64,64,64);
+            colorVal = Color3B(64,64,64);
             break;
         case 42:
-            colorVal = ccc3(191,191,191);
+            colorVal = Color3B(191,191,191);
             break;
         default:
             break;
@@ -359,25 +359,25 @@ ccColor3B ColorManager::getCurColor(int _colorIndex)
 }
 
 void ColorManager::firstColorValue(int colorIndex){
-    ccColor3B colorVal;
+    Color3B colorVal;
     if (strcmp(curPenName, "pencil")==0){
         colorNums =2;
         switch (colorIndex) {
             case 12:
-                colorVal = ccc3(255, 183, 87);
-                secondColor = ccc3(248, 37, 15);
+                colorVal = Color3B(255, 183, 87);
+                secondColor = Color3B(248, 37, 15);
                 break;
             case 13:
-                colorVal = ccc3(2, 58, 205);
-                secondColor = ccc3(136, 177, 251);
+                colorVal = Color3B(2, 58, 205);
+                secondColor = Color3B(136, 177, 251);
                 break;
             case 14:
-                colorVal = ccc3(253, 89, 152);
-                secondColor = ccc3(0, 22, 252);
+                colorVal = Color3B(253, 89, 152);
+                secondColor = Color3B(0, 22, 252);
                 break;
             case 15:
-                colorVal = ccc3(62, 246, 196);
-                secondColor = ccc3(6, 141, 163);
+                colorVal = Color3B(62, 246, 196);
+                secondColor = Color3B(6, 141, 163);
                 break;
             default:
                 break;
@@ -385,26 +385,26 @@ void ColorManager::firstColorValue(int colorIndex){
     }else if (strcmp(curPenName, "paint")==0){
         switch (colorIndex) {
             case 12:
-                colorVal = ccc3(234, 37, 88);
-                secondColor = ccc3(101, 89, 252);
-                thirdColor = ccc3(249,170,212);
+                colorVal = Color3B(234, 37, 88);
+                secondColor = Color3B(101, 89, 252);
+                thirdColor = Color3B(249,170,212);
                 colorNums =3;
                 break;
             case 13:
-                colorVal = ccc3(51, 248, 4);
-                secondColor = ccc3(248, 245, 66);
-                thirdColor = ccc3(140,35,249);
+                colorVal = Color3B(51, 248, 4);
+                secondColor = Color3B(248, 245, 66);
+                thirdColor = Color3B(140,35,249);
                 colorNums =3;
                 break;
             case 14:
-                colorVal = ccc3(254, 250, 90);
-                secondColor = ccc3(10, 243, 224);
-                thirdColor = ccc3(242,64,219);
+                colorVal = Color3B(254, 250, 90);
+                secondColor = Color3B(10, 243, 224);
+                thirdColor = Color3B(242,64,219);
                 colorNums =3;
                 break;
             case 15:
-                colorVal = ccc3(74, 98, 250);
-                secondColor = ccc3(58, 234, 3);
+                colorVal = Color3B(74, 98, 250);
+                secondColor = Color3B(58, 234, 3);
                 colorNums =2;
                 break;
             default:
@@ -822,15 +822,15 @@ void ColorManager::trebleColorChange(){
 
 }
 
-CCTexture2D* ColorManager::maskedWithSpriteTexture(CCSprite* texturesp, CCSprite* masksp,CCPoint location)
+Texture2D* ColorManager::maskedWithSpriteTexture(Sprite* texturesp, Sprite* masksp, Vec2 location)
 {
-    CCRenderTexture* newRendertexture = CCRenderTexture::create(masksp->getContentSize().width, masksp->getContentSize().height);
+    RenderTexture* newRendertexture = RenderTexture::create(masksp->getContentSize().width, masksp->getContentSize().height);
     
-    masksp->setPosition(ccp(masksp->getContentSize().width*location.x, masksp->getContentSize().height*location.y));
-    texturesp->setPosition(ccp(masksp->getContentSize().width*location.x, masksp->getContentSize().height*location.y));
+    masksp->setPosition(Vec2(masksp->getContentSize().width*location.x, masksp->getContentSize().height*location.y));
+    texturesp->setPosition(Vec2(masksp->getContentSize().width*location.x, masksp->getContentSize().height*location.y));
     
-    masksp->setBlendFunc((ccBlendFunc){GL_ONE, GL_ZERO});
-    texturesp->setBlendFunc((ccBlendFunc){GL_DST_ALPHA, GL_ZERO});
+    masksp->setBlendFunc(BlendFunc{GL_ONE, GL_ZERO});
+    texturesp->setBlendFunc(BlendFunc{GL_DST_ALPHA, GL_ZERO});
     
     newRendertexture->begin();
     masksp->visit();
@@ -841,9 +841,9 @@ CCTexture2D* ColorManager::maskedWithSpriteTexture(CCSprite* texturesp, CCSprite
     return newRendertexture->getSprite()->getTexture();
 }
 
-CCImage* ColorManager::loadImageFromBinaryFile(const std::string &_fileName)
+Image* ColorManager::loadImageFromBinaryFile(const std::string &_fileName)
 {
-    std::string fullPath = CCFileUtils::sharedFileUtils()->getWritablePath()+_fileName+".bin";
+    std::string fullPath = FileUtils::getInstance()->getWritablePath()+_fileName+".bin";
     // Open the file
     FILE* file = fopen(fullPath.c_str(), "rb");
     if (!file) {
@@ -864,8 +864,8 @@ CCImage* ColorManager::loadImageFromBinaryFile(const std::string &_fileName)
     size_t bytesRead = fread(buffer, 1, fileSize, file);
 
 
-    // Create a CCImage from the binary data
-    CCImage* image = new CCImage();
+    // Create a Image from the binary data
+    Image* image = new Image();
     if (!image->initWithImageData(buffer, static_cast<int>(bytesRead))) {
         // Handle error
         delete[] buffer;
@@ -884,14 +884,14 @@ CCImage* ColorManager::loadImageFromBinaryFile(const std::string &_fileName)
 
 void ColorManager::saveTextureToFile(std::string _fileName, ColorSprite *_colorSpr)
 {
-    CCSize sprSize = _colorSpr->getContentSize();
-    CCRenderTexture* saverenderTexture = CCRenderTexture::create(sprSize.width, sprSize.height, kCCTexture2DPixelFormat_RGBA8888);
+    Size sprSize = _colorSpr->getContentSize();
+    RenderTexture* saverenderTexture = RenderTexture::create(sprSize.width, sprSize.height, Texture2D::PixelFormat::RGBA8888);
     saverenderTexture->begin();
     _colorSpr->visit();
     saverenderTexture->end();
     
-    std::string localPath = CCFileUtils::sharedFileUtils()->getWritablePath()+_fileName+".bin";
-    CCImage* saveImage = saverenderTexture->newCCImage();
+    std::string localPath = FileUtils::getInstance()->getWritablePath()+_fileName+".bin";
+    Image* saveImage = saverenderTexture->newImage();
     saveImage->saveToFile(localPath.c_str());
     saveImage->release();
     

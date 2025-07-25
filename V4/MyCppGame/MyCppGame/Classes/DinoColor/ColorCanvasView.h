@@ -10,32 +10,31 @@
 
 #include <stdio.h>
 #include "cocos2d.h"
-#include "SimpleAudioEngine.h"
+#include "AudioEngine.h"
 #include <iostream>
 #include "ColorManager.hpp"
 #include "ColorSprite/ColorSprite.h"
 #include "ColorSprite/ColoringClippingNode.h"
-#include "cocos-ext.h"
+#include "ui/CocosGUI.h"
 
 using namespace cocos2d;
-using namespace CocosDenshion;
-using namespace cocos2d::extension ;
+using namespace cocos2d::ui;
 
 #define kChangeBrushCallback "colorcanvas.changebrush"
 #define kChangeColorCallback "colorcanvas.changecolor"
 #define kShowPenColorIapCallback "colorcanvas.showpeniap"
 
-class ColorCanvasView : public cocos2d:: CCLayer {
+class ColorCanvasView : public cocos2d::Layer {
     
     
 public:
-    CCSize v_size ;
-    CCPoint poszero;
-    CCArray* m_DrawArray ;
-    CCArray* m_ClipDrawArray ;
+    Size v_size ;
+    Vec2 poszero;
+    Vector<Node*> m_DrawArray ;
+    Vector<Node*> m_ClipDrawArray ;
     
-    CCRenderTexture *m_pCanvas;
-    CCSprite *m_pBrush;
+    RenderTexture *m_pCanvas;
+    Sprite *m_pBrush;
     ColorSprite* m_DrawingSp;
     ColoringClippingNode* m_ClippingNode;
     
@@ -46,28 +45,28 @@ public:
     bool  buyState;
     CREATE_FUNC(ColorCanvasView);
     virtual bool init();
-    static cocos2d::CCScene* scene();
+    static cocos2d::Scene* scene();
     virtual void onEnter();
     virtual void onExit();
     
     //virtual void onExit();
-    virtual void ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent);
-    virtual void ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent);
-    virtual void ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent);
-    virtual void ccTouchesCancelled(CCSet *pTouches, CCEvent *pEvent);
+    virtual bool onTouchBegan(Touch *touch, Event *event);
+    virtual void onTouchMoved(Touch *touch, Event *event);
+    virtual void onTouchEnded(Touch *touch, Event *event);
+    virtual void onTouchCancelled(Touch *touch, Event *event);
     void UpdateChooseColor() ;
     void backClick();
     void camera();
     
     void changeBrushCallback();
     void changeColorCallback();
-    void clickPenButton(CCObject *sender);
+    void clickPenButton(Ref *sender);
     void showColorBoard();
     
     void canTouchButton();
     void selectAdsOrIAP();
     
-    void penParticleAction(CCPoint parPos);
+    void penParticleAction(Vec2 parPos);
     
     void resetColorValue();
 
@@ -75,17 +74,17 @@ public:
 //    int curSelectBrush[5];
     bool selectRaser;
     
-    CCPoint curParPos;
+    Vec2 curParPos;
     bool clickEraser;
     
     bool showParColor;
 private:
-    CCString* DinoColor ;
-    CCString* GradonFile ;
+    std::string DinoColor ;
+    std::string GradonFile ;
     void MakeToolBar() ;
     void MakeContent();
     
-    void ClearCanvas(CCObject* pSender) ;
+    void ClearCanvas(Ref* pSender) ;
     
     void ChangePlatingMode();
     
@@ -97,24 +96,24 @@ private:
     void ClickColor();
     void ClickEraser();
     ColorSprite* whiteCanvas;
-    CCMenuItemSprite* brush;
-    CCMenuItemSprite* color;
-    CCMenuItemSprite* eraser ;
-    CCMenuItemSprite* Delete;
+    MenuItemSprite* brush;
+    MenuItemSprite* color;
+    MenuItemSprite* eraser ;
+    MenuItemSprite* Delete;
     
-    CCControlButton* back ;
-    CCControlButton* camerabtu ;
-    CCSprite* toolsBg;
-    CCMenu* closeMenu ;
+    Button* back ;
+    Button* camerabtu ;
+    Sprite* toolsBg;
+    Menu* closeMenu ;
     
-    CCPoint toolsBgInitPos;
-    CCPoint brushBtnPos;
-    CCPoint colorBtnPos;
-    CCPoint eraserBtnPos;
-    CCPoint toolsMenuPos;
+    Vec2 toolsBgInitPos;
+    Vec2 brushBtnPos;
+    Vec2 colorBtnPos;
+    Vec2 eraserBtnPos;
+    Vec2 toolsMenuPos;
     
     void removeNouesImage();
-    void ImageVisible();
+    void ImageVisible(float dt);
     
     void showToolsBoard();
     void hideToolsBoard();

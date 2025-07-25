@@ -6,7 +6,7 @@
 //
 
 #include "SelectAnimalScene.h"
-#include "cocos-ext.h"
+#include "extensions/cocos-ext.h"
 #include "GameManager.h"
 #include "ColorManager.hpp"
 #include "ColorCanvasView.h"
@@ -14,6 +14,7 @@
 #include "BuyPage.h"
 #include "PizzaManager.h"
 #include "DinoTownScene.h"
+#include "audio/include/AudioEngine.h"
 #ifdef NEWDINO
 #include "ShiningScene.h"
 #endif
@@ -32,10 +33,10 @@ enum{
     kLockMenuTag = 699,
 };
 
-CCScene* SelectAnimalScene::scene()
+Scene* SelectAnimalScene::scene()
 {
     // 'scene' is an autorelease object
-    CCScene *scene = CCScene::create();
+    Scene *scene = Scene::create();
     
     // 'layer' is an autorelease object
     SelectAnimalScene* layer = SelectAnimalScene::create();
@@ -50,14 +51,14 @@ bool SelectAnimalScene::init()
 {
     //////////////////////////////
     // 1. super init first
-    if ( !CCLayer::init() )
+    if ( !Layer::init() )
     {
         return false;
     }
-    CCPoint winCenter = GameManager::sharedManager()->getCenter();
-     s = CCDirector::sharedDirector()->getVisibleSize();
-    poszero = CCDirector::sharedDirector()->getVisibleOrigin();
-//    CCSprite* bg = CCSprite::create("DinoColor/roles-bg.jpg");
+    Vec2 winCenter = GameManager::sharedManager()->getCenter();
+     s = Director::getInstance()->getVisibleSize();
+    poszero = Director::getInstance()->getVisibleOrigin();
+//    Sprite* bg = Sprite::create("DinoColor/roles-bg.jpg");
 //    bg->setPosition(winCenter);
 //    this->addChild(bg);
 //
@@ -66,52 +67,59 @@ bool SelectAnimalScene::init()
 //    }
    
     
-    CCMenuItemImage* closeBtn = CCMenuItemImage::create("universal/back.png", "universal/back.png", this, menu_selector(SelectAnimalScene::backClick));
+    MenuItemImage* closeBtn = MenuItemImage::create("universal/back.png", "universal/back.png", CC_CALLBACK_1(SelectAnimalScene::backClick, this));
            //closeBtn->setScale(1.2);
-       CCMenu* closeMenu = CCMenu::create();
-       closeMenu->setPosition(ccp(poszero.x+50,s.height-50));
+       Menu* closeMenu = Menu::create();
+       closeMenu->setPosition(Vec2(poszero.x+50,s.height-50));
        closeMenu->addChild(closeBtn);
     this->addChild(closeMenu,999) ;
     this->initAnimals();
-    this->setTouchEnabled(true);
+    
+    // Setup touch handling
+    auto touchListener = EventListenerTouchOneByOne::create();
+    touchListener->onTouchBegan = CC_CALLBACK_2(SelectAnimalScene::onTouchBegan, this);
+    touchListener->onTouchMoved = CC_CALLBACK_2(SelectAnimalScene::onTouchMoved, this);
+    touchListener->onTouchEnded = CC_CALLBACK_2(SelectAnimalScene::onTouchEnded, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
+    
     return true ;
 }
 
-void SelectAnimalScene::addLock(CCObject *_parent,int _index) {
+void SelectAnimalScene::addLock(Ref *_parent,int _index) {
 
     const char* lockName = "lock";
     
-    CCSprite* parentSpr = (CCSprite*)_parent;
+    Sprite* parentSpr = (Sprite*)_parent;
     
-    CCSprite* locked = CCSprite::create(CCString::createWithFormat("iap/%s.png",lockName)->getCString()) ;   //那么设置一个锁的精灵
+    Sprite* locked = Sprite::create(StringUtils::format("iap/%s.png",lockName)) ;   //那么设置一个锁的精灵
 //    locked->setScale(1.0) ;
-    locked->setPosition(ccp(parentSpr->getContentSize().width/2, parentSpr->getContentSize().height/2-locked->getContentSize().height/3));
+    locked->setPosition(Vec2(parentSpr->getContentSize().width/2, parentSpr->getContentSize().height/2-locked->getContentSize().height/3));
     locked->setTag(kLockTag);
     parentSpr->addChild(locked) ;
 }
 
 void SelectAnimalScene::initAnimals()
 {
-//    SimpleAudioEngine::sharedEngine()->playBackgroundMusic("mp3/sink/sinkBg.mp3", true);
+//    experimental::AudioEngine::play2d("mp3/sink/sinkBg.mp3", true);
 //    //滑动屏幕
-////    containerLayer=CCLayer::create();
-////    scrollView = extension::CCScrollView::create();
-////    scrollView->setPosition(CCPointZero);
-////    scrollView->setViewSize(CCSizeMake(1136, 640));             //设置可视区域的大小
-////    containerLayer->setContentSize(CCSizeMake(1136, 3000));      //设置真实区域的大小
-//////    containerLayer->setPosition(ccp(0, -3000));                  //初始位置
-////    scrollView->setContainer(containerLayer);
-//////    CCLog("---%d---",ColorManager::shared()->yDis);
-////    scrollView->setContentOffset(ccp(0,ColorManager::shared()->yDis));
+////    containerLayer=Layer::create();
+////    scrollView = extension::ui::ScrollView::create();
+////    scrollView->setPosition(Vec2::ZERO);
+////    scrollView->setContentSize(Size(1136, 640));             //设置可视区域的大小
+////    containerLayer->setContentSize(Size(1136, 3000));      //设置真实区域的大小
+//////    containerLayer->setPosition(Vec2(0, -3000));                  //初始位置
+////    scrollView->setInnerContainerSize(containerLayer->getContentSize());
+//////    log("---%d---",ColorManager::shared()->yDis);
+////    scrollView->setInnerContainerPosition(Vec2(0,ColorManager::shared()->yDis));
 ////    scrollView->setTouchEnabled(true);
-////    scrollView->setDirection(cocos2d::extension::kCCScrollViewDirectionVertical);
+////    scrollView->setDirection(ui::ScrollView::Direction::VERTICAL);
 ////    scrollView->setDelegate(this);                                 //开启代理
-////    scrollView->setBounceable(true);
+////    scrollView->setBounceEnabled(true);
 ////    this->addChild(scrollView);
 ////    containerLayer->setTouchEnabled(true);
-//
-////    aniPosArr = CCPointArray::create(35);
-//
+
+////    aniPosArr = PointArray::create(35);
+
 //    if (ColorManager::shared()->firstPlayColor) {
 //        for (int i=0; i<43; i++) {
 //            for (int j=0; j<2; j++) {
@@ -139,60 +147,60 @@ void SelectAnimalScene::initAnimals()
 //    }
 //    for (int i = 0; i <43; i++) {
 //
-//        CCString* name = CCString::createWithFormat("DinoColor/dinoballon/dragon-%d.png",(i+1)) ;
-//        CCSprite* tmp2 = CCSprite::create(name->getCString());
-////        CCSize size2 = tmp2->getContentSize();
-////        CCRect insetRect2 = CCRectMake(2,2,size2.width-4, size2.height-4);
-////        CCScale9Sprite* sprite2 = CCScale9Sprite::create(name->getCString(), insetRect2) ;
-////        CCControlButton *button = CCControlButton::create(sprite2) ;
-////        button->setPreferredSize(size2) ;
+//        std::string name = StringUtils::format("DinoColor/dinoballon/dragon-%d.png",(i+1)) ;
+//        Sprite* tmp2 = Sprite::create(name);
+////        Size size2 = tmp2->getContentSize();
+////        Rect insetRect2 = Rect(2,2,size2.width-4, size2.height-4);
+////        ui::Scale9Sprite* sprite2 = ui::Scale9Sprite::create(name, insetRect2) ;
+////        ui::Button *button = ui::Button::create() ;
+////        button->setContentSize(size2) ;
 ////        button->setTag(i+1);
 //
-////        CCLog("containHeight ====> %d",ColorManager::shared()->aniPosArr[i][1]);
-////        button->setPosition(ccp(aniPosArr[i][0], aniPosArr[i][1]));
+////        log("containHeight ====> %d",ColorManager::shared()->aniPosArr[i][1]);
+////        button->setPosition(Vec2(aniPosArr[i][0], aniPosArr[i][1]));
 //        tmp2->setTag(i+1);
 //        if (i<40) {
-//            tmp2->setPosition(ccp(260+200*(i%4)+fix_w, ColorManager::shared()->aniPosArr[i][1])) ;
+//            tmp2->setPosition(Vec2(260+200*(i%4)+fix_w, ColorManager::shared()->aniPosArr[i][1])) ;
 //        }else if(i>=40) {
-//            tmp2->setPosition(ccp(360+200*(i%4)+fix_w, ColorManager::shared()->aniPosArr[i][1])) ;
+//            tmp2->setPosition(Vec2(360+200*(i%4)+fix_w, ColorManager::shared()->aniPosArr[i][1])) ;
 //        }
 //
 //        this->addChild(tmp2, 3) ;
 //
-////        containerLayer->runAction(CCMoveTo::create(600.0, ccp(0, 640)));
-////        containerLayer->runAction(CCSequence::create(CCMoveTo::create(600.0, ccp(0, 640)),
-////                                                     CCCallFuncN::create(this, callfuncN_selector(SelectAnimalScene::resetAniPos)),
+////        containerLayer->runAction(MoveTo::create(600.0, Vec2(0, 640)));
+////        containerLayer->runAction(Sequence::create(MoveTo::create(600.0, Vec2(0, 640)),
+////                                                     CallFuncN::create(CC_CALLBACK_1(SelectAnimalScene::resetAniPos, this)),
 ////                                                     NULL));
 //
-//        if (i !=0 && i!=8 && i!=27 && i != 32 && (!CCUserDefault::sharedUserDefault()->getBoolForKey("UnlockAll") && !CCUserDefault::sharedUserDefault()->getBoolForKey("purchased"))) {
+//        if (i !=0 && i!=8 && i!=27 && i != 32 && (!UserDefault::getInstance()->getBoolForKey("UnlockAll") && !UserDefault::getInstance()->getBoolForKey("purchased"))) {
 //            this->addLock(tmp2, i);
 //        }
 //
-//        if ((i ==0 || i==8 || i==27 || i == 32) && (!CCUserDefault::sharedUserDefault()->getBoolForKey("UnlockAll") && !CCUserDefault::sharedUserDefault()->getBoolForKey("purchased"))) {
-//            CCSprite* freeTag = CCSprite::create("dinohospital/free.png");
-//            freeTag->setPosition(ccp(tmp2->getContentSize().width-50,tmp2->getContentSize().height-20));
+//        if ((i ==0 || i==8 || i==27 || i == 32) && (!UserDefault::getInstance()->getBoolForKey("UnlockAll") && !UserDefault::getInstance()->getBoolForKey("purchased"))) {
+//            Sprite* freeTag = Sprite::create("dinohospital/free.png");
+//            freeTag->setPosition(Vec2(tmp2->getContentSize().width-50,tmp2->getContentSize().height-20));
 ////            freeTag->setScale(1.5);
 //            tmp2->addChild(freeTag,9);
 //        }
 //
-////        button->addTargetWithActionForControlEvents(this, cccontrol_selector(SelectAnimalScene::selectAni), CCControlEventTouchUpInside) ;//button 优先级高于ccmove
+////        button->addClickEventListener(CC_CALLBACK_1(SelectAnimalScene::selectAni, this)) ;//button 优先级高于move
 //
 ////        bubbleShake(button);
 //    }
 ////    if (touchEnd) {
 ////        scheduleUpdate();
 ////    }
-//    this->schedule(schedule_selector(SelectAnimalScene::resetAniPos));
+//    this->schedule(CC_CALLBACK_1(SelectAnimalScene::resetAniPos, this), "resetAniPos");
 }
 
 
 void SelectAnimalScene::update(float date){
 //    if(moveDisY==0){
     for (int i=1; i<44; i++) {
-        CCSprite* aniButton = (CCSprite*)this->getChildByTag(i);
+        Sprite* aniButton = (Sprite*)this->getChildByTag(i);
 //        if (touchEnd) {
         aniButton->setPositionY(aniButton->getPosition().y+1);
-//        CCLog("containHeight ====> %f",aniButton->getPosition().y);
+//        log("containHeight ====> %f",aniButton->getPosition().y);
         if (aniButton->getPosition().y>890) {
             
                 aniButton->setPositionY(-2200);
@@ -215,9 +223,9 @@ void SelectAnimalScene::update(float date){
 
 void SelectAnimalScene::resetAniPos(){
     for (int i=1; i<44; i++) {
-        CCSprite* aniButton = (CCSprite*)this->getChildByTag(i);
-//        CCLog("containHeight ====> %d",ColorManager::shared()->aniPosArr[i-1][1]);
-//        CCLog("containHeight ====> %f",aniButton->getPosition().y);
+        Sprite* aniButton = (Sprite*)this->getChildByTag(i);
+//        log("containHeight ====> %d",ColorManager::shared()->aniPosArr[i-1][1]);
+//        log("containHeight ====> %f",aniButton->getPosition().y);
         if (aniButton->getPosition().y>890) {                              //向上滑动
 //            aniButton->setPositionY(-1820+(moveDisY-(700-ColorManager::shared()->aniPosArr[i-1][1])));
             int index = aniButton->getPosition().y-890;
@@ -246,122 +254,122 @@ void SelectAnimalScene::resetAniPos(){
 }
 
 
-//void SelectAnimalScene::moveAniPos(CCObject *pSender){
+//void SelectAnimalScene::moveAniPos(Ref *pSender){
 //
 ////    posIndex = i/4;
-//    CCSprite* button = (CCSprite*)pSender;
+//    Sprite* button = (Sprite*)pSender;
 //    int aniIndex1 = button->getTag()-1;
 //
 ////    if (aniIndex1<32) {
-////        button->setPosition(ccp(260+200*(aniIndex1%4), 420 -280*(aniIndex1/4))) ;
+////        button->setPosition(Vec2(260+200*(aniIndex1%4), 420 -280*(aniIndex1/4))) ;
 ////    }else if(aniIndex1>=32) {
-////        button->setPosition(ccp(360+200*(aniIndex1%4), 420 -280*(aniIndex1/4))) ;
+////        button->setPosition(Vec2(360+200*(aniIndex1%4), 420 -280*(aniIndex1/4))) ;
 ////    }
 ////    posIndex = aniIndex1/4;
 //    aniIndex = aniIndex1;
-//    CCSequence* sequence=CCSequence::create(
-//                                            CCMoveTo::create(5.0+(aniIndex/4)*2.8,ccp(260+200*(aniIndex1%4),700)),
-//                                            CCCallFuncN::create(this, callfuncN_selector(SelectAnimalScene::resetAniPos)),
-////                                            CCMoveTo::create(45,ccp(260+200*(aniIndex1%4),700)),
-////                                            CCCallFuncN::create(this, callfuncN_selector(SelectAnimalScene::resetAniPos)),
+//    Sequence* sequence=Sequence::create(
+//                                            MoveTo::create(5.0+(aniIndex/4)*2.8,Vec2(260+200*(aniIndex1%4),700)),
+//                                            CallFuncN::create(CC_CALLBACK_1(SelectAnimalScene::resetAniPos, this)),
+////                                            MoveTo::create(45,Vec2(260+200*(aniIndex1%4),700)),
+////                                            CallFuncN::create(CC_CALLBACK_1(SelectAnimalScene::resetAniPos, this)),
 //                                                             NULL);
-////    CCSequence* sequences = CCSequence::create(CCMoveTo::create((700-button->getPosition().y)/56,ccp(260+200*(aniIndex1%4),700)),
-////                                               CCCallFuncN::create(this, callfuncN_selector(SelectAnimalScene::resetAniPos)),
-////                                               CCRepeatForever::create(sequence),
+////    Sequence* sequences = Sequence::create(MoveTo::create((700-button->getPosition().y)/56,Vec2(260+200*(aniIndex1%4),700)),
+////                                               CallFuncN::create(CC_CALLBACK_1(SelectAnimalScene::resetAniPos, this)),
+////                                               RepeatForever::create(sequence),
 ////                                               NULL);
-////    button->runAction(CCSequence::create(CCMoveTo::create(5.0+(aniIndex/4)*2.8, ccp(button->getPosition().x, button->getPosition().y+((aniIndex/4)+1)*280)),
-////                                         CCCallFuncN::create(this, callfuncN_selector(SelectAnimalScene::resetAniPos)),
+////    button->runAction(Sequence::create(MoveTo::create(5.0+(aniIndex/4)*2.8, Vec2(button->getPosition().x, button->getPosition().y+((aniIndex/4)+1)*280)),
+////                                         CallFuncN::create(CC_CALLBACK_1(SelectAnimalScene::resetAniPos, this)),
 ////                                         NULL));
-//    button->runAction(CCRepeatForever::create(sequence));
+//    button->runAction(RepeatForever::create(sequence));
 ////    button->runAction(sequence);
-//    CCLog("---%f---",button->getPosition().y);
+//    log("---%f---",button->getPosition().y);
 ////    if (button->getPosition().y == 700) {
-////        button->setPosition(ccp(260+200*(aniIndex%4), 140));
+////        button->setPosition(Vec2(260+200*(aniIndex%4), 140));
 ////    }
 //}
 
-//void SelectAnimalScene::resetAniPos(CCObject *pSender){
-//    CCSprite* button = (CCSprite*)pSender;
+//void SelectAnimalScene::resetAniPos(Ref *pSender){
+//    Sprite* button = (Sprite*)pSender;
 //    int aniIndex1 = button->getTag()-1;
 //    aniIndex = 39;
 //    button->setPositionY(ColorManager::shared()->aniPosArr[39][1]);
 ////    if (button->getPosition().y >= 700) {
-////        button->setPosition(ccp(260+200*(aniIndex1%4), button->getPosition().y-abs(aniIndex1-10)*280));
+////        button->setPosition(Vec2(260+200*(aniIndex1%4), button->getPosition().y-abs(aniIndex1-10)*280));
 ////        aniIndex = abs(aniIndex1-10);
 ////    }
-//    CCLog("---%f---",button->getPosition().y);
+//    log("---%f---",button->getPosition().y);
 //}
 
 
 void SelectAnimalScene::resetContainerPos(){
     int pos = -2360;
-    containerLayer->setPosition(ccp(0, -2360));
+    containerLayer->setPosition(Vec2(0, -2360));
 }
 
-//void SelectAnimalScene::resetAniPos(CCObject *pSender){
-//    CCLayer *container = (CCLayer*)pSender;
+//void SelectAnimalScene::resetAniPos(Ref *pSender){
+//    Layer *container = (Layer*)pSender;
 //    if (container) {
-////        container->setPosition(ccp(0, 3200));
+////        container->setPosition(Vec2(0, 3200));
 //        CCLOG("---%f---",containerLayer->getPosition().y);
 ////        ColorManager::shared()->yDis=-2360;
-////        containerLayer->runAction(CCMoveTo::create(0.01, ccp(0,-2360)));
+////        containerLayer->runAction(MoveTo::create(0.01, Vec2(0,-2360)));
 ////        ColorManager::shared()->yDis=-2360;
-////        CCRepeatForever* repeat = CCRepeatForever::create(CCSequence::create(CCMoveTo::create(-(containerLayer->getPosition().y*0.01),ccp(0,180)),
-////                                                                             CCMoveTo::create(0.000000001, ccp(0, -2900)),
-////                                                                             CCMoveTo::create(-(containerLayer->getPosition().y*0.01),ccp(0,180)),
-////                                                                             CCCallFuncN::create(this,callfuncN_selector(SelectAnimalScene::resetAniPos)),
+////        RepeatForever* repeat = RepeatForever::create(Sequence::create(MoveTo::create(-(containerLayer->getPosition().y*0.01),Vec2(0,180)),
+////                                                                             MoveTo::create(0.000000001, Vec2(0, -2900)),
+////                                                                             MoveTo::create(-(containerLayer->getPosition().y*0.01),Vec2(0,180)),
+////                                                                             CallFuncN::create(CC_CALLBACK_1(SelectAnimalScene::resetAniPos, this)),
 ////                                                                             NULL));
-//        CCSequence* sequence = CCSequence::create(
-//                                                  CCMoveTo::create(25,ccp(0,680)),
-//                                                  CCMoveTo::create(0.000000001, ccp(0, -2360)),
-//                                                  CCCallFunc::create(this, callfunc_selector(SelectAnimalScene::resetContainerPos)),
-//                                                  CCMoveTo::create(25,ccp(0,680)),
-//                                                  CCMoveTo::create(0.000000001, ccp(0, -2360)),
-////                                                  CCCallFuncN::create(this,callfuncN_selector(SelectAnimalScene::resetAniPos)),
+//        Sequence* sequence = Sequence::create(
+//                                                  MoveTo::create(25,Vec2(0,680)),
+//                                                  MoveTo::create(0.000000001, Vec2(0, -2360)),
+//                                                  CallFunc::create(CC_CALLBACK_0(SelectAnimalScene::resetContainerPos, this)),
+//                                                  MoveTo::create(25,Vec2(0,680)),
+//                                                  MoveTo::create(0.000000001, Vec2(0, -2360)),
+////                                                  CallFuncN::create(CC_CALLBACK_1(SelectAnimalScene::resetAniPos, this)),
 //                                                  NULL);
-////        container->runAction(CCSequence::create(
+////        container->runAction(Sequence::create(
 //////                                                repeat,
-//////                                                CCMoveTo::create(-(containerLayer->getPosition().y*0.01), ccp(0, 180)),
-////                                                CCMoveTo::create(0.000000001, ccp(0, -2900)),
-//////                                                CCDelayTime::create(0.5),
-////                                                CCMoveTo::create(-(containerLayer->getPosition().y*0.01), ccp(0, 180)),
-////                                                CCCallFuncN::create(this, callfuncN_selector(SelectAnimalScene::resetAniPos)),
+//////                                                MoveTo::create(-(containerLayer->getPosition().y*0.01), Vec2(0, 180)),
+////                                                MoveTo::create(0.000000001, Vec2(0, -2900)),
+//////                                                DelayTime::create(0.5),
+////                                                MoveTo::create(-(containerLayer->getPosition().y*0.01), Vec2(0, 180)),
+////                                                CallFuncN::create(CC_CALLBACK_1(SelectAnimalScene::resetAniPos, this)),
 ////                                                NULL));
-//        container->runAction(CCRepeatForever::create(sequence));
+//        container->runAction(RepeatForever::create(sequence));
 //    }
 //}
 
-void SelectAnimalScene::scrollViewDidScroll(extension::CCScrollView *view){
-    CCLog("---%f---",containerLayer->getPosition().y);
+void SelectAnimalScene::scrollViewDidScroll(extension::ui::ScrollView *view){
+    log("---%f---",containerLayer->getPosition().y);
     ColorManager::shared()->yDis = containerLayer->getPosition().y;
    
     return;
 }
 
-void SelectAnimalScene::scrollViewDidZoom(extension::CCScrollView *view){
+void SelectAnimalScene::scrollViewDidZoom(extension::ui::ScrollView *view){
     return;
 }
 
 void SelectAnimalScene::selectAdsOrIAP(int _pageIndex) {
 //    if (GameManager::sharedManager()->clickAdLockCount < 2){
-        CCLayer* buyLayer = (CCLayer*)this->getChildByTag(kBuyLayerTag);
+        Layer* buyLayer = (Layer*)this->getChildByTag(kBuyLayerTag);
         if (buyLayer == NULL) {
 //            if (GameManager::sharedManager()->clickAdLockCount == 0){
 //
-//                buyLayer = (CCLayer*)BuyPage::nodeWithID(0);
+//                buyLayer = (Layer*)BuyPage::nodeWithID(0);
 //            } else{
 
-            buyLayer = (CCLayer*)BuyPage::nodeWithID(_pageIndex);
+            buyLayer = (Layer*)BuyPage::nodeWithID(_pageIndex);
 //            }
             buyLayer->setTag(kBuyLayerTag);
             this->addChild(buyLayer, 100);
 
-            CCSize _winSize = GameManager::sharedManager()->getViewVisibleSize();
-            CCPoint center = GameManager::sharedManager()->getCenter();
+            Size _winSize = GameManager::sharedManager()->getViewVisibleSize();
+            Vec2 center = GameManager::sharedManager()->getCenter();
 
-            CCLayerColor *blacklayer = CCLayerColor::create(ccc4(0, 0, 0, 180), _winSize.width, _winSize.height);
+            LayerColor *blacklayer = LayerColor::create(Color4B(0, 0, 0, 180), _winSize.width, _winSize.height);
             blacklayer->ignoreAnchorPointForPosition(false);
-            blacklayer->setPosition(ccp(center.x,center.y));
+            blacklayer->setPosition(Vec2(center.x,center.y));
             buyLayer->addChild(blacklayer, -1);
         }
 //    } else{
@@ -370,12 +378,12 @@ void SelectAnimalScene::selectAdsOrIAP(int _pageIndex) {
 //    }
 }
 
-void SelectAnimalScene::selectAni(CCObject * sender)
+void SelectAnimalScene::selectAni(Ref * sender)
 {
-    CCNode* button = (CCNode*)sender;
+    Node* button = (Node*)sender;
     
-    CCSprite* adLock = (CCSprite*)button->getChildByTag(kLockTag);
-    CCLayer* buyLayer = (CCLayer*)this->getChildByTag(kBuyLayerTag);
+    Sprite* adLock = (Sprite*)button->getChildByTag(kLockTag);
+    Layer* buyLayer = (Layer*)this->getChildByTag(kBuyLayerTag);
     if (buyLayer == NULL) {
 //        if (ColorManager::shared()->yDis==0) {
             if (adLock != NULL) {
@@ -384,7 +392,7 @@ void SelectAnimalScene::selectAni(CCObject * sender)
                 
                 int tag = button->getTag() ;
                 ColorManager::shared()->m_AnimalTag = tag ;
-                CCDirector::sharedDirector()->replaceScene(CCTransitionCrossFade::create(0.5, ColorCanvasView::scene()));
+                Director::getInstance()->replaceScene(TransitionCrossFade::create(0.5, ColorCanvasView::scene()));
             }
 //        }
     }
@@ -392,28 +400,27 @@ void SelectAnimalScene::selectAni(CCObject * sender)
     
 }
 
-void SelectAnimalScene::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent){
-    CCTouch* pTouch = (CCTouch*)(pTouches->anyObject());
-    CCPoint location = CCDirector::sharedDirector()->convertToGL(pTouch->getLocationInView());
+bool SelectAnimalScene::onTouchBegan(Touch* touch, Event* event){
+    Vec2 location = touch->getLocation();
     moveDisY=0;
     touchEnd=false;
 //    unscheduleUpdate();
+    return true;
 }
 
 
-void SelectAnimalScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
-    CCTouch* pTouch = (CCTouch*)(pTouches->anyObject());
-    CCPoint location = CCDirector::sharedDirector()->convertToGL(pTouch->getLocationInView());
-    CCPoint preLocation = CCDirector::sharedDirector()->convertToGL(pTouch->getPreviousLocationInView());//即时获取上次的触摸点
+void SelectAnimalScene::onTouchMoved(Touch* touch, Event* event){
+    Vec2 location = touch->getLocation();
+    Vec2 preLocation = touch->getPreviousLocation();
     beginPosY = preLocation.y;
     endPosY = location.y;
     moveDisY = endPosY-beginPosY;
-    this->unschedule(schedule_selector(SelectAnimalScene::resetAniPos));
+    this->unschedule("resetAniPos");
     resetAniPos();
     if (!touchEnd) {
-//        this->runAction(CCSequence::create(CCCallFunc::create(this, callfunc_selector(SelectAnimalScene::resetAniPos)),
+//        this->runAction(Sequence::create(CallFunc::create(CC_CALLBACK_0(SelectAnimalScene::resetAniPos, this)),
 //                                           
-//                                           CCCallFunc::create(this, callfunc_selector(SelectAnimalScene::resetTouch)),
+//                                           CallFunc::create(CC_CALLBACK_0(SelectAnimalScene::resetTouch, this)),
 //                                           NULL));
     }
 //    unscheduleUpdate();
@@ -425,35 +432,34 @@ void SelectAnimalScene::resetTouch(){
 }
 
 void SelectAnimalScene::clickMp3(){
-    SimpleAudioEngine::sharedEngine()->playEffect("mp3/buttonPop.mp3");
+    experimental::AudioEngine::play2d("mp3/buttonPop.mp3");
 }
 
-void SelectAnimalScene::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent){
-    CCTouch* pTouch = (CCTouch*)(pTouches->anyObject());
-    CCPoint location = CCDirector::sharedDirector()->convertToGL(pTouch->getLocationInView());
+void SelectAnimalScene::onTouchEnded(Touch* touch, Event* event){
+    Vec2 location = touch->getLocation();
 //    if (moveDisY!=0) {
 //        moveDisY=0;
 //    }
     
     for (int i=1; i<44; i++) {
-        CCSprite* aniPop = (CCSprite*)this->getChildByTag(i);
-        if (aniPop && aniPop->boundingBox().containsPoint(location) && moveDisY==0) {
-            aniPop->runAction(CCSequence::create(CCScaleTo::create(0.1, 1.2),
-                                                 CCDelayTime::create(0.2),
-                                                 CCScaleTo::create(0.1, 1),
-                                                 CCCallFunc::create(this, callfunc_selector(SelectAnimalScene::clickMp3)),
-                                                 CCCallFuncN::create(this, callfuncN_selector(SelectAnimalScene::selectAni)),
+        Sprite* aniPop = (Sprite*)this->getChildByTag(i);
+        if (aniPop && aniPop->getBoundingBox().containsPoint(location) && moveDisY==0) {
+            aniPop->runAction(Sequence::create(ScaleTo::create(0.1, 1.2),
+                                                 DelayTime::create(0.2),
+                                                 ScaleTo::create(0.1, 1),
+                                                 CallFunc::create(CC_CALLBACK_0(SelectAnimalScene::clickMp3, this)),
+                                                 CallFuncN::create(CC_CALLBACK_1(SelectAnimalScene::selectAni, this)),
                                                  NULL));
         }
     }
-//    else if(back && !back->boundingBox().containsPoint(location)){
+//    else if(back && !back->getBoundingBox().containsPoint(location)){
 //            this->scheduleUpdate();
     moveDisY = 0;
-        this->schedule(schedule_selector(SelectAnimalScene::resetAniPos));
+        this->schedule(CC_CALLBACK_1(SelectAnimalScene::resetAniPos, this), "resetAniPos");
 //    }
 //    scheduleUpdate();
 //    if (containerLayer->getPosition().y<=20) {
-//        containerLayer->runAction(CCCallFuncN::create(this, callfuncN_selector(SelectAnimalScene::resetAniPos)));
+//        containerLayer->runAction(CallFuncN::create(CC_CALLBACK_1(SelectAnimalScene::resetAniPos, this)));
 //    }
     
 }
@@ -462,34 +468,34 @@ void SelectAnimalScene::backClick()
 {
     
 //#if defined (NEWMAIN)
-    CCTransitionCrossFade *trans = CCTransitionCrossFade::create(0.5, DinoTownScene::scene()) ;
+    TransitionCrossFade *trans = TransitionCrossFade::create(0.5, DinoTownScene::scene()) ;
 //#else
-//    CCTransitionCrossFade *trans = CCTransitionCrossFade::create(0.5, ShiningScene::sceneWithId(kCatDressTag+1)) ;
+//    TransitionCrossFade *trans = TransitionCrossFade::create(0.5, ShiningScene::sceneWithId(kCatDressTag+1)) ;
 //#endif
-    CCDirector::sharedDirector()->replaceScene(trans) ;
+    Director::getInstance()->replaceScene(trans) ;
 }
 
-void SelectAnimalScene::bubbleShake(cocos2d::CCObject *sender)
+void SelectAnimalScene::bubbleShake(cocos2d::Ref *sender)
 {
     float fix_w = 0 ;
     if (GameManager::sharedManager()->isIphoneX()) {
         fix_w = 100;
     }
-    CCSprite* bubble = (CCSprite*)sender;
+    Sprite* bubble = (Sprite*)sender;
     int posIndex = bubble->getTag()-1;
 //    if (posIndex<32) {
-//        pos=ccp(260+200*(posIndex%4)+fix_w, 420 -280*(posIndex/4));
+//        pos=Vec2(260+200*(posIndex%4)+fix_w, 420 -280*(posIndex/4));
 //    }else if(posIndex>=32) {
-//        pos=ccp(360+200*(posIndex%4)+fix_w, 420 -280*(posIndex/4)) ;
+//        pos=Vec2(360+200*(posIndex%4)+fix_w, 420 -280*(posIndex/4)) ;
 //    }
-////    CCPoint pos = ccp(260+200*(posIndex%4)+fix_w, 2760 -280*(posIndex/4));
-//    bubble->runAction(CCSequence::create(CCMoveTo::create(5.0, ccp(bubble->getPosition().x, bubble->getPosition().y+300+(posIndex/4)*280)),
+////    Vec2 pos = Vec2(260+200*(posIndex%4)+fix_w, 2760 -280*(posIndex/4));
+//    bubble->runAction(Sequence::create(MoveTo::create(5.0, Vec2(bubble->getPosition().x, bubble->getPosition().y+300+(posIndex/4)*280)),
 //                                         NULL));
     int random1 = arc4random()%2 > 0? 1:-1;
     int random2 = arc4random()%2 > 0? 1:-1;
     int offset = 2;
     
-    CCPoint endPoint = CCPoint(bubble->getPosition().x + random1*(arc4random()%offset+1.0), bubble->getPosition().y + random1*(arc4random()%offset+1.0));
-    CCMoveTo* move = CCMoveTo::create(0.2*(arc4random()%2+1.0), endPoint);
-    bubble->runAction(CCSequence::createWithTwoActions(move, CCCallFuncN::create(this, callfuncN_selector(SelectAnimalScene::bubbleShake))));
+    Vec2 endPoint = Vec2(bubble->getPosition().x + random1*(arc4random()%offset+1.0), bubble->getPosition().y + random1*(arc4random()%offset+1.0));
+    MoveTo* move = MoveTo::create(0.2*(arc4random()%2+1.0), endPoint);
+    bubble->runAction(Sequence::createWithTwoActions(move, CallFuncN::create(CC_CALLBACK_1(SelectAnimalScene::bubbleShake, this))));
 }

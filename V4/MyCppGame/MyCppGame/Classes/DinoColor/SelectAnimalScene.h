@@ -10,37 +10,37 @@
 
 #include <stdio.h>
 #include "cocos2d.h"
-#include "cocos-ext.h"
+#include "extensions/cocos-ext.h"
 
 using namespace cocos2d;
 
-//class SelectAnimalScene : public CCLayer {
-class SelectAnimalScene : public cocos2d::CCLayer, public extension::CCScrollViewDelegate{
-    extension::CCScrollView *scrollView;
+//class SelectAnimalScene : public Layer {
+class SelectAnimalScene : public cocos2d::Layer, public extension::ui::ScrollViewDelegate{
+    extension::ui::ScrollView *scrollView;
 private:
-    void addLock(cocos2d::CCObject* _parent,int _index);
+    void addLock(cocos2d::Ref* _parent,int _index);
     void selectAdsOrIAP(int _pageIndex);
     
 public:
-    CCSize s;
-    CCPoint poszero;
+    Size s;
+    Vec2 poszero;
 //    int xDis=0;
-    virtual void scrollViewDidScroll(extension::CCScrollView *view);
-    virtual void scrollViewDidZoom(extension::CCScrollView *view);
+    virtual void scrollViewDidScroll(extension::ui::ScrollView *view);
+    virtual void scrollViewDidZoom(extension::ui::ScrollView *view);
     
     virtual bool init();
-    static cocos2d::CCScene* scene();
+    static cocos2d::Scene* scene();
     void backClick();
     
     void initAnimals();
-    void selectAni(CCObject *sender) ;
-    void bubbleShake(cocos2d::CCObject *sender);
+    void selectAni(Ref *sender) ;
+    void bubbleShake(cocos2d::Ref *sender);
     
-    virtual void ccTouchesBegan(CCSet *pTouches,CCEvent *pEvent);
-    virtual void ccTouchesMoved(CCSet *pTouches,CCEvent *pEvent);
-    virtual void ccTouchesEnded(CCSet *pTouches,CCEvent *pEvent);
+    virtual bool onTouchBegan(Touch* touch, Event* event);
+    virtual void onTouchMoved(Touch* touch, Event* event);
+    virtual void onTouchEnded(Touch* touch, Event* event);
     
-    CCPoint pos;
+    Vec2 pos;
     int beginPosY=0;
     int endPosY=0;
     
@@ -50,17 +50,17 @@ public:
     void update(float date);
     
     void resetContainerPos();
-//    void moveAniPos(CCObject *pSender);
+//    void moveAniPos(Ref *pSender);
     void resetAniPos();
     
     void clickMp3();
     
     bool touchEnd=true;
     void resetTouch();
-//    CCPointArray* aniPosArr;
+//    PointArray* aniPosArr;
     
 //    void resetButtonPos();
-    CCLayer *containerLayer;
+    Layer *containerLayer;
     CREATE_FUNC(SelectAnimalScene);
 };
 

@@ -38,12 +38,12 @@ public:
     void initColorManager();
     void changeCurColor();
     
-    ccColor3B getCurColor(int _colorIndex);
-    CCTexture2D* maskedWithSpriteTexture(CCSprite* texturesp, CCSprite* masksp,CCPoint location);
+    Color3B getCurColor(int _colorIndex);
+    Texture2D* maskedWithSpriteTexture(Sprite* texturesp, Sprite* masksp, Vec2 location);
     
     void saveTextureToFile(std::string _fileName, ColorSprite* _colorSpr);
     
-    CCImage* loadImageFromBinaryFile(const std::string& _fileName);
+    Image* loadImageFromBinaryFile(const std::string& _fileName);
     
     void doubleColorChange();
     void trebleColorChange();
@@ -52,10 +52,10 @@ public:
     
     
     DrawType m_DrawType  = Draw_Point;
-    ccColor3B m_pColor ;
-    ccColor3B secondColor ;
-    ccColor3B thirdColor ;
-    ccColor3B firstColor ;
+    Color3B m_pColor ;
+    Color3B secondColor ;
+    Color3B thirdColor ;
+    Color3B firstColor ;
     
     
     bool changeR;
