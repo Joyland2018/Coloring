@@ -10,19 +10,20 @@
 
 #include <stdio.h>
 #include "cocos2d.h"
-#include "cocos-ext.h"
+#include "extensions/cocos-ext.h"
+#include "ui/CocosGUI.h"
 
-using namespace cocos2d;
+USING_NS_CC;
 using namespace extension;
 
-class SelectColorTheme : public CCLayer {
+class SelectColorTheme : public Layer {
 public:
-//    CCScrollView *scrollView1;
-//    CCScrollView *scrollView2;
-//    CCLayer *containerLayer1;
-//    CCLayer *containerLayer2;
+//    ui::ScrollView *scrollView1;
+//    ui::ScrollView *scrollView2;
+//    Layer *containerLayer1;
+//    Layer *containerLayer2;
     
-    static CCScene* scene();
+    static Scene* scene();
     virtual void onEnter();
     virtual void onExit();
     virtual bool init();
@@ -30,13 +31,13 @@ public:
     SelectColorTheme();
     ~SelectColorTheme();
     
-//    virtual void scrollViewDidScroll(CCScrollView* view);
-//    virtual void scrollViewDidZoom(CCScrollView* view);
+//    virtual void scrollViewDidScroll(ui::ScrollView* view);
+//    virtual void scrollViewDidZoom(ui::ScrollView* view);
     
-    virtual void registerWithTouchDispatcher();                 //注册单点触摸点击事件
-    virtual bool ccTouchBegan(CCTouch* touch,CCEvent* event);
-    virtual void ccTouchEnded(CCTouch* touch,CCEvent* event);
-    virtual void ccTouchMoved(CCTouch* touch,CCEvent* event);
+    // 新的触摸处理方式
+    virtual void onTouchesBegan(const std::vector<Touch*>& touches, Event* event);
+    virtual void onTouchesEnded(const std::vector<Touch*>& touches, Event* event);
+    virtual void onTouchesMoved(const std::vector<Touch*>& touches, Event* event);
     
     void clickBack();
     void showTheme();
@@ -50,7 +51,7 @@ public:
     bool showCurTheme;
     bool haveResetPos;
     
-    CCPoint winCenter;
+    Vec2 winCenter;
     
     int beginX;
     int endX;

@@ -12,21 +12,21 @@
 #include "cocos2d.h"
 
 using namespace cocos2d;
-class SelectBrush : public CCLayer {
+class SelectBrush : public Layer {
         
 public:
-    CCSize v_size;
-    CCPoint poszero;
+    Size v_size;
+    Vec2 poszero;
     CREATE_FUNC(SelectBrush);
     virtual bool init();
-    static cocos2d::CCScene* scene();
+    static cocos2d::Scene* scene();
     
     void setButton();
-    void brushClick(CCObject* obj);
-    CCMenuItemSprite* brushBtu;
-    CCLayer* contentNode;
+    void brushClick(Ref* obj);
+    MenuItemSprite* brushBtu;
+    Layer* contentNode;
     
-    void SetMenuItem(CCMenuItemSprite* item);
+    void SetMenuItem(MenuItemSprite* item);
 };
 
 #endif /* SelectBrushLayer_hpp */

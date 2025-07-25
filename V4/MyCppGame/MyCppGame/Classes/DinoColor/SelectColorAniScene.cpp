@@ -6,7 +6,7 @@
 //
 
 #include "SelectColorAniScene.hpp"
-#include "SimpleAudioEngine.h"
+#include "audio/include/SimpleAudioEngine.h"
 #include "GameManager.h"
 //#include "DeviceManager.h"
 
@@ -15,7 +15,7 @@
 #include "ColorCanvasView.h"
 #include "BuyPage.h"
 
-
+USING_NS_CC;
 using namespace CocosDenshion;
 
 enum{
@@ -26,8 +26,8 @@ enum{
     kColorAniTag = 30,
 };
 
-CCScene* SelectColorAniScene::scene(){
-    CCScene* scene = CCScene::create();
+Scene* SelectColorAniScene::scene(){
+    Scene* scene = Scene::create();
     SelectColorAniScene* layer  = SelectColorAniScene::create();
     scene->addChild(layer);
     return scene;
@@ -35,7 +35,7 @@ CCScene* SelectColorAniScene::scene(){
 
 
 bool SelectColorAniScene::init(){
-    if (!CCLayer::init()) {
+    if (!Layer::init()) {
         return false;
     }
     
@@ -45,9 +45,9 @@ bool SelectColorAniScene::init(){
     selectAniIndex =0;
     
     winCenter = GameManager::sharedManager()->getCenter();
-    CCPoint leftTop = GameManager::sharedManager()->getLeftTopPos();
+    Vec2 leftTop = GameManager::sharedManager()->getLeftTopPos();
     
-    CCSprite* bg = CCSprite::create("DinoColor/colorUI/colorAniBg.png");
+    Sprite* bg = Sprite::create("DinoColor/colorUI/colorAniBg.png");
     bg->setPosition(winCenter);
     this->addChild(bg);
     
@@ -58,55 +58,62 @@ bool SelectColorAniScene::init(){
     }
     
     //返回按钮
-    CCSprite* back=CCSprite::create("background/back.png");
-    back->setPosition(ccp(leftTop.x+50,leftTop.y-50));
+    Sprite* back=Sprite::create("background/back.png");
+    back->setPosition(Vec2(leftTop.x+50,leftTop.y-50));
     back->setTag(kBackTag);
     this->addChild(back,1);
     
     CCLOG("---位置%d---",ColorManager::shared()->curColorTheme);
     
-    this->scheduleOnce(schedule_selector(SelectColorAniScene::showAllTheme), 0.3);
+    this->scheduleOnce(CC_SCHEDULE_SELECTOR(SelectColorAniScene::showAllTheme), 0.3);
     
-    SimpleAudioEngine::sharedEngine()->playBackgroundMusic("mp3/sink/sinkBg.mp3", true);
+    SimpleAudioEngine::getInstance()->playBackgroundMusic("mp3/sink/sinkBg.mp3", true);
     
-    this->setTouchEnabled(true);
+    // Setup touch listener for Cocos2d-x 4.0
+    touchListener = EventListenerTouchOneByOne::create();
+    touchListener->setSwallowTouches(true);
+    touchListener->onTouchBegan = CC_CALLBACK_2(SelectColorAniScene::onTouchBegan, this);
+    touchListener->onTouchMoved = CC_CALLBACK_2(SelectColorAniScene::onTouchMoved, this);
+    touchListener->onTouchEnded = CC_CALLBACK_2(SelectColorAniScene::onTouchEnded, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
+    
     return true;
 }
 
-void SelectColorAniScene::addLock(CCObject *_parent,int _index) {
+void SelectColorAniScene::addLock(Node *_parent,int _index) {
 
     const char* lockName = "lock";
     
-    CCSprite* parentSpr = (CCSprite*)_parent;
+    Sprite* parentSpr = (Sprite*)_parent;
     
-    CCSprite* locked = CCSprite::create(CCString::createWithFormat("iap/%s.png",lockName)->getCString()) ;   //那么设置一个锁的精灵
+    Sprite* locked = Sprite::create(StringUtils::format("iap/%s.png",lockName)) ;   //那么设置一个锁的精灵
     locked->setScale(0.6) ;
-    locked->setPosition(ccp(parentSpr->getContentSize().width-25, parentSpr->getContentSize().height/4));
+    locked->setPosition(Vec2(parentSpr->getContentSize().width-25, parentSpr->getContentSize().height/4));
     locked->setTag(kLockTag);
     parentSpr->addChild(locked) ;
 }
 
 void SelectColorAniScene::selectAdsOrIAP(int _pageIndex) {
-        CCLayer* buyLayer = (CCLayer*)this->getChildByTag(kBuyLayerTag);
+        Layer* buyLayer = (Layer*)this->getChildByTag(kBuyLayerTag);
         if (buyLayer == NULL) {
-            buyLayer = (CCLayer*)BuyPage::nodeWithID(_pageIndex);
+            buyLayer = (Layer*)BuyPage::nodeWithID(_pageIndex);
             buyLayer->setTag(kBuyLayerTag);
             this->addChild(buyLayer, 100);
 
-            CCSize _winSize = GameManager::sharedManager()->getViewVisibleSize();
-            CCPoint center = GameManager::sharedManager()->getCenter();
+            Size _winSize = GameManager::sharedManager()->getViewVisibleSize();
+            Vec2 center = GameManager::sharedManager()->getCenter();
 
-            CCLayerColor *blacklayer = CCLayerColor::create(ccc4(0, 0, 0, 180), _winSize.width, _winSize.height);
+            LayerColor *blacklayer = LayerColor::create(Color4B(0, 0, 0, 180), _winSize.width, _winSize.height);
             blacklayer->ignoreAnchorPointForPosition(false);
-            blacklayer->setPosition(ccp(center.x,center.y));
+            blacklayer->setPosition(Vec2(center.x,center.y));
             buyLayer->addChild(blacklayer, -1);
         }
 }
 
 void SelectColorAniScene::showAllTheme(){
     
-    CCSize curWinSize = GameManager::sharedManager()->getViewVisibleSize();
-    CCPoint lastscenePos = GameManager::sharedManager()->getLeftBottomPos();
+    Size curWinSize = GameManager::sharedManager()->getViewVisibleSize();
+    Vec2 lastscenePos = GameManager::sharedManager()->getLeftBottomPos();
     
     int x_x = 0;
     
@@ -120,43 +127,43 @@ void SelectColorAniScene::showAllTheme(){
     
     for (int i=0; i<8; i++) {
         
-//        CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile(CCString::createWithFormat("DinoColor/ColoringType_%d/ColoringType_%d_%d/ColoringType_%d_%d.plist",1,1,2,1,2)->getCString());
+//        SpriteFrameCache::getInstance()->addSpriteFramesWithFile(StringUtils::format("DinoColor/ColoringType_%d/ColoringType_%d_%d/ColoringType_%d_%d.plist",1,1,2,1,2));
         CCLOG("---位置%d---",ColorManager::shared()->curColorTheme);
-        CCSprite* board = CCSprite::create("DinoColor/colorUI/colorBoard.png");
-        board->setPosition(ccp(270+(i%4)*200+iphoneXOffsetX-x_x, 420-(i/4)*200));
+        Sprite* board = Sprite::create("DinoColor/colorUI/colorBoard.png");
+        board->setPosition(Vec2(270+(i%4)*200+iphoneXOffsetX-x_x, 420-(i/4)*200));
         board->setTag(kColorBoardTag+i);
         this->addChild(board);
         
-        CCSprite* colorTheme = CCSprite::create(CCString::createWithFormat("DinoColor/ColoringType_%d/ColoringType_%d_%d/coloringType_line.png",ColorManager::shared()->curColorTheme+1,ColorManager::shared()->curColorTheme+1,i+1)->getCString());
-        colorTheme->setPosition(ccp(board->getContentSize().width/2, board->getContentSize().height/2));
+        Sprite* colorTheme = Sprite::create(StringUtils::format("DinoColor/ColoringType_%d/ColoringType_%d_%d/coloringType_line.png",ColorManager::shared()->curColorTheme+1,ColorManager::shared()->curColorTheme+1,i+1));
+        colorTheme->setPosition(Vec2(board->getContentSize().width/2, board->getContentSize().height/2));
         colorTheme->setScale(0.2);
         colorTheme->setTag(kColorAniTag+i);
         board->addChild(colorTheme,2);
         
 //        std::string canvasFileName = "ColoringType_"+std::to_string(ColorManager::shared()->curColorTheme+1)+"_"+std::to_string(i+1)+"canvas";
-//        CCImage* canvasImage = ColorManager::shared()->loadImageFromBinaryFile(canvasFileName);
+//        Image* canvasImage = ColorManager::shared()->loadImageFromBinaryFile(canvasFileName);
 //
 //        if (canvasImage != NULL) {
 //
-//            CCTexture2D* canvasTexture = new CCTexture2D();
+//            Texture2D* canvasTexture = new Texture2D();
 //            if (canvasTexture && canvasTexture->initWithImage(canvasImage)) {
 //
 //
-//                CCSprite* stencilSpr = CCSprite::createWithTexture(CCTextureCache::sharedTextureCache()->addImage("DinoColor/canvas.png"), CCRect(0, 0, 739, 640));
-//                stencilSpr->setAnchorPoint(ccp(0.0, 0.0));
-//                stencilSpr->setPosition(CCPointZero);
+//                Sprite* stencilSpr = Sprite::createWithTexture(Director::getInstance()->getTextureCache()->addImage("DinoColor/canvas.png"), Rect(0, 0, 739, 640));
+//                stencilSpr->setAnchorPoint(Vec2(0.0, 0.0));
+//                stencilSpr->setPosition(Vec2::ZERO);
 //
-//                CCSprite* canvasSpr = CCSprite::createWithTexture(canvasTexture);
-//                canvasSpr->setPosition(ccp(lastscenePos.x+x_x, canvasSpr->getContentSize().height/2));
+//                Sprite* canvasSpr = Sprite::createWithTexture(canvasTexture);
+//                canvasSpr->setPosition(Vec2(lastscenePos.x+x_x, canvasSpr->getContentSize().height/2));
 //                if (GameManager::sharedManager()->isIphoneX()) {
 //                    canvasSpr->setScaleX(0.6);
 //                }
-//                CCClippingNode* clip = CCClippingNode::create(stencilSpr);
+//                ClippingNode* clip = ClippingNode::create(stencilSpr);
 //                clip->addChild(canvasSpr);
 //
-//                clip->setContentSize(CCSizeMake(stencilSpr->getContentSize().width, stencilSpr->getContentSize().height));
-//                clip->setAnchorPoint(ccp(0.5, 0.5));
-//                clip->setPosition(ccp(colorTheme->getPosition().x, colorTheme->getPosition().y));
+//                clip->setContentSize(Size(stencilSpr->getContentSize().width, stencilSpr->getContentSize().height));
+//                clip->setAnchorPoint(Vec2(0.5, 0.5));
+//                clip->setPosition(Vec2(colorTheme->getPosition().x, colorTheme->getPosition().y));
 //                clip->setAlphaThreshold(0.0f);
 //                clip->setScale(0.2);
 //                board->addChild(clip);
@@ -166,33 +173,33 @@ void SelectColorAniScene::showAllTheme(){
 //            CC_SAFE_RELEASE(canvasImage);
 //        }
         
-        CCString* name = CCString::create( CCString::createWithFormat("DinoColor/ColoringType_%d/ColoringType_%d_%d/ColoringType_%d_%d.plist",ColorManager::shared()->curColorTheme+1,ColorManager::shared()->curColorTheme+1,i+1,ColorManager::shared()->curColorTheme+1,i+1)->getCString());
-        CCDictionary* pointArray = CCDictionary::createWithContentsOfFile(name->getCString()) ;
-        if (pointArray!= NULL) {
-            for (int j = 0; j < pointArray->count(); j++) {
-                CCString* key = (CCString*)pointArray->allKeys()->objectAtIndex(j);
-                std::string strFileName = "ColoringType_"+std::to_string(ColorManager::shared()->curColorTheme+1)+"_"+std::to_string(i+1)+key->m_sString;
-//                CCImage* renderImage = ColorManager::shared()->loadImageFromBinaryFile(strFileName);
+        std::string name = StringUtils::format("DinoColor/ColoringType_%d/ColoringType_%d_%d/ColoringType_%d_%d.plist",ColorManager::shared()->curColorTheme+1,ColorManager::shared()->curColorTheme+1,i+1,ColorManager::shared()->curColorTheme+1,i+1);
+        ValueMap pointArray = FileUtils::getInstance()->getValueMapFromFile(name) ;
+        if (!pointArray.empty()) {
+            for (auto& pair : pointArray) {
+                std::string key = pair.first;
+                std::string strFileName = "ColoringType_"+std::to_string(ColorManager::shared()->curColorTheme+1)+"_"+std::to_string(i+1)+key;
+//                Image* renderImage = ColorManager::shared()->loadImageFromBinaryFile(strFileName);
                 
 //                if (renderImage != NULL) {
                     
-//                    CCTexture2D* lastSceneTexture = new CCTexture2D();
+//                    Texture2D* lastSceneTexture = new Texture2D();
 //                    if (lastSceneTexture && lastSceneTexture->initWithImage(renderImage)) {
                         
-                        CCString* pngName = CCString::createWithFormat("DinoColor/ColoringType_%d/ColoringType_%d_%d/%s.png",ColorManager::shared()->curColorTheme+1,ColorManager::shared()->curColorTheme+1,i+1,key->getCString());
-                        CCSprite* stencilSpr = CCSprite::create(pngName->getCString());
-                        stencilSpr->setAnchorPoint(ccp(0.0, 0.0));
-                        stencilSpr->setPosition(CCPointZero);
+                        std::string pngName = StringUtils::format("DinoColor/ColoringType_%d/ColoringType_%d_%d/%s.png",ColorManager::shared()->curColorTheme+1,ColorManager::shared()->curColorTheme+1,i+1,key.c_str());
+                        Sprite* stencilSpr = Sprite::create(pngName);
+                        stencilSpr->setAnchorPoint(Vec2(0.0, 0.0));
+                        stencilSpr->setPosition(Vec2::ZERO);
                         
-//                        CCSprite* lastSceneSpr = CCSprite::createWithTexture(lastSceneTexture);
-//                        lastSceneSpr->setPosition(ccp(stencilSpr->getContentSize().width/2, stencilSpr->getContentSize().height/2+2));
+//                        Sprite* lastSceneSpr = Sprite::createWithTexture(lastSceneTexture);
+//                        lastSceneSpr->setPosition(Vec2(stencilSpr->getContentSize().width/2, stencilSpr->getContentSize().height/2+2));
 
-                        CCClippingNode* clip = CCClippingNode::create(stencilSpr);
+                        ClippingNode* clip = ClippingNode::create(stencilSpr);
 //                        clip->addChild(lastSceneSpr);
                         
-                        clip->setContentSize(CCSizeMake(stencilSpr->getContentSize().width, stencilSpr->getContentSize().height));
-                        clip->setAnchorPoint(ccp(0.5, 0.5));
-                        clip->setPosition(ccp(colorTheme->getContentSize().width/2, colorTheme->getContentSize().height/2));
+                        clip->setContentSize(Size(stencilSpr->getContentSize().width, stencilSpr->getContentSize().height));
+                        clip->setAnchorPoint(Vec2(0.5, 0.5));
+                        clip->setPosition(Vec2(colorTheme->getContentSize().width/2, colorTheme->getContentSize().height/2));
                         clip->setAlphaThreshold(0.0f);
     //                    clip->setScale(0.2);
                         colorTheme->addChild(clip,-1);
@@ -207,34 +214,34 @@ void SelectColorAniScene::showAllTheme(){
         }
         
 //        std::string picFileName = "ColoringType_"+std::to_string(ColorManager::shared()->colorThemeIndex)+"_"+std::to_string(i+1)+"_Preview";
-//        CCImage* renderImage = ColorManager::shared()->loadImageFromBinaryFile(picFileName);
+//        Image* renderImage = ColorManager::shared()->loadImageFromBinaryFile(picFileName);
 //        
 //        if (renderImage != NULL) {
 //            
-//            CCTexture2D* sceneTexture = new CCTexture2D();
+//            Texture2D* sceneTexture = new Texture2D();
 //            sceneTexture->initWithImage(renderImage);
 //            
-//            CCSprite* colorSceneSpr = CCSprite::createWithTexture(sceneTexture);
-//            colorSceneSpr->setPosition(ccp(board->getContentSize().width/2, board->getContentSize().height/2));
+//            Sprite* colorSceneSpr = Sprite::createWithTexture(sceneTexture);
+//            colorSceneSpr->setPosition(Vec2(board->getContentSize().width/2, board->getContentSize().height/2));
 //            colorSceneSpr->setScale(0.2);
 //            board->addChild(colorSceneSpr);
 //        }
         
-        if (!CCUserDefault::sharedUserDefault()->getBoolForKey("UnlockAll") && !CCUserDefault::sharedUserDefault()->getBoolForKey("purchased")) {
+        if (!UserDefault::getInstance()->getBoolForKey("UnlockAll") && !UserDefault::getInstance()->getBoolForKey("purchased")) {
             if (ColorManager::shared()->curColorTheme == 3) {
                 if (i>1) {
                     this->addLock(board, i);
                 }else if(i<=1){
-                    CCSprite* freeTag = CCSprite::create("background/free.png");
-                    freeTag->setPosition(ccp(board->getContentSize().width-25, board->getContentSize().height));
+                    Sprite* freeTag = Sprite::create("background/free.png");
+                    freeTag->setPosition(Vec2(board->getContentSize().width-25, board->getContentSize().height));
                     freeTag->setScale(0.8);
                     board->addChild(freeTag,2);
                 }
                 
             }else if(ColorManager::shared()->curColorTheme != 3){
                 if(i==0){
-                        CCSprite* freeTag = CCSprite::create("background/free.png");
-                        freeTag->setPosition(ccp(board->getContentSize().width-25, board->getContentSize().height));
+                        Sprite* freeTag = Sprite::create("background/free.png");
+                        freeTag->setPosition(Vec2(board->getContentSize().width-25, board->getContentSize().height));
                         freeTag->setScale(0.8);
                         board->addChild(freeTag,2);
                 }else{
@@ -254,18 +261,22 @@ void SelectColorAniScene::showAllTheme(){
 
 SelectColorAniScene::SelectColorAniScene(){}
 
-SelectColorAniScene::~SelectColorAniScene(){}
+SelectColorAniScene::~SelectColorAniScene(){
+    if (touchListener) {
+        _eventDispatcher->removeEventListener(touchListener);
+    }
+}
 
 void SelectColorAniScene::onEnter(){
-    CCLayer::onEnter();
+    Layer::onEnter();
 }
 
 void SelectColorAniScene::onExit(){
-    CCLayer::onExit();
+    Layer::onExit();
 }
 
 void SelectColorAniScene::clickBack(){
-    if (!CCUserDefault::sharedUserDefault()->getBoolForKey("UnlockAll") && !CCUserDefault::sharedUserDefault()->getBoolForKey("purchased")){
+    if (!UserDefault::getInstance()->getBoolForKey("UnlockAll") && !UserDefault::getInstance()->getBoolForKey("purchased")){
         if (GameManager::sharedManager()->num == 5){
             GameManager::sharedManager()->showInterstitial();
             GameManager::sharedManager()->num = 0;
@@ -273,55 +284,51 @@ void SelectColorAniScene::clickBack(){
             GameManager::sharedManager()->num++;
         }
     }
-    CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(0.5, SelectColorTheme::scene(), ccBLACK));
+    Director::getInstance()->replaceScene(TransitionFade::create(0.5, SelectColorTheme::scene(), Color3B::BLACK));
 }
 
 void SelectColorAniScene::goNext(){
-    SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
-    CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(0.5, ColorCanvasView::scene(), ccBLACK));
+    SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+    Director::getInstance()->replaceScene(TransitionFade::create(0.5, ColorCanvasView::scene(), Color3B::BLACK));
 }
 
-void SelectColorAniScene::registerWithTouchDispatcher(){
-    CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, false);
-}
-
-bool SelectColorAniScene::ccTouchBegan(CCTouch *touch, CCEvent *event){
-    CCPoint location = touch->getLocationInView();
-    location = CCDirector::sharedDirector()->convertToGL(location);
-    CCSprite* back = (CCSprite*)this->getChildByTag(kBackTag);
-    CCLayer* buyLayer = (CCLayer*)this->getChildByTag(kBuyLayerTag);
-    if (back!= NULL && back->boundingBox().containsPoint(location) && backClick==false&&!buyLayer) {
+bool SelectColorAniScene::onTouchBegan(Touch *touch, Event *event){
+    Vec2 location = touch->getLocationInView();
+    location = Director::getInstance()->convertToGL(location);
+    Sprite* back = (Sprite*)this->getChildByTag(kBackTag);
+    Layer* buyLayer = (Layer*)this->getChildByTag(kBuyLayerTag);
+    if (back!= NULL && back->getBoundingBox().containsPoint(location) && backClick==false&&!buyLayer) {
         backClick = true;
-        CCScaleBy* scaleBy = CCScaleBy::create(0.1, 1.2);
-        SimpleAudioEngine::sharedEngine()->playEffect("mp3/touchItem.mp3");
-        back->runAction(CCSequence::createWithTwoActions(CCSequence::createWithTwoActions(scaleBy, scaleBy->reverse()), CCCallFunc::create(this, callfunc_selector(SelectColorAniScene::clickBack))));
-        SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
+        ScaleBy* scaleBy = ScaleBy::create(0.1, 1.2);
+        SimpleAudioEngine::getInstance()->playEffect("mp3/touchItem.mp3");
+        back->runAction(Sequence::createWithTwoActions(Sequence::createWithTwoActions(scaleBy, scaleBy->reverse()), CallFunc::create(CC_CALLBACK_0(SelectColorAniScene::clickBack, this))));
+        SimpleAudioEngine::getInstance()->stopBackgroundMusic();
     }
 
     for (int i=0; i<8; i++) {
-        CCSprite* board = (CCSprite*)this->getChildByTag(kColorBoardTag+i);
-//        CCSprite* colorAni = (CCSprite*)board->getChildByTag(kColorAniTag+i);
-        CCSprite* adLock = (CCSprite*)board->getChildByTag(kLockTag);
-//        CCPoint themePos =board->convertToNodeSpace(location);
-        if (board!=NULL && board->boundingBox().containsPoint(location) && clickTheme==false &&!buyLayer) {
-            SimpleAudioEngine::sharedEngine()->playEffect("mp3/touchItem.mp3");
+        Sprite* board = (Sprite*)this->getChildByTag(kColorBoardTag+i);
+//        Sprite* colorAni = (Sprite*)board->getChildByTag(kColorAniTag+i);
+        Sprite* adLock = (Sprite*)board->getChildByTag(kLockTag);
+//        Vec2 themePos =board->convertToNodeSpace(location);
+        if (board!=NULL && board->getBoundingBox().containsPoint(location) && clickTheme==false &&!buyLayer) {
+            SimpleAudioEngine::getInstance()->playEffect("mp3/touchItem.mp3");
             if (adLock!=NULL) {
-//                CCScaleBy* scaleBy = CCScaleBy::create(0.1, 1.2);
-//                adLock->runAction(CCSequence::createWithTwoActions(scaleBy, scaleBy->reverse()));
+//                ScaleBy* scaleBy = ScaleBy::create(0.1, 1.2);
+//                adLock->runAction(Sequence::createWithTwoActions(scaleBy, scaleBy->reverse()));
                 this->selectAdsOrIAP(2);
             }else{
                 selectAniIndex = i;
                 clickTheme=true;
                 ColorManager::shared()->colorAniIndex = i+1;
-                CCScaleBy* scaleBy = CCScaleBy::create(0.1, 1.3);
-                GameManager::sharedManager()->trackMixpanel(CCString::createWithFormat("Click ColorTheme%d themeAni%d Times",ColorManager::shared()->curColorTheme,i)->getCString());
-                board->runAction(CCSequence::create(CCSequence::createWithTwoActions(scaleBy, scaleBy->reverse()),
-                                                                  CCCallFunc::create(this, callfunc_selector(SelectColorAniScene::aniAction)),
-                                                                  CCDelayTime::create(1.1),
-                                                                  CCCallFunc::create(this, callfunc_selector(SelectColorAniScene::goNext)),NULL));
+                ScaleBy* scaleBy = ScaleBy::create(0.1, 1.3);
+                GameManager::sharedManager()->trackMixpanel(StringUtils::format("Click ColorTheme%d themeAni%d Times",ColorManager::shared()->curColorTheme,i).c_str());
+                board->runAction(Sequence::create(Sequence::createWithTwoActions(scaleBy, scaleBy->reverse()),
+                                                                  CallFunc::create(CC_CALLBACK_0(SelectColorAniScene::aniAction, this)),
+                                                                  DelayTime::create(1.1),
+                                                                  CallFunc::create(CC_CALLBACK_0(SelectColorAniScene::goNext, this)),NULL));
             }
 
-//            colorThemes->runAction(CCSequence::createWithTwoActions(CCSequence::createWithTwoActions(scaleBy, scaleBy->reverse()), CCCallFunc::create(this, callfunc_selector(SelectColorAniScene::goNext))));
+//            colorThemes->runAction(Sequence::createWithTwoActions(Sequence::createWithTwoActions(scaleBy, scaleBy->reverse()), CallFunc::create(CC_CALLBACK_0(SelectColorAniScene::goNext, this))));
         }
     }
     
@@ -331,32 +338,32 @@ bool SelectColorAniScene::ccTouchBegan(CCTouch *touch, CCEvent *event){
     return true;
 }
 
-void SelectColorAniScene::ccTouchMoved(CCTouch *touch, CCEvent *event){
-    CCPoint location = touch->getLocationInView();
-    location = CCDirector::sharedDirector()->convertToGL(location);
+void SelectColorAniScene::onTouchMoved(Touch *touch, Event *event){
+    Vec2 location = touch->getLocationInView();
+    location = Director::getInstance()->convertToGL(location);
 }
 
-void SelectColorAniScene::ccTouchEnded(CCTouch *touch, CCEvent *event){
-    CCPoint point = touch->getLocation();
-    CCPoint lastPoint = touch->getPreviousLocation();
+void SelectColorAniScene::onTouchEnded(Touch *touch, Event *event){
+    Vec2 point = touch->getLocation();
+    Vec2 lastPoint = touch->getPreviousLocation();
     
 
 }
 
 
 void SelectColorAniScene::aniAction(){
-    CCSprite* board = (CCSprite*)this->getChildByTag(kColorBoardTag+selectAniIndex);
+    Sprite* board = (Sprite*)this->getChildByTag(kColorBoardTag+selectAniIndex);
     if (board!=NULL) {
-        CCSprite* colorThemes = (CCSprite*)board->getChildByTag(kColorAniTag+selectAniIndex);
+        Sprite* colorThemes = (Sprite*)board->getChildByTag(kColorAniTag+selectAniIndex);
         if(colorThemes!=NULL){
-            SimpleAudioEngine::sharedEngine()->playEffect("mp3/hairSalon/takeBrush.mp3");
-            CCSpawn* actionSpawn = CCSpawn::create(CCJumpBy::create(0.3, ccp(0, 0), 5, 2),
-                                                   CCCallFunc::create(this, callfunc_selector(SelectColorAniScene::aniJumpMp3)),
+            SimpleAudioEngine::getInstance()->playEffect("mp3/hairSalon/takeBrush.mp3");
+            Spawn* actionSpawn = Spawn::create(JumpBy::create(0.3, Vec2(0, 0), 5, 2),
+                                                   CallFunc::create(CC_CALLBACK_0(SelectColorAniScene::aniJumpMp3, this)),
                                                    NULL);
-            colorThemes ->runAction(CCSequence::create(CCRotateTo::create(0.1, -25),
-                                                       CCRotateTo::create(0.1, 0),
-                                                       CCRotateTo::create(0.1, 25),
-                                                       CCRotateTo::create(0.1, 0),
+            colorThemes ->runAction(Sequence::create(RotateTo::create(0.1, -25),
+                                                       RotateTo::create(0.1, 0),
+                                                       RotateTo::create(0.1, 25),
+                                                       RotateTo::create(0.1, 0),
                                                        actionSpawn,
                                                        NULL));
         }
@@ -366,5 +373,5 @@ void SelectColorAniScene::aniAction(){
 
 
 void SelectColorAniScene::aniJumpMp3(){
-    SimpleAudioEngine::sharedEngine()->playEffect("mp3/changing/buttonJump.mp3");
+    SimpleAudioEngine::getInstance()->playEffect("mp3/changing/buttonJump.mp3");
 }

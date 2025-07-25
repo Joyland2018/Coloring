@@ -20,36 +20,36 @@ using namespace cocos2d::extension ;
 
 bool SelectBrush::init()
 {
-    if (!CCLayer::init())
+    if (!Layer::init())
     {
         return false;
     }
-    CCPoint winCenter = GameManager::sharedManager()->getCenter();
-    v_size = CCDirector::sharedDirector()->getWinSize();
-    poszero = CCDirector::sharedDirector()->getVisibleOrigin();
-//    CCSprite* bg = CCSprite::create("DinoColor/swatch_new.png");
-//    bg->setPosition(ccp(v_size.width/4*3-poszero.x,v_size.height/2));
+    Vec2 winCenter = GameManager::sharedManager()->getCenter();
+    v_size = Director::getInstance()->getWinSize();
+    poszero = Director::getInstance()->getVisibleOrigin();
+//    Sprite* bg = Sprite::create("DinoColor/swatch_new.png");
+//    bg->setPosition(Vec2(v_size.width/4*3-poszero.x,v_size.height/2));
 //
 //    this->addChild(bg);
 //
-//    CCSprite* stencilNode = CCSprite::create("DinoColor/swatch_new.png");
-//    stencilNode->setContentSize(CCSizeMake(stencilNode->getContentSize().width-10, stencilNode->getContentSize().height));
-//    stencilNode->setAnchorPoint(ccp(0.0, 0.0));
-//    stencilNode->setPosition(ccp(-10, 0));
+//    Sprite* stencilNode = Sprite::create("DinoColor/swatch_new.png");
+//    stencilNode->setContentSize(Size(stencilNode->getContentSize().width-10, stencilNode->getContentSize().height));
+//    stencilNode->setAnchorPoint(Vec2(0.0, 0.0));
+//    stencilNode->setPosition(Vec2(-10, 0));
 
-//    CCClippingNode* brushLayerClipper = CCClippingNode::create(stencilNode);
-//    brushLayerClipper->setPosition(ccp(0,0));
+//    ClippingNode* brushLayerClipper = ClippingNode::create(stencilNode);
+//    brushLayerClipper->setPosition(Vec2(0,0));
 ////    brushLayerClipper->setInverted(true);
 //    brushLayerClipper->setAlphaThreshold(0.0f);
 //
-//    contentNode = CCLayer::create();
-//    contentNode->setContentSize(CCSizeMake(bg->getContentSize().width-20, bg->getContentSize().height));
-//    contentNode->setPosition(ccp(0, 0));
+//    contentNode = Layer::create();
+//    contentNode->setContentSize(Size(bg->getContentSize().width-20, bg->getContentSize().height));
+//    contentNode->setPosition(Vec2(0, 0));
 //    brushLayerClipper->addChild(contentNode);
 //    bg->addChild(brushLayerClipper);
     
-//    CCSprite* bgCover = CCSprite::create("DinoColor/swatch_new_cover.png");
-//    bgCover->setPosition(ccp(bg->getPosition().x, bg->getPosition().y));
+//    Sprite* bgCover = Sprite::create("DinoColor/swatch_new_cover.png");
+//    bgCover->setPosition(Vec2(bg->getPosition().x, bg->getPosition().y));
 //    this->addChild(bgCover,2);
     
     this->setButton();
@@ -67,37 +67,38 @@ void SelectBrush::setButton()
 //    std::string names[] = {"pencil","paint","largebrush","paintbucket","crayon"} ;
 //       for (int i = 0; i < 5; i++) {
 //
-//           CCString* name = CCString::createWithFormat("DinoColor/toolsUI/%s_tools_cover.png",names[i].c_str()) ;
-//           CCSprite* tmp2 = CCSprite::create(name->getCString());
-//           CCSize size2 = tmp2->getContentSize();
-//           CCRect insetRect2 = CCRectMake(0,0,size2.width, size2.height);
-//           CCScale9Sprite* sprite2 = CCScale9Sprite::create(name->getCString(), insetRect2) ;
-//           CCControlButton *button = CCControlButton::create(sprite2) ;
+//           std::string name = StringUtils::format("DinoColor/toolsUI/%s_tools_cover.png",names[i].c_str()) ;
+//           Sprite* tmp2 = Sprite::create(name);
+//           Size size2 = tmp2->getContentSize();
+//           Rect insetRect2 = Rect(0,0,size2.width, size2.height);
+//           ui::Scale9Sprite* sprite2 = ui::Scale9Sprite::create(name, insetRect2) ;
+//           ui::Button *button = ui::Button::create() ;
+//           button->loadTextures(name, name, name);
 //           button->setPreferredSize(size2) ;
 //           button->setTag(Tag+i);
-//           button->setPosition(ccp(contentNode->getContentSize().width/3*2, contentNode->getContentSize().height-(contentNode->getContentSize().height/6)*(i+1))) ;
+//           button->setPosition(Vec2(contentNode->getContentSize().width/3*2, contentNode->getContentSize().height-(contentNode->getContentSize().height/6)*(i+1))) ;
 //           button->setScale(0.9);
-////           button->setPosition(ccp(0, 0)) ;
+////           button->setPosition(Vec2(0, 0)) ;
 //           contentNode->addChild(button, 3) ;
 //
-//           CCSprite* brushIconShadow = NULL;
+//           Sprite* brushIconShadow = NULL;
 //           if (i == 4) {
-//               CCTexture2D* texture = ColorManager::shared()->maskedWithSpriteTexture(CCSprite::create(CCString::createWithFormat("DinoColor/crayon_texture/crayon_texture_%d.png",ColorManager::shared()->SelectColorTag[i]-99)->getCString()), CCSprite::create(CCString::createWithFormat("DinoColor/toolsUI/%s_tools_shadow.png",names[i].c_str())->getCString()), ccp(0.5, 0.5));
-//               brushIconShadow = CCSprite::createWithTexture(texture);
+//               Texture2D* texture = ColorManager::shared()->maskedWithSpriteTexture(Sprite::create(StringUtils::format("DinoColor/crayon_texture/crayon_texture_%d.png",ColorManager::shared()->SelectColorTag[i]-99)), Sprite::create(StringUtils::format("DinoColor/toolsUI/%s_tools_shadow.png",names[i].c_str())), Vec2(0.5, 0.5));
+//               brushIconShadow = Sprite::createWithTexture(texture);
 //           }else {
-//               brushIconShadow = CCSprite::create(CCString::createWithFormat("DinoColor/toolsUI/%s_tools_shadow.png",names[i].c_str())->getCString());
+//               brushIconShadow = Sprite::create(StringUtils::format("DinoColor/toolsUI/%s_tools_shadow.png",names[i].c_str()));
 //
-//               ccColor3B brushColor = ColorManager::shared()->getCurColor(ColorManager::shared()->SelectColorTag[i]-99);
+//               Color3B brushColor = ColorManager::shared()->getCurColor(ColorManager::shared()->SelectColorTag[i]-99);
 //               brushIconShadow->setColor(brushColor);
 //           }
 //
-//           brushIconShadow->setPosition(ccp(tmp2->getContentSize().width/2, tmp2->getContentSize().height/2));
+//           brushIconShadow->setPosition(Vec2(tmp2->getContentSize().width/2, tmp2->getContentSize().height/2));
 //           brushIconShadow->setTag(ToolsIconShadow_Tag);
 //           button->addChild(brushIconShadow,-1);
 //
-//           CCSprite* mark = CCSprite::create("DinoColor/brush-select.png");
+//           Sprite* mark = Sprite::create("DinoColor/brush-select.png");
 //           mark->setTag(Mark);
-//           mark->setPosition(ccp(size2.width/2, size2.height/2 ));
+//           mark->setPosition(Vec2(size2.width/2, size2.height/2 ));
 //           button->addChild(mark);
 //           if (ColorManager::shared()->SelectBrushTag == Tag+i) {
 //               mark->setVisible(true);
@@ -105,18 +106,22 @@ void SelectBrush::setButton()
 //              mark->setVisible(false);
 //           }
 //
-//           button->addTargetWithActionForControlEvents(this, cccontrol_selector(SelectBrush::brushClick), CCControlEventTouchUpInside) ;
+//           button->addTouchEventListener([=](Ref* sender, ui::Widget::TouchEventType type){
+//               if(type == ui::Widget::TouchEventType::ENDED) {
+//                   this->brushClick(sender);
+//               }
+//           });
 //       }
 }
 
-void SelectBrush::brushClick(CCObject *obj)
+void SelectBrush::brushClick(Ref *obj)
 {
-//    int tag = ((CCNode*)obj)->getTag();
+//    int tag = ((Node*)obj)->getTag();
 //    for (int i = 0; i < 5; i++) {
-//        CCNode* node =contentNode->getChildByTag(Tag+i);
+//        Node* node =contentNode->getChildByTag(Tag+i);
 //        node->getChildByTag(Mark)->setVisible(false);
 //    }
-//    ((CCNode*)obj)->getChildByTag(Mark)->setVisible(true);
+//    ((Node*)obj)->getChildByTag(Mark)->setVisible(true);
 //    ColorManager::shared()->SelectBrushTag = tag;
 //    
 //    ColorManager::shared()->changeCurColor();
@@ -154,25 +159,25 @@ void SelectBrush::brushClick(CCObject *obj)
 //    }
 //    
 //    for (int i = 0; i < 2; i++) {
-//        CCSprite* btnSpr = NULL;
+//        Sprite* btnSpr = NULL;
 //        if (i == 0) {
-//            btnSpr = (CCSprite*)brushBtu->getNormalImage();
+//            btnSpr = (Sprite*)brushBtu->getNormalImage();
 //        } else {
-//            btnSpr = (CCSprite*)brushBtu->getSelectedImage();
+//            btnSpr = (Sprite*)brushBtu->getSelectedImage();
 //        }
 //        
 //        if (btnSpr != NULL) {
-//            CCSprite* btnIconSpr = (CCSprite*)btnSpr->getChildByTag(ToolsIcon_Tag);
-//            CCSprite* btnIconShadow = (CCSprite*)btnIconSpr->getChildByTag(ToolsIconShadow_Tag);
-//            btnIconShadow->setColor(ccWHITE);
+//            Sprite* btnIconSpr = (Sprite*)btnSpr->getChildByTag(ToolsIcon_Tag);
+//            Sprite* btnIconShadow = (Sprite*)btnIconSpr->getChildByTag(ToolsIconShadow_Tag);
+//            btnIconShadow->setColor(Color3B::WHITE);
 //            
-//            CCTexture2D* btnCoverTexture = CCTextureCache::sharedTextureCache()->addImage(CCString::createWithFormat("DinoColor/toolsUI/%s_tools_cover.png",toolsTypeName)->getCString());
-//            CCTexture2D* btnShadowTexture = NULL;
+//            Texture2D* btnCoverTexture = Director::getInstance()->getTextureCache()->addImage(StringUtils::format("DinoColor/toolsUI/%s_tools_cover.png",toolsTypeName));
+//            Texture2D* btnShadowTexture = NULL;
 //            
 //            if (ColorManager::shared()->SelectBrushTag == Brush_Crayon) {
-//                btnShadowTexture = ColorManager::shared()->maskedWithSpriteTexture(CCSprite::create(CCString::createWithFormat("DinoColor/crayon_texture/crayon_texture_%d.png",ColorManager::shared()->SelectColorTag[4]-99)->getCString()), CCSprite::create(CCString::createWithFormat("DinoColor/toolsUI/%s_tools_shadow.png",toolsTypeName)->getCString()), ccp(0.5, 0.5));
+//                btnShadowTexture = ColorManager::shared()->maskedWithSpriteTexture(Sprite::create(StringUtils::format("DinoColor/crayon_texture/crayon_texture_%d.png",ColorManager::shared()->SelectColorTag[4]-99)), Sprite::create(StringUtils::format("DinoColor/toolsUI/%s_tools_shadow.png",toolsTypeName)), Vec2(0.5, 0.5));
 //            }else {
-//                btnShadowTexture = CCTextureCache::sharedTextureCache()->addImage(CCString::createWithFormat("DinoColor/toolsUI/%s_tools_shadow.png",toolsTypeName)->getCString());
+//                btnShadowTexture = Director::getInstance()->getTextureCache()->addImage(StringUtils::format("DinoColor/toolsUI/%s_tools_shadow.png",toolsTypeName));
 //                btnIconShadow->setColor(ColorManager::shared()->m_pColor);
 //            }
 //            btnIconSpr->setTexture(btnCoverTexture);
@@ -183,26 +188,28 @@ void SelectBrush::brushClick(CCObject *obj)
 //    
 ////    switch (ColorManager::shared()->SelectBrushTag) {
 ////        case 100:
-////            brushBtu->setNormalImage(CCSprite::create("DinoColor/pencil-normal.png"));
-////            brushBtu->setSelectedImage(CCSprite::create("DinoColor/pencil-down.png"));
+////            brushBtu->setNormalImage(Sprite::create("DinoColor/pencil-normal.png"));
+////            brushBtu->setSelectedImage(Sprite::create("DinoColor/pencil-down.png"));
 ////            break;
 ////        case 101:
-////            brushBtu->setNormalImage(CCSprite::create("DinoColor/brush-normal.png"));
-////            brushBtu->setSelectedImage(CCSprite::create("DinoColor/brush-down.png"));
+////            brushBtu->setNormalImage(Sprite::create("DinoColor/brush-normal.png"));
+////            brushBtu->setSelectedImage(Sprite::create("DinoColor/brush-down.png"));
 ////            break;
 ////        case 102:
-////            brushBtu->setNormalImage(CCSprite::create("DinoColor/largebrush-normal.png"));
-////            brushBtu->setSelectedImage(CCSprite::create("DinoColor/largebrush-down.png"));
+////            brushBtu->setNormalImage(Sprite::create("DinoColor/largebrush-normal.png"));
+////            brushBtu->setSelectedImage(Sprite::create("DinoColor/largebrush-down.png"));
 ////            break;
 ////        default:
 ////            break;
 ////    }
 //    brushBtu->selected();
-//    CCNotificationCenter::sharedNotificationCenter()->postNotification("colorcanvas.changebrush");
+//    EventDispatcher* dispatcher = Director::getInstance()->getEventDispatcher();
+//    EventCustom event("colorcanvas.changebrush");
+//    dispatcher->dispatchEvent(&event);
 //    this->removeFromParent();
 }
 
-void SelectBrush::SetMenuItem(CCMenuItemSprite *item)
+void SelectBrush::SetMenuItem(MenuItemSprite *item)
 {
     brushBtu = item;
 }

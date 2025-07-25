@@ -11,11 +11,11 @@
 #include <stdio.h>
 #include "cocos2d.h"
 
-using namespace cocos2d;
+USING_NS_CC;
 
-class SelectColorAniScene : public CCLayer{
+class SelectColorAniScene : public Layer{
 public:
-    static CCScene* scene();
+    static Scene* scene();
     virtual void onEnter();
     virtual void onExit();
     virtual bool init();
@@ -23,28 +23,30 @@ public:
     SelectColorAniScene();
     ~SelectColorAniScene();
     
-    virtual void registerWithTouchDispatcher();                 //注册单点触摸点击事件
-    virtual bool ccTouchBegan(CCTouch* touch,CCEvent* event);
-    virtual void ccTouchEnded(CCTouch* touch,CCEvent* event);
-    virtual void ccTouchMoved(CCTouch* touch,CCEvent* event);
+    // Touch event handling for Cocos2d-x 4.0
+    virtual bool onTouchBegan(Touch* touch, Event* event);
+    virtual void onTouchEnded(Touch* touch, Event* event);
+    virtual void onTouchMoved(Touch* touch, Event* event);
     
     void clickBack();
     void showAllTheme();
     void goNext();
     void aniAction();
     void aniJumpMp3();
-    void addLock(cocos2d::CCObject* _parent,int _index);
+    void addLock(Node* _parent, int _index);
     void selectAdsOrIAP(int _pageIndex);
     
     bool backClick;
     bool clickTheme;
     
-    CCPoint winCenter;
+    Vec2 winCenter;
     
     float iphoneXOffsetX;
     
     int selectAniIndex;
     CREATE_FUNC(SelectColorAniScene);
     
+private:
+    EventListenerTouchOneByOne* touchListener;
 };
 #endif /* SelectColorAniScene_hpp */

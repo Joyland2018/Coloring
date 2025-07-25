@@ -6,14 +6,14 @@
 //
 
 #include "SelectColorTheme.hpp"
-#include "SimpleAudioEngine.h"
-#include "GameManager.h"
+#include "audio/include/AudioEngine.h"
+#include "../GameManager.h"
 //#include "DeviceManager.h"
 
 #include "SelectColorAniScene.hpp"
 #include "ColorManager.hpp"
 
-using namespace CocosDenshion;
+USING_NS_CC;
 
 enum{
     kBackTag = 1,
@@ -22,8 +22,8 @@ enum{
     kColorThemeTag = 20,
 };
 
-CCScene* SelectColorTheme::scene(){
-    CCScene* scene = CCScene::create();
+Scene* SelectColorTheme::scene(){
+    Scene* scene = Scene::create();
     SelectColorTheme* layer  = SelectColorTheme::create();
     scene->addChild(layer);
     return scene;
@@ -31,7 +31,7 @@ CCScene* SelectColorTheme::scene(){
 
 
 bool SelectColorTheme::init(){
-    if (!CCLayer::init()) {
+    if (!Layer::init()) {
         return false;
     }
     
@@ -55,9 +55,9 @@ bool SelectColorTheme::init(){
     curTouchMoveX = 0;
 
     winCenter = GameManager::sharedManager()->getCenter();
-    CCPoint leftTop = GameManager::sharedManager()->getLeftTopPos();
+    Vec2 leftTop = GameManager::sharedManager()->getLeftTopPos();
 
-    CCSprite* bg = CCSprite::create("DinoColor/roles-bg.jpg");
+    Sprite* bg = Sprite::create("DinoColor/roles-bg.jpg");
     bg->setPosition(winCenter);
     this->addChild(bg);
 
@@ -69,15 +69,20 @@ bool SelectColorTheme::init(){
     }
 
     //返回按钮
-//    CCSprite* back=CCSprite::create("background/back.png");
-//    back->setPosition(ccp(leftTop.x+50,leftTop.y-50));
+//    Sprite* back=Sprite::create("background/back.png");
+//    back->setPosition(Vec2(leftTop.x+50,leftTop.y-50));
 //    back->setTag(kBackTag);
 //    this->addChild(back,1);
 
-    this->scheduleOnce(schedule_selector(SelectColorTheme::showTheme), 0.3);
+    this->scheduleOnce(CC_SCHEDULE_SELECTOR(SelectColorTheme::showTheme), 0.3);
 
-    SimpleAudioEngine::sharedEngine()->playBackgroundMusic("mp3/sink/sinkBg.mp3", true);
-    this->setTouchEnabled(true);
+    AudioEngine::play2d("mp3/sink/sinkBg.mp3", true);
+    
+    auto touchListener = EventListenerTouchAllAtOnce::create();
+    touchListener->onTouchesBegan = CC_CALLBACK_2(SelectColorTheme::onTouchesBegan, this);
+    touchListener->onTouchesMoved = CC_CALLBACK_2(SelectColorTheme::onTouchesMoved, this);
+    touchListener->onTouchesEnded = CC_CALLBACK_2(SelectColorTheme::onTouchesEnded, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
     return true;
 }
 
@@ -111,8 +116,8 @@ void SelectColorTheme::showTheme(){
 //    }
     
     for (int i=0; i<6; i++) {
-        CCSprite* colorTheme = CCSprite::create(CCString::createWithFormat("DinoColor/colorUI/colorBg_%d.png",i+1)->getCString());
-            colorTheme->setPosition(ccp( ColorManager::shared()->colorThemePos[i], winCenter.y));
+        Sprite* colorTheme = Sprite::create(StringUtils::format("DinoColor/colorUI/colorBg_%d.png",i+1));
+            colorTheme->setPosition(Vec2( ColorManager::shared()->colorThemePos[i], winCenter.y));
             if (i==ColorManager::shared()->curColorTheme) {
                 colorTheme->setScale(0.9);
             }else{
@@ -131,15 +136,15 @@ SelectColorTheme::SelectColorTheme(){}
 SelectColorTheme::~SelectColorTheme(){}
 
 void SelectColorTheme::onEnter(){
-    CCLayer::onEnter();
+    Layer::onEnter();
 }
 
 void SelectColorTheme::onExit(){
-    CCLayer::onExit();
+    Layer::onExit();
 }
 
 void SelectColorTheme::clickBack(){
-    if (!CCUserDefault::sharedUserDefault()->getBoolForKey("UnlockAll") && !CCUserDefault::sharedUserDefault()->getBoolForKey("purchased")){
+    if (!UserDefault::getInstance()->getBoolForKey("UnlockAll") && !UserDefault::getInstance()->getBoolForKey("purchased")){
         if (GameManager::sharedManager()->num == 5){
             GameManager::sharedManager()->showInterstitial();
             GameManager::sharedManager()->num = 0;
@@ -147,45 +152,42 @@ void SelectColorTheme::clickBack(){
             GameManager::sharedManager()->num++;
         }
     }
-  //  CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(0.5, DinoTownScene::scene(), ccBLACK));
+  //  Director::getInstance()->replaceScene(TransitionFade::create(0.5, DinoTownScene::scene(), Color3B::BLACK));
 }
 
 void SelectColorTheme::goNext(){
-    if (!CCUserDefault::sharedUserDefault()->getBoolForKey("UnlockAll") && !CCUserDefault::sharedUserDefault()->getBoolForKey("purchased")){
+    if (!UserDefault::getInstance()->getBoolForKey("UnlockAll") && !UserDefault::getInstance()->getBoolForKey("purchased")){
         GameManager::sharedManager()->showInterstitial();
     }
-    CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(0.5, SelectColorAniScene::scene(), ccBLACK));
+    Director::getInstance()->replaceScene(TransitionFade::create(0.5, SelectColorAniScene::scene(), Color3B::BLACK));
 }
 
-void SelectColorTheme::registerWithTouchDispatcher(){
-    CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, false);
-}
-
-bool SelectColorTheme::ccTouchBegan(CCTouch *touch, CCEvent *event){
-    CCPoint location = touch->getLocationInView();
-    location = CCDirector::sharedDirector()->convertToGL(location);
-    CCSprite* back = (CCSprite*)this->getChildByTag(kBackTag);
+void SelectColorTheme::onTouchesBegan(const std::vector<Touch*>& touches, Event* event){
+    Touch* touch = touches[0];
+    Vec2 location = touch->getLocationInView();
+    location = Director::getInstance()->convertToGL(location);
+    Sprite* back = (Sprite*)this->getChildByTag(kBackTag);
     touchMoveDis = 0;
     showCurTheme=false;
     startX = location.x;
     
-    if (back!= NULL && back->boundingBox().containsPoint(location) && backClick==false) {
+    if (back!= NULL && back->getBoundingBox().containsPoint(location) && backClick==false) {
         backClick = true;
-        CCScaleBy* scaleBy = CCScaleBy::create(0.1, 1.2);
-        SimpleAudioEngine::sharedEngine()->playEffect("mp3/touchItem.mp3");
-        back->runAction(CCSequence::createWithTwoActions(CCSequence::createWithTwoActions(scaleBy, scaleBy->reverse()), CCCallFunc::create(this, callfunc_selector(SelectColorTheme::clickBack))));
-        SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
+        ScaleBy* scaleBy = ScaleBy::create(0.1, 1.2);
+        AudioEngine::play2d("mp3/touchItem.mp3");
+        back->runAction(Sequence::create(Sequence::create(scaleBy, scaleBy->reverse(), nullptr), CallFunc::create(CC_CALLBACK_0(SelectColorTheme::clickBack, this)), nullptr));
+        AudioEngine::stopAll();
     }
     
     
-    return true;
 }
 
-void SelectColorTheme::ccTouchMoved(CCTouch *touch, CCEvent *event){
-    CCPoint location = touch->getLocationInView();
-    location = CCDirector::sharedDirector()->convertToGL(location);
-    CCPoint preLocation = touch->getPreviousLocationInView();
-    preLocation = CCDirector::sharedDirector()->convertToGL(preLocation);
+void SelectColorTheme::onTouchesMoved(const std::vector<Touch*>& touches, Event* event){
+    Touch* touch = touches[0];
+    Vec2 location = touch->getLocationInView();
+    location = Director::getInstance()->convertToGL(location);
+    Vec2 preLocation = touch->getPreviousLocationInView();
+    preLocation = Director::getInstance()->convertToGL(preLocation);
     beginX = preLocation.x;
     endX = location.x;
     touchMoveDis = endX-beginX;
@@ -200,7 +202,7 @@ void SelectColorTheme::ccTouchMoved(CCTouch *touch, CCEvent *event){
 //    resetThemePos();
     if (showCurTheme == false) {
         for (int i=0; i<6; i++) {
-            CCSprite* colorThemes = (CCSprite*)this->getChildByTag(kColorThemeTag+i);
+            Sprite* colorThemes = (Sprite*)this->getChildByTag(kColorThemeTag+i);
             if (colorThemes!=NULL && touchMoveTheme==false) {
                 int themePos = colorThemes->getPosition().x;
                 float themeScale = colorThemes->getScale();
@@ -210,11 +212,11 @@ void SelectColorTheme::ccTouchMoved(CCTouch *touch, CCEvent *event){
     //            CCLOG("---移动位置差%f---",colorThemes->getPosition().x-580);
     //            CCLOG("---当前主题%d---",ColorManager::shared()->curColorTheme);
                 if (abs(colorThemes->getPosition().x-winCenter.x)<100 && themeScale<0.8 ) {
-                    colorThemes->runAction(CCScaleTo::create(0.3, 0.9));
+                    colorThemes->runAction(ScaleTo::create(0.3, 0.9));
                     curThemeIndex = i;
                 }
                 if(abs(colorThemes->getPosition().x-winCenter.x)>100 && themeScale>0.65){
-                    colorThemes->runAction(CCScaleTo::create(0.3, 0.45));
+                    colorThemes->runAction(ScaleTo::create(0.3, 0.45));
                 }
     //            if(themeScale>0.65){
     //                scaleThemeIndex++;
@@ -232,13 +234,14 @@ void SelectColorTheme::ccTouchMoved(CCTouch *touch, CCEvent *event){
     
 }
 
-void SelectColorTheme::ccTouchEnded(CCTouch *touch, CCEvent *event){
-    CCPoint location = touch->getLocationInView();
-    CCPoint point = touch->getLocation();
-    CCPoint lastPoint = touch->getPreviousLocation();
+void SelectColorTheme::onTouchesEnded(const std::vector<Touch*>& touches, Event* event){
+    Touch* touch = touches[0];
+    Vec2 location = touch->getLocationInView();
+    Vec2 point = touch->getLocation();
+    Vec2 lastPoint = touch->getPreviousLocation();
     
 //    for (int i=0; i<6; i++) {
-//        CCSprite* colorThemes = (CCSprite*)this->getChildByTag(kColorThemeTag+i);
+//        Sprite* colorThemes = (Sprite*)this->getChildByTag(kColorThemeTag+i);
 //        ColorManager::shared()->colorThemePos[i] = colorThemes->getPositionX();
 //    }
 
@@ -248,7 +251,7 @@ void SelectColorTheme::ccTouchEnded(CCTouch *touch, CCEvent *event){
 
     float moveIndex=0;
         for (int i=0; i<6; i++) {
-            CCSprite* colorThemes = (CCSprite*)this->getChildByTag(kColorThemeTag+i);
+            Sprite* colorThemes = (Sprite*)this->getChildByTag(kColorThemeTag+i);
             int themePos = colorThemes->getPosition().x;
 //            CCLOG("---最后实际的位置%f---",colorThemes->getPositionX());
 //            CCLOG("---位置差%f---",themePos-winCenter.x);
@@ -263,7 +266,7 @@ void SelectColorTheme::ccTouchEnded(CCTouch *touch, CCEvent *event){
                 }
                 ColorManager::shared()->selectedColorTheme=true;
                 showCurTheme = true;
-                colorThemes->runAction(CCScaleTo::create(0.3, 0.9));
+                colorThemes->runAction(ScaleTo::create(0.3, 0.9));
                 curThemeIndex = i;
 //                }
                 moveIndex=themePos-winCenter.x;
@@ -271,37 +274,37 @@ void SelectColorTheme::ccTouchEnded(CCTouch *touch, CCEvent *event){
                 curMoveThemeX = moveIndex;
 //                CCLOG("---距离差%f---",moveIndex);
                 for (int i=0; i<6; i++) {
-                    CCSprite* oldcolorThemes = (CCSprite*)this->getChildByTag(kColorThemeTag+i);
+                    Sprite* oldcolorThemes = (Sprite*)this->getChildByTag(kColorThemeTag+i);
 //                    if (ColorManager::shared()->curColorTheme==i) {
-//                        oldcolorThemes->runAction(CCScaleTo::create(0.3, 0.6));
+//                        oldcolorThemes->runAction(ScaleTo::create(0.3, 0.6));
 ////                        scaleThemeIndex--;
 //                    }
                     if(i!=curThemeIndex){
-                        oldcolorThemes->runAction(CCScaleTo::create(0.3, 0.45));
+                        oldcolorThemes->runAction(ScaleTo::create(0.3, 0.45));
                     }
                     
-                    oldcolorThemes->runAction(CCSequence::create(CCMoveTo::create(0.1, ccp(oldcolorThemes->getPositionX()-moveIndex, winCenter.y)),
-                                                                 CCDelayTime::create(0.3),
-                                                                 CCCallFunc::create(this, callfunc_selector(SelectColorTheme::canTouchTheme)),NULL));
+                    oldcolorThemes->runAction(Sequence::create(MoveTo::create(0.1, Vec2(oldcolorThemes->getPositionX()-moveIndex, winCenter.y)),
+                                                                 DelayTime::create(0.3),
+                                                                 CallFunc::create(CC_CALLBACK_0(SelectColorTheme::canTouchTheme, this)),NULL));
 //                    CCLOG("---移动位置差%d---",moveIndex);
                     ColorManager::shared()->colorThemePos[i] = ColorManager::shared()->colorThemePos[i]-moveIndex;
-//                    oldcolorThemes->runAction(CCSequence::create(CCMoveTo::create(0.1, ccp(ColorManager::shared()->colorThemePos[i]-moveIndex, winCenter.y)),
-//                                                                 CCCallFunc::create(this, callfunc_selector(SelectColorTheme::resetThemePos)),
-//                                                                 CCCallFunc::create(this, callfunc_selector(SelectColorTheme::canTouchTheme)),
+//                    oldcolorThemes->runAction(Sequence::create(MoveTo::create(0.1, ccp(ColorManager::shared()->colorThemePos[i]-moveIndex, winCenter.y)),
+//                                                                 CallFunc::create(this, callfunc_selector(SelectColorTheme::resetThemePos)),
+//                                                                 CallFunc::create(this, callfunc_selector(SelectColorTheme::canTouchTheme)),
 //                                                                 NULL));
 //
                 }
             }
-            if (colorThemes!=NULL && colorThemes->boundingBox().containsPoint(location) && clickTheme==false && touchMoveDis==0  && touchMoveTheme==false) {
-                SimpleAudioEngine::sharedEngine()->playEffect("mp3/touchItem.mp3");
+            if (colorThemes!=NULL && colorThemes->getBoundingBox().containsPoint(location) && clickTheme==false && touchMoveDis==0  && touchMoveTheme==false) {
+                AudioEngine::play2d("mp3/touchItem.mp3");
                 if ( ColorManager::shared()->curColorTheme==i) {
-                    GameManager::sharedManager()->trackMixpanel(CCString::createWithFormat("Click ColorTheme%d Game Times",i)->getCString());
+                    GameManager::sharedManager()->trackMixpanel(StringUtils::format("Click ColorTheme%d Game Times",i));
                     //                ColorManager::shared()->curColorTheme=i;
                     clickTheme=true;
                     ColorManager::shared()->selectedColorTheme=true;
-                    CCScaleBy* scaleBy = CCScaleBy::create(0.1, 1.2);
+                    ScaleBy* scaleBy = ScaleBy::create(0.1, 1.2);
 
-                    colorThemes->runAction(CCSequence::createWithTwoActions(CCSequence::createWithTwoActions(scaleBy, scaleBy->reverse()), CCCallFunc::create(this, callfunc_selector(SelectColorTheme::goNext))));
+                    colorThemes->runAction(Sequence::create(Sequence::create(scaleBy, scaleBy->reverse(), nullptr), CallFunc::create(CC_CALLBACK_0(SelectColorTheme::goNext, this)), nullptr));
                 }else{
                     touchMoveTheme = true;
                     clickTheme=false;
@@ -309,7 +312,7 @@ void SelectColorTheme::ccTouchEnded(CCTouch *touch, CCEvent *event){
 //                    CCLOG("---当前主题%d---",ColorManager::shared()->curColorTheme);
 //                    CCLOG("---选择的主题%d---",i);
 //                    if (scaleThemeIndex==0) {
-                    colorThemes->runAction(CCScaleTo::create(0.3, 0.9));
+                    colorThemes->runAction(ScaleTo::create(0.3, 0.9));
 //                        scaleThemeIndex++;
 //                    }
                     curThemeIndex = i;
@@ -323,29 +326,29 @@ void SelectColorTheme::ccTouchEnded(CCTouch *touch, CCEvent *event){
                     curTouchMoveX = -moveIndex;
 //                    moveIndex = ColorManager::shared()->colorThemePos[curThemeIndex]-winCenter.x;
                     for (int j=0; j<6; j++) {
-                        CCSprite* oldcolorThemes = (CCSprite*)this->getChildByTag(kColorThemeTag+j);
+                        Sprite* oldcolorThemes = (Sprite*)this->getChildByTag(kColorThemeTag+j);
 //                        if (ColorManager::shared()->curColorTheme==i) {
-//                            oldcolorThemes->runAction(CCScaleTo::create(0.3, 0.45));
+//                            oldcolorThemes->runAction(ScaleTo::create(0.3, 0.45));
 ////                            scaleThemeIndex--;
 //                        }
                         if(j!=curThemeIndex){
-                            oldcolorThemes->runAction(CCScaleTo::create(0.3, 0.45));
+                            oldcolorThemes->runAction(ScaleTo::create(0.3, 0.45));
                         }
                         moveIndex=themePos-winCenter.x;
     //                    CCLOG("---移动位置差%d---",moveIndex);
 //                        CCLOG("---最后的位置%f---",ColorManager::shared()->colorThemePos[j]);
-                        oldcolorThemes->runAction(CCSequence::create(CCMoveTo::create(0.1, ccp(oldcolorThemes->getPositionX()-moveIndex, winCenter.y)),
-//                                                                     CCCallFunc::create(this, callfunc_selector(SelectColorTheme::resetTouchThemePos)),
-//                                                                     CCCallFunc::create(this, callfunc_selector(SelectColorTheme::resetThemePos)),
-                                                                     CCDelayTime::create(0.3),
-                                                                     CCCallFunc::create(this, callfunc_selector(SelectColorTheme::canTouchTheme)),
+                        oldcolorThemes->runAction(Sequence::create(MoveTo::create(0.1, Vec2(oldcolorThemes->getPositionX()-moveIndex, winCenter.y)),
+//                                                                     CallFunc::create(this, callfunc_selector(SelectColorTheme::resetTouchThemePos)),
+//                                                                     CallFunc::create(this, callfunc_selector(SelectColorTheme::resetThemePos)),
+                                                                     DelayTime::create(0.3),
+                                                                     CallFunc::create(CC_CALLBACK_0(SelectColorTheme::canTouchTheme, this)),
                                                                      NULL));
 //                        CCLOG("---最后调整后第0个的位置%f---",ColorManager::shared()->colorThemePos[0]);
                         ColorManager::shared()->colorThemePos[j] = ColorManager::shared()->colorThemePos[j]-moveIndex;
 //                        CCLOG("---最后未调整的位置%f---",ColorManager::shared()->colorThemePos[j]);
-//                        oldcolorThemes->runAction(CCSequence::create(CCMoveTo::create(0.1, ccp(ColorManager::shared()->colorThemePos[j]+moveIndex, winCenter.y)),
-//                                                                     CCCallFunc::create(this, callfunc_selector(SelectColorTheme::resetThemePos)),
-//                                                                     CCCallFunc::create(this, callfunc_selector(SelectColorTheme::canTouchTheme)),
+//                        oldcolorThemes->runAction(Sequence::create(MoveTo::create(0.1, ccp(ColorManager::shared()->colorThemePos[j]+moveIndex, winCenter.y)),
+//                                                                     CallFunc::create(this, callfunc_selector(SelectColorTheme::resetThemePos)),
+//                                                                     CallFunc::create(this, callfunc_selector(SelectColorTheme::canTouchTheme)),
 //                                                                     NULL));
 //                        resetThemePos();
 //                        CCLOG("---位置%f---",ColorManager::shared()->colorThemePos[i]);
@@ -367,8 +370,8 @@ void SelectColorTheme::ccTouchEnded(CCTouch *touch, CCEvent *event){
     
 
 //    this->resetThemePos();
-//    this->runAction(CCSequence::create(CCDelayTime::create(0.3),
-//                                       CCCallFunc::create(this, callfunc_selector(SelectColorTheme::resetThemePos)),
+//    this->runAction(Sequence::create(DelayTime::create(0.3),
+//                                       CallFunc::create(this, callfunc_selector(SelectColorTheme::resetThemePos)),
 //                                       NULL));
 //    for (int i=0; i<6; i++) {
 ////            ColorManager::shared()->colorThemePos[i] =-830+i*470;
@@ -392,7 +395,7 @@ void SelectColorTheme::resetThemePos(){
     
     if (touchMoveDis<0 || curTouchMoveX<0) {
         for (int i=0; i<6; i++) {
-            CCSprite* colorThemes = (CCSprite*)this->getChildByTag(kColorThemeTag+i);
+            Sprite* colorThemes = (Sprite*)this->getChildByTag(kColorThemeTag+i);
             if (colorThemes!=NULL) {
                 float themePos = colorThemes->getPosition().x;
                 if (themePos+touchMoveDis<minDis) { //左滑
@@ -433,7 +436,7 @@ void SelectColorTheme::resetThemePos(){
         }
     }else if(touchMoveDis>0 || curTouchMoveX>0){
         for (int i=5; i>=0; i--) {
-            CCSprite* colorThemes = (CCSprite*)this->getChildByTag(kColorThemeTag+i);
+            Sprite* colorThemes = (Sprite*)this->getChildByTag(kColorThemeTag+i);
             if (colorThemes!=NULL) {
                 float themePos = colorThemes->getPosition().x;
                 if(themePos+touchMoveDis>maxDis){       //右滑
