@@ -6,7 +6,7 @@
 //
 
 #include "SelectColorAniScene.hpp"
-#include "audio/include/SimpleAudioEngine.h"
+#include "audio/include/AudioEngine.h"
 #include "GameManager.h"
 //#include "DeviceManager.h"
 
@@ -16,7 +16,7 @@
 #include "BuyPage.h"
 
 USING_NS_CC;
-using namespace CocosDenshion;
+//using namespace CocosDenshion;
 
 enum{
     kBuyLayerTag = 0,

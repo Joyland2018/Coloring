@@ -5,7 +5,7 @@
 5    <uses-sdk android:minSdkVersion="21" />
 6
 7    <uses-permission android:name="android.permission.VIBRATE" />
-7-->D:\Cocos\Coloring\V4\MyCppGame\MyCppGame\cocos2d\cocos\platform\android\libcocos2dx\AndroidManifest.xml:3:5-66
-7-->D:\Cocos\Coloring\V4\MyCppGame\MyCppGame\cocos2d\cocos\platform\android\libcocos2dx\AndroidManifest.xml:3:22-63
+7-->/Users/chuiningmeng/Documents/cocos/DinoHospital/Coloring/V4/MyCppGame/MyCppGame/cocos2d/cocos/platform/android/libcocos2dx/AndroidManifest.xml:3:5-66
+7-->/Users/chuiningmeng/Documents/cocos/DinoHospital/Coloring/V4/MyCppGame/MyCppGame/cocos2d/cocos/platform/android/libcocos2dx/AndroidManifest.xml:3:22-63
 8
 9</manifest>

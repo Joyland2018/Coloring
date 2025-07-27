@@ -13,23 +13,23 @@
 
 using namespace cocos2d;
 
-class ColorNode : public CCNode {
+class ColorNode : public Node {
     
     
 public:
-    static ColorNode* createColorNode(CCSize _nodeSize);
+    static ColorNode* createColorNode(Size _nodeSize);
     
-    CCSprite* testSimpleBrush;
-    CCRenderTexture* testSimpleRender;
-    CCSprite* testBrush;
-    CCClippingNode* clippingNode;
+    Sprite* testSimpleBrush;
+    RenderTexture* testSimpleRender;
+    Sprite* testBrush;
+    ClippingNode* clippingNode;
     
     void changeTestBrush();
     void changeTestColor();
     
     void initBrushNode();
     
-    void testBrushing(CCPoint _testPos);
+    void testBrushing(Vec2 _testPos);
 };
 
 #endif /* ColorNode_h */

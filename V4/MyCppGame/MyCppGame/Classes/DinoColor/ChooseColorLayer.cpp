@@ -7,13 +7,13 @@
 
 #include "ChooseColorLayer.hpp"
 #include "GameManager.h"
-#include "cocos-ext.h"
+#include "extensions/cocos-ext.h"
 #include "ColorManager.hpp"
-#include "SimpleAudioEngine.h"
+#include "audio/include/AudioEngine.h"
 #include "BuyPage.h"
 #include "ColorCanvasView.h"
 
-using namespace CocosDenshion;
+//using namespace CocosDenshion;
 using namespace cocos2d::extension ;
 //
 //#define Tag  100
@@ -33,14 +33,14 @@ enum{
 
 bool ChooseColorLayer::init()
 {
-    if (!CCLayer::init())
+    if (!Layer::init())
     {
         return false;
     }
     buyState= false;
-    CCPoint winCenter = GameManager::sharedManager()->getCenter();
-    v_size = CCDirector::sharedDirector()->getWinSize();
-    poszero = CCDirector::sharedDirector()->getVisibleOrigin();
+    Vec2 winCenter = GameManager::sharedManager()->getCenter();
+    v_size = Director::getInstance()->getWinSize();
+    poszero = Director::getInstance()->getVisibleOrigin();
     clickPen = false;
     selectPenColorIndex = 0;
     ColorManager::shared()->colorNums = 0;
@@ -60,8 +60,8 @@ bool ChooseColorLayer::init()
            fix_w = 70;
        }
     
-//    bg = CCSprite::create("DinoColor/swatch_color.png");
-//    bg->setPosition(ccp(v_size.width/4*2.2-poszero.x+fix_w,v_size.height/2+10));
+//    bg = Sprite::create("DinoColor/swatch_color.png");
+//    bg->setPosition(Vec2(v_size.width/4*2.2-poszero.x+fix_w,v_size.height/2+10));
 //
 //    this->addChild(bg);
     touchColorBg = NULL;
@@ -71,8 +71,30 @@ bool ChooseColorLayer::init()
 
     
     this->setButton();
-    this->setTouchEnabled(true);
     return true;
+}
+
+void ChooseColorLayer::onEnter()
+{
+    Layer::onEnter();
+    
+    // 创建触摸监听器
+    _touchListener = EventListenerTouchOneByOne::create();
+    _touchListener->setSwallowTouches(true);
+    _touchListener->onTouchBegan = CC_CALLBACK_2(ChooseColorLayer::onTouchBegan, this);
+    _touchListener->onTouchMoved = CC_CALLBACK_2(ChooseColorLayer::onTouchMoved, this);
+    _touchListener->onTouchEnded = CC_CALLBACK_2(ChooseColorLayer::onTouchEnded, this);
+    
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(_touchListener, this);
+}
+
+void ChooseColorLayer::onExit()
+{
+    if (_touchListener) {
+        _eventDispatcher->removeEventListener(_touchListener);
+        _touchListener = nullptr;
+    }
+    Layer::onExit();
 }
 
 void ChooseColorLayer::setButton()
@@ -88,8 +110,8 @@ void ChooseColorLayer::setButton()
 //        w_fix = 50 ;
 //    }
     
-    CCSprite* colorBg = CCSprite::create("DinoColor/color_bg.png");
-    colorBg->setPosition(ccp(v_size.width -80 - w_fix-poszero.x,v_size.height/2));
+    Sprite* colorBg = Sprite::create("DinoColor/color_bg.png");
+    colorBg->setPosition(Vec2(v_size.width -80 - w_fix-poszero.x,v_size.height/2));
 //    toolsBg->setScaleX(0.7);
     colorBg->setTag(kColorBgTag);
     this->addChild(colorBg,2) ;
@@ -136,7 +158,7 @@ void ChooseColorLayer::setButton()
             colorPenPos[i] = ColorManager::shared()->colorPaintPos[i];
         }
             
-//        ColorManager::shared()->m_pColor = ccc3(98,170,50);
+//        ColorManager::shared()->m_pColor = Color3B(98,170,50);
     }else if (strcmp(ColorManager::shared()->curPenName, "largebrush")==0){
         int penColorArr[20] = {13,32,24,14,5,12,8,4,1,6,3,37,25,28,7,10,23,31,18,2};
         for (int i=0; i<20; i++) {
@@ -147,7 +169,7 @@ void ChooseColorLayer::setButton()
         scaleColor  = 0.65;
         colorDisX = 10;
         firstPenIndex = 20;
-//        ColorManager::shared()->m_pColor = ccc3(2,68,246);
+//        ColorManager::shared()->m_pColor = Color3B(2,68,246);
         
         selectPenIndex = ColorManager::shared()->curLargebrushIndex;
         
@@ -189,7 +211,7 @@ void ChooseColorLayer::setButton()
             colorPenPos[i] = ColorManager::shared()->colorCrayonPos[i];
         }
         
-//        ColorManager::shared()->m_pColor = ccc3(255,255,50);
+//        ColorManager::shared()->m_pColor = Color3B(255,255,50);
     }else if (strcmp(ColorManager::shared()->curPenName, "pencil")==0){
         int penColorArr[24] = {23,2,12,32,8,18,5,3,1,37,4,6,13,28,7,10,25,31,24,14};
         for (int i=0; i<24; i++) {
@@ -214,7 +236,7 @@ void ChooseColorLayer::setButton()
             colorPenPos[i] = ColorManager::shared()->colorPencilPos[i];
         }
             
-//        ColorManager::shared()->m_pColor = ccc3(0,0,0);
+//        ColorManager::shared()->m_pColor = Color3B(0,0,0);
     }else if (strcmp(ColorManager::shared()->curPenName, "paintbucket")==0){
         int penColorArr[20] = {7,2,18,32,8,12,5,4,37,1,6,3,25,28,23,10,13,31,14,24};
         for (int i=0; i<20; i++) {
@@ -242,7 +264,7 @@ void ChooseColorLayer::setButton()
             colorPenPos[i] = ColorManager::shared()->colorPaintbucketPos[i];
         }
         
-//        ColorManager::shared()->m_pColor = ccc3(248,37,15);
+//        ColorManager::shared()->m_pColor = Color3B(248,37,15);
     }
     
 
@@ -279,37 +301,37 @@ void ChooseColorLayer::setButton()
         }else{
             origiPenX = 0;
         }
-        CCString* name = CCString::createWithFormat("DinoColor/toolsUI/%s_tools_cover.png",ColorManager::shared()->curPenName) ;
-        CCSprite* penColor = CCSprite::create(name->getCString());
-        penColor->setPosition(ccp(colorBg->getContentSize().width/3-origiPenX,colorPenPos[i]+400));
+        std::string name = StringUtils::format("DinoColor/toolsUI/%s_tools_cover.png",ColorManager::shared()->curPenName);
+        Sprite* penColor = Sprite::create(name);
+        penColor->setPosition(Vec2(colorBg->getContentSize().width/3-origiPenX,colorPenPos[i]+400));
         penColor->setTag(kPenColorTag+i);
         penColor->setScale(scaleColor);
         colorBg->addChild(penColor);
         
-//        CCSprite* tmp2 = CCSprite::create(name->getCString());
-//        CCSize size2 = tmp2->getContentSize();
-//        CCRect insetRect2 = CCRectMake(0,0,size2.width, size2.height);
-//        CCScale9Sprite* sprite2 = CCScale9Sprite::create(name->getCString(), insetRect2) ;
-//        CCControlButton *button = CCControlButton::create(sprite2) ;
+//        Sprite* tmp2 = Sprite::create(name);
+//        Size size2 = tmp2->getContentSize();
+//        Rect insetRect2 = Rect(0,0,size2.width, size2.height);
+//        ui::Scale9Sprite* sprite2 = ui::Scale9Sprite::create(name, insetRect2) ;
+//        ControlButton *button = ControlButton::create(sprite2) ;
 //        button->setPreferredSize(size2) ;
 //        button->setTag(Tag+i);
-//        button->setPosition(ccp(v_size.width -130-poszero.x-colorDisX,v_size.height/1.07+maxDis-i*colorDisY)) ;
+//        button->setPosition(Vec2(v_size.width -130-poszero.x-colorDisX,v_size.height/1.07+maxDis-i*colorDisY)) ;
 //        button->setScale(scaleColor);
-////           button->setPosition(ccp(0, 0)) ;
+////           button->setPosition(Vec2(0, 0)) ;
 //        this->addChild(button, 3) ;
         
-        CCSprite* brushIconShadow = NULL;
+        Sprite* brushIconShadow = NULL;
 //        if (strcmp(ColorManager::shared()->curPenName, "crayon")==0 ) {
-//            CCTexture2D* texture = ColorManager::shared()->maskedWithSpriteTexture(CCSprite::create(CCString::createWithFormat("DinoColor/crayon_texture/crayon_texture_%d.png",crayonTextureIndex[i])->getCString()), CCSprite::create(CCString::createWithFormat("DinoColor/toolsUI/%s_tools_shadow.png",ColorManager::shared()->curPenName)->getCString()), ccp(0.5, 0.5));
-//            brushIconShadow = CCSprite::createWithTexture(texture);
+//            Texture2D* texture = ColorManager::shared()->maskedWithSpriteTexture(Sprite::create(StringUtils::format("DinoColor/crayon_texture/crayon_texture_%d.png",crayonTextureIndex[i])), Sprite::create(StringUtils::format("DinoColor/toolsUI/%s_tools_shadow.png",ColorManager::shared()->curPenName)), Vec2(0.5, 0.5));
+//            brushIconShadow = Sprite::createWithTexture(texture);
 //        }else{
         
         if ((strcmp(ColorManager::shared()->curPenName, "pencil")==0 || strcmp(ColorManager::shared()->curPenName, "paint")==0) && i>11 && i<16) {
-            brushIconShadow = CCSprite::create(CCString::createWithFormat("DinoColor/toolsUI/%s_tools_colorshadow%d.png",ColorManager::shared()->curPenName,i)->getCString());
+            brushIconShadow = Sprite::create(StringUtils::format("DinoColor/toolsUI/%s_tools_colorshadow%d.png",ColorManager::shared()->curPenName,i));
         }else{
             
-                brushIconShadow = CCSprite::create(CCString::createWithFormat("DinoColor/toolsUI/%s_tools_shadow.png",ColorManager::shared()->curPenName)->getCString());
-            ccColor3B brushColor;
+                brushIconShadow = Sprite::create(StringUtils::format("DinoColor/toolsUI/%s_tools_shadow.png",ColorManager::shared()->curPenName));
+            Color3B brushColor;
             if((strcmp(ColorManager::shared()->curPenName, "pencil")==0 || strcmp(ColorManager::shared()->curPenName, "paint")==0) && i>15){
                 brushColor = ColorManager::shared()->getCurColor(paintColorArr[i-4]);
             }else{
@@ -321,49 +343,49 @@ void ChooseColorLayer::setButton()
 
 //        }
         
-        brushIconShadow->setPosition(ccp(penColor->getContentSize().width/2, penColor->getContentSize().height/2));
+        brushIconShadow->setPosition(Vec2(penColor->getContentSize().width/2, penColor->getContentSize().height/2));
 //        brushIconShadow->setTag(Tag+i);
         penColor->addChild(brushIconShadow,-1);
         
-//        CCSprite* mark = CCSprite::create("DinoColor/brush-select.png");
+//        Sprite* mark = Sprite::create("DinoColor/brush-select.png");
 //        mark->setTag(Mark);
-//        mark->setPosition(ccp(size2.width/2, size2.height/2 ));
+//        mark->setPosition(Vec2(size2.width/2, size2.height/2 ));
 //        button->addChild(mark);
 //        if (ColorManager::shared()->SelectBrushTag == Tag+i) {
 //            mark->setVisible(true);
 //        }else{
 //           mark->setVisible(false);
 //        }
-        penColor->runAction(CCMoveBy::create(0.3, ccp(0, -400)));
+        penColor->runAction(MoveBy::create(0.3, Vec2(0, -400)));
         
-        if (!CCUserDefault::sharedUserDefault()->getBoolForKey("UnlockAll") && !CCUserDefault::sharedUserDefault()->getBoolForKey("purchased") && (i<(7) || i>(11))) {
+        if (!UserDefault::getInstance()->getBoolForKey("UnlockAll") && !UserDefault::getInstance()->getBoolForKey("purchased") && (i<(7) || i>(11))) {
             this->addLock(penColor, i);
-            CCString* name = CCString::createWithFormat("DinoColor/toolsUI/%s_iap_shadow.png",ColorManager::shared()->curPenName) ;
-            CCSprite* penIapShadow = CCSprite::create(name->getCString());
-            penIapShadow->setPosition(ccp(penColor->getContentSize().width/2, penColor->getContentSize().height/2));
+            std::string name = StringUtils::format("DinoColor/toolsUI/%s_iap_shadow.png",ColorManager::shared()->curPenName);
+            Sprite* penIapShadow = Sprite::create(name);
+            penIapShadow->setPosition(Vec2(penColor->getContentSize().width/2, penColor->getContentSize().height/2));
             penColor->addChild(penIapShadow);
         }
 //        ColorManager::shared()->colorPenPos[i]  = penColor->getPosition().y-400;
-//        button->addTargetWithActionForControlEvents(this, cccontrol_selector(ChooseColorLayer::colorClick), CCControlEventTouchUpInside) ;
+//        button->addTargetWithActionForControlEvents(this, cccontrol_selector(ChooseColorLayer::colorClick), ControlEventTouchUpInside) ;
     }
 //    for (int i=0; i<37; i++) {
 //        CCLOG("---最后一支笔当前的位置%f---",ColorManager::shared()->colorPenPos[i]);
 //    }
 //       for (int i = 0; i < 37; i++) {
            
-//           CCString* name = CCString::createWithFormat("DinoColor/color/color_%d.png",(i+1)) ;
-//           CCSprite* tmp2 = CCSprite::create(name->getCString());
-//           CCSize size2 = tmp2->getContentSize();
-//           CCRect insetRect2 = CCRectMake(0,0,size2.width, size2.height);
-//           CCScale9Sprite* sprite2 = CCScale9Sprite::create(name->getCString(), insetRect2) ;
-//           CCControlButton *button = CCControlButton::create(sprite2) ;
+//           std::string name = StringUtils::format("DinoColor/color/color_%d.png",(i+1));
+//           Sprite* tmp2 = Sprite::create(name);
+//           Size size2 = tmp2->getContentSize();
+//           Rect insetRect2 = Rect(0,0,size2.width, size2.height);
+//           ui::Scale9Sprite* sprite2 = ui::Scale9Sprite::create(name, insetRect2) ;
+//           ControlButton *button = ControlButton::create(sprite2) ;
 //           button->setPreferredSize(size2) ;
 //           button->setTag(Tag+i);
-//           button->setPosition(ccp(v_size.width -160-poszero.x,v_size.height/1.07+800-i*100+200)) ;
+//           button->setPosition(Vec2(v_size.width -160-poszero.x,v_size.height/1.07+800-i*100+200)) ;
 //           this->addChild(button, 3) ;
-////           CCSprite* mark = CCSprite::create("DinoColor/color-selected.png");
+////           Sprite* mark = Sprite::create("DinoColor/color-selected.png");
 ////           mark->setTag(Mark);
-////           mark->setPosition(ccp(size2.width/2, size2.height/2));
+////           mark->setPosition(Vec2(size2.width/2, size2.height/2));
 ////           button->addChild(mark);
 ////           if (ColorManager::shared()->SelectColorTag[ColorManager::shared()->SelectBrushTag-100] == Tag+i) {
 ////               mark->setVisible(true);
@@ -371,34 +393,34 @@ void ChooseColorLayer::setButton()
 ////              mark->setVisible(false);
 ////           }
 ////
-//           button->runAction(CCMoveBy::create(0.5, ccp(0, -200)));
-//           button->addTargetWithActionForControlEvents(this, cccontrol_selector(ChooseColorLayer::colorClick), CCControlEventTouchUpInside) ;
+//           button->runAction(MoveBy::create(0.5, Vec2(0, -200)));
+//           button->addTargetWithActionForControlEvents(this, cccontrol_selector(ChooseColorLayer::colorClick), ControlEventTouchUpInside) ;
 //       }
 }
 
 
 
-void ChooseColorLayer::addLock(CCObject *_parent,int _index) {
+void ChooseColorLayer::addLock(Ref *_parent,int _index) {
 
     const char* lockName = "lock";
     
-    CCSprite* parentSpr = (CCSprite*)_parent;
+    Sprite* parentSpr = (Sprite*)_parent;
     
     
     
-    CCSprite* locked = CCSprite::create(CCString::createWithFormat("iap/%s.png",lockName)->getCString()) ;   //那么设置一个锁的精灵
+    Sprite* locked = Sprite::create(StringUtils::format("iap/%s.png",lockName));   //那么设置一个锁的精灵
     if (strcmp(ColorManager::shared()->curPenName, "largebrush")==0){
         locked->setScale(0.7) ;
-        locked->setPosition(ccp(parentSpr->getContentSize().width/2.5, parentSpr->getContentSize().height/1.7));
+        locked->setPosition(Vec2(parentSpr->getContentSize().width/2.5, parentSpr->getContentSize().height/1.7));
     }else  if (strcmp(ColorManager::shared()->curPenName, "paintbucket")==0){
         locked->setScale(0.8) ;
-        locked->setPosition(ccp(parentSpr->getContentSize().width/2, parentSpr->getContentSize().height/1.7));
+        locked->setPosition(Vec2(parentSpr->getContentSize().width/2, parentSpr->getContentSize().height/1.7));
     }else{
         locked->setScale(scaleColor-0.3) ;
-        locked->setPosition(ccp(parentSpr->getContentSize().width/2, parentSpr->getContentSize().height/1.9));
+        locked->setPosition(Vec2(parentSpr->getContentSize().width/2, parentSpr->getContentSize().height/1.9));
     }
     
-//    locked->setPosition(ccp(parentSpr->getContentSize().width/2, parentSpr->getContentSize().height/1.7));
+//    locked->setPosition(Vec2(parentSpr->getContentSize().width/2, parentSpr->getContentSize().height/1.7));
     locked->setTag(kLockTag);
     parentSpr->addChild(locked,10) ;
 }
@@ -406,42 +428,42 @@ void ChooseColorLayer::addLock(CCObject *_parent,int _index) {
 
 
 
-void ChooseColorLayer::colorClick(CCObject *obj)
+void ChooseColorLayer::colorClick(Ref *obj)
 {
-    CCSprite* colorBg = (CCSprite*)this->getChildByTag(kColorBgTag);
+    Sprite* colorBg = (Sprite*)this->getChildByTag(kColorBgTag);
 
-    CCSprite* penButton = (CCSprite*)colorBg->getChildByTag(kPenColorTag+selectPenIndex);
+    Sprite* penButton = (Sprite*)colorBg->getChildByTag(kPenColorTag+selectPenIndex);
     if(penButton!=NULL){
 //        penButton->setScale(scaleColor);
-        penButton->runAction(CCSpawn::create(CCSequence::create(CCScaleTo::create(0.1, scaleColor+0.2),
-                                                                CCScaleTo::create(0.1, scaleColor),
+        penButton->runAction(Spawn::create(Sequence::create(ScaleTo::create(0.1, scaleColor+0.2),
+                                                                ScaleTo::create(0.1, scaleColor),
                                                                                    NULL),
-                                             CCEaseIn::create(CCMoveBy::create(0.3, ccp(-25, 0)), 0.3),
+                                             EaseIn::create(MoveBy::create(0.3, Vec2(-25, 0)), 0.3),
                                              NULL));
     }
     
     for (int i=0; i<totlePenCount; i++) {
-        CCSprite* otherPenButton = (CCSprite*)colorBg->getChildByTag(kPenColorTag+i);
+        Sprite* otherPenButton = (Sprite*)colorBg->getChildByTag(kPenColorTag+i);
         if (i!=selectPenIndex && otherPenButton!=NULL) {
             otherPenButton->setPositionX(colorBg->getContentSize().width/3);
-            otherPenButton->runAction(CCScaleTo::create(0.2, scaleColor));
+            otherPenButton->runAction(ScaleTo::create(0.2, scaleColor));
             clickPenIndexArr[i] = 0;
         }
     }
     
-//    int tag = ((CCNode*)obj)->getTag();
+//    int tag = ((Node*)obj)->getTag();
 //    for (int i = 0; i < 15; i++) {
-//        CCNode* node =this->getChildByTag(Tag+i);
+//        Node* node =this->getChildByTag(Tag+i);
 //        node->getChildByTag(Mark)->setVisible(false);
 //    }
-//    ((CCNode*)obj)->getChildByTag(Mark)->setVisible(true);
+//    ((Node*)obj)->getChildByTag(Mark)->setVisible(true);
     
-//    CCSprite* pait = ( CCSprite*)color->getSelectedImage()->getChildByTag(1);
+//    Sprite* pait = ( Sprite*)color->getSelectedImage()->getChildByTag(1);
 //    pait->setColor(ColorManager::shared()->m_pColor);
-//    pait = ( CCSprite*)color->getNormalImage()->getChildByTag(1);
+//    pait = ( Sprite*)color->getNormalImage()->getChildByTag(1);
 //    pait->setColor(ColorManager::shared()->m_pColor);
 //    color->unselected();
-//    CCNotificationCenter::sharedNotificationCenter()->postNotification("colorcanvas.changecolor");
+//    NotificationCenter::getInstance()->postNotification("colorcanvas.changecolor");
 //    this->removeFromParent();
     if (selectPenIndex>11 && selectPenIndex<16 && (strcmp(ColorManager::shared()->curPenName, "pencil")==0 || strcmp(ColorManager::shared()->curPenName, "paint")==0)) {
         ColorManager::shared()->firstColorValue(selectPenIndex);
@@ -457,31 +479,27 @@ void ChooseColorLayer::colorClick(CCObject *obj)
     ColorManager::shared()->m_DrawType = Draw_Point ;
 //    if (strcmp(ColorManager::shared()->curPenName, "crayon")==0) {
 //        ColorManager::shared()->SelectColorTag[ColorManager::shared()->SelectBrushTag-100] =  crayonTextureIndex[selectPenIndex];
-//        CCNotificationCenter::sharedNotificationCenter()->postNotification("colorcanvas.changecolor");
+//        NotificationCenter::getInstance()->postNotification("colorcanvas.changecolor");
 
 //    }
 
 }
 
-void ChooseColorLayer::SetMenuItem(CCMenuItemSprite *item)
+void ChooseColorLayer::SetMenuItem(MenuItemSprite *item)
 {
     color = item;
 }
 
 
-void ChooseColorLayer::registerWithTouchDispatcher(){
-    CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, false);
-}
+bool ChooseColorLayer::onTouchBegan(Touch *touch, Event *event){
+    Vec2 location = touch->getLocationInView();
 
-bool ChooseColorLayer::ccTouchBegan(CCTouch *touch, CCEvent *event){
-    CCPoint location = touch->getLocationInView();
-
-    location = CCDirector::sharedDirector()->convertToGL(location);
-    CCPoint preLocation = touch->getPreviousLocationInView();
+    location = Director::getInstance()->convertToGL(location);
+    Vec2 preLocation = touch->getPreviousLocationInView();
     startY = location.y;
-    CCSprite* colorBg = (CCSprite*)this->getChildByTag(kColorBgTag);
+    Sprite* colorBg = (Sprite*)this->getChildByTag(kColorBgTag);
     buyState=ColorManager::shared()->buyState;
-    if (colorBg!=NULL && colorBg->boundingBox().containsPoint(location)&&!buyState) {
+    if (colorBg!=NULL && colorBg->getBoundingBox().containsPoint(location)&&!buyState) {
         touchColorBg = colorBg;
         if(strcmp(ColorManager::shared()->curPenName, "eraser")!=0){
             ColorManager::shared()->scrollPenBoard = true;
@@ -507,17 +525,17 @@ bool ChooseColorLayer::ccTouchBegan(CCTouch *touch, CCEvent *event){
     return true;
 }
 
-void ChooseColorLayer::ccTouchMoved(CCTouch *touch, CCEvent *event){
-    CCPoint location = touch->getLocationInView();
-    location = CCDirector::sharedDirector()->convertToGL(location);
-    CCPoint preLocation = touch->getPreviousLocationInView();
-    preLocation = CCDirector::sharedDirector()->convertToGL(preLocation);
-    CCSprite* colorBg = (CCSprite*)this->getChildByTag(kColorBgTag);
+void ChooseColorLayer::onTouchMoved(Touch *touch, Event *event){
+    Vec2 location = touch->getLocationInView();
+    location = Director::getInstance()->convertToGL(location);
+    Vec2 preLocation = touch->getPreviousLocationInView();
+    preLocation = Director::getInstance()->convertToGL(preLocation);
+    Sprite* colorBg = (Sprite*)this->getChildByTag(kColorBgTag);
     buyState=ColorManager::shared()->buyState;
     buyState=ColorManager::shared()->buyState;
-//    CCPoint touchPos = colorBg->convertToNodeSpace(location);
-//    CCPoint preLocation = touchPos->getPreviousLocationInView();
-//    CCPoint touchPrePos = colorBg->convertToNodeSpace(preLocation);
+//    Vec2 touchPos = colorBg->convertToNodeSpace(location);
+//    Vec2 preLocation = touchPos->getPreviousLocationInView();
+//    Vec2 touchPrePos = colorBg->convertToNodeSpace(preLocation);
     beginY = preLocation.y;
     endY = location.y;
     touchMoveDis = endY-beginY;
@@ -525,10 +543,10 @@ void ChooseColorLayer::ccTouchMoved(CCTouch *touch, CCEvent *event){
     if(abs(startY-endY)>100){
         resetColorPos();
     }
-    if (touchColorBg!=NULL && touchColorBg->boundingBox().containsPoint(location) && touchMoveDis!=0&&!buyState) {
+    if (touchColorBg!=NULL && touchColorBg->getBoundingBox().containsPoint(location) && touchMoveDis!=0&&!buyState) {
         for (int i=0; i<totlePenCount; i++) {
 
-            CCSprite* penButton = (CCSprite*)colorBg->getChildByTag(kPenColorTag+i);
+            Sprite* penButton = (Sprite*)colorBg->getChildByTag(kPenColorTag+i);
             if (penButton!=NULL) {
 //                CCLOG("---没有移动前的位置%f---",ColorManager::shared()->colorPenPos[36]);
 //                CCLOG("---%f---",penButton->getPositionY());
@@ -553,16 +571,16 @@ void ChooseColorLayer::ccTouchMoved(CCTouch *touch, CCEvent *event){
 //    CCLOG("---最后一支笔当前的位置%f---",ColorManager::shared()->colorPenPos[36]);
 }
 
-void ChooseColorLayer::ccTouchEnded(CCTouch *touch, CCEvent *event){
+void ChooseColorLayer::onTouchEnded(Touch *touch, Event *event){
 
-    CCPoint location = touch->getLocationInView();
-    location = CCDirector::sharedDirector()->convertToGL(location);
-    CCPoint point = touch->getLocation();
-    CCPoint lastPoint = touch->getPreviousLocation();
-    CCSprite* colorBg = (CCSprite*)this->getChildByTag(kColorBgTag);
+    Vec2 location = touch->getLocationInView();
+    location = Director::getInstance()->convertToGL(location);
+    Vec2 point = touch->getLocation();
+    Vec2 lastPoint = touch->getPreviousLocation();
+    Sprite* colorBg = (Sprite*)this->getChildByTag(kColorBgTag);
 //    CCLOG("---手滑动距离%d---",touchMoveDis);
     for (int i=0; i<totlePenCount; i++) {
-        CCSprite* penButton = (CCSprite*)colorBg->getChildByTag(kPenColorTag+i);
+        Sprite* penButton = (Sprite*)colorBg->getChildByTag(kPenColorTag+i);
 //        CCLOG("---最后一支笔当前的位置%f---",penButton->getPositionY());
         if (strcmp(ColorManager::shared()->curPenName, "paint")==0) {
             ColorManager::shared()->colorPaintPos[i] = penButton->getPositionY();
@@ -585,17 +603,17 @@ void ChooseColorLayer::ccTouchEnded(CCTouch *touch, CCEvent *event){
     ColorCanvasView* c = (ColorCanvasView*)this->getChildByTag(kBuyLayerTag);
     if(touchMoveDis==0){
         for (int i=0; i<totlePenCount; i++) {
-            CCSprite* penColor = (CCSprite*)colorBg->getChildByTag(kPenColorTag+i);
-            CCSprite* adLock = (CCSprite*)penColor->getChildByTag(kLockTag);
-            CCPoint penPos = colorBg->convertToNodeSpace(location);
+            Sprite* penColor = (Sprite*)colorBg->getChildByTag(kPenColorTag+i);
+            Sprite* adLock = (Sprite*)penColor->getChildByTag(kLockTag);
+            Vec2 penPos = colorBg->convertToNodeSpace(location);
             buyState=ColorManager::shared()->buyState;
-            if (penColor!=NULL && penColor->boundingBox().containsPoint(penPos) && clickPen==false && clickPenIndexArr[i] == 0&&!buyState) {
-                SimpleAudioEngine::sharedEngine()->playEffect("mp3/touchItem.mp3");
+            if (penColor!=NULL && penColor->getBoundingBox().containsPoint(penPos) && clickPen==false && clickPenIndexArr[i] == 0&&!buyState) {
+                SimpleAudioEngine::getInstance()->playEffect("mp3/touchItem.mp3");
 //                ColorManager::shared()->firstTouchPencil = true;
                 if (adLock!=NULL) {
-    //                CCScaleBy* scaleBy = CCScaleBy::create(0.1, 1.2);
-    //                adLock->runAction(CCSequence::createWithTwoActions(scaleBy, scaleBy->reverse()));
-                     CCNotificationCenter::sharedNotificationCenter()->postNotification("colorcanvas.showpeniap");
+    //                ScaleBy* scaleBy = ScaleBy::create(0.1, 1.2);
+    //                adLock->runAction(Sequence::createWithTwoActions(scaleBy, scaleBy->reverse()));
+                     NotificationCenter::getInstance()->postNotification("colorcanvas.showpeniap");
                      ColorManager::shared()->buyState= true;
                 }else{
 
@@ -627,8 +645,8 @@ void ChooseColorLayer::ccTouchEnded(CCTouch *touch, CCEvent *event){
                     }else if (strcmp(ColorManager::shared()->curPenName, "paintbucket")==0){
                         ColorManager::shared()->curPaintbucketIndex = i;
                     }
-                    penColor->runAction(CCSequence::create(CCCallFuncN::create(this, callfuncN_selector(ChooseColorLayer::colorClick)),
-                                                           CCCallFunc::create(this, callfunc_selector(ChooseColorLayer::canClickPen)),
+                    penColor->runAction(Sequence::create(CallFuncN::create(CC_CALLBACK_1(ChooseColorLayer::colorClick, this)),
+                                                           CallFunc::create(CC_CALLBACK_0(ChooseColorLayer::canClickPen, this)),
                                                            NULL));
 
                 }
@@ -639,7 +657,7 @@ void ChooseColorLayer::ccTouchEnded(CCTouch *touch, CCEvent *event){
 
 //    }
     
-//    SimpleAudioEngine::sharedEngine()->stopAllEffects();
+//    SimpleAudioEngine::getInstance()->stopAllEffects();
     
 }
 
@@ -652,11 +670,11 @@ void ChooseColorLayer::resetColorPos(){
 //    int touchMoved=finishY-startY;
 //    CCLOG("---当前画笔%d---",colorMaxDis);
 //    CCLOG("---拖动距离%d---",touchMoveDis);
-    CCSprite* colorBg = (CCSprite*)this->getChildByTag(kColorBgTag);
+    Sprite* colorBg = (Sprite*)this->getChildByTag(kColorBgTag);
     if (touchMoveDis>0) {
         for (int i=0; i<totlePenCount; i++) {
     //        CCLOG("---各个笔的位置%f---",ColorManager::shared()->colorPenPos[i]);
-            CCSprite* penButton = (CCSprite*)colorBg->getChildByTag(kPenColorTag+i);
+            Sprite* penButton = (Sprite*)colorBg->getChildByTag(kPenColorTag+i);
             int penPos = penButton->getPositionY();
     //        CCLOG("---第一支笔当前的位置%d---",penPos);
     //        CCLOG("---第一支笔当前的位置%f---",ColorManager::shared()->colorPenPos[0]);
@@ -726,7 +744,7 @@ void ChooseColorLayer::resetColorPos(){
     }else if(touchMoveDis<0){
         for (int i=totlePenCount-1; i>=0; i--) {
     //        CCLOG("---各个笔的位置%f---",ColorManager::shared()->colorPenPos[i]);
-            CCSprite* penButton = (CCSprite*)colorBg->getChildByTag(kPenColorTag+i);
+            Sprite* penButton = (Sprite*)colorBg->getChildByTag(kPenColorTag+i);
             int penPos = penButton->getPositionY();
     //        CCLOG("---第一支笔当前的位置%d---",penPos);
     //        CCLOG("---第一支笔当前的位置%f---",ColorManager::shared()->colorPenPos[0]);

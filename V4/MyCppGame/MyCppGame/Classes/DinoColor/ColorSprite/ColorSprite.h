@@ -14,39 +14,39 @@
 using namespace cocos2d;
 
 struct DrawingPointInfo {
-    ccColor3B pointColor;
-    CCPoint pointPos;
+    Color3B pointColor;
+    Vec2 pointPos;
     std::string parentSprName;
     int brushTag;
     int colorTag;
 };
 
-class ColorSprite : public cocos2d::CCSprite {
+class ColorSprite : public cocos2d::Sprite {
     
     
 public:
 
-    static ColorSprite* CreateColor(const char* spName,CCPoint pos ,CCNode* parent,int ptag);
-//    bool isTouched(cocos2d::CCTouch *pTouch);
-//    void PlatingSprite(ccColor3B color, CCRenderTexture* canvas);
-//    bool CheckAlpha(CCPoint point);
+    static ColorSprite* CreateColor(const char* spName, Vec2 pos, Node* parent, int ptag);
+//    bool isTouched(cocos2d::Touch *pTouch);
+//    void PlatingSprite(Color3B color, RenderTexture* canvas);
+//    bool CheckAlpha(Vec2 point);
     
     std::string curSprName;
-    CCDrawNode* m_EraserDrawer ;
+    DrawNode* m_EraserDrawer ;
     
-    CCDrawNode* pencilNode;
-    CCDrawNode* paintNode;
-    CCDrawNode* brushNode;
-    CCRenderTexture* brushRender;
-    CCSprite* clippingBrushSpr;
-//    CCRenderTexture* testRender;
-//    CCSprite* texture;
-//    CCClippingNode* clippingNode;
-//    CCNode* twoNode;
+    DrawNode* pencilNode;
+    DrawNode* paintNode;
+    DrawNode* brushNode;
+    RenderTexture* brushRender;
+    Sprite* clippingBrushSpr;
+//    RenderTexture* testRender;
+//    Sprite* texture;
+//    ClippingNode* clippingNode;
+//    Node* twoNode;
     
     std::vector<DrawingPointInfo> infoArr;
     
-    CCArray* drawPoints;
+    Vector<Node*> drawPoints;
     
     void changeBrush();
     void changeColor();
@@ -55,7 +55,7 @@ public:
     
     void initBrushNode();
     
-    void toolsBrushing(CCPoint _brushPos, CCPoint _lastPos);
+    void toolsBrushing(Vec2 _brushPos, Vec2 _lastPos);
     
     void showLastSceneImage();
     
@@ -64,7 +64,7 @@ private:
     ColorSprite();
     virtual ~ColorSprite();
     
-    CCPoint lastDotPos;
+    Vec2 lastDotPos;
     
 };
 

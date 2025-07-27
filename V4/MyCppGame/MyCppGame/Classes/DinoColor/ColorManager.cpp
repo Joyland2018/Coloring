@@ -885,7 +885,7 @@ Image* ColorManager::loadImageFromBinaryFile(const std::string &_fileName)
 void ColorManager::saveTextureToFile(std::string _fileName, ColorSprite *_colorSpr)
 {
     Size sprSize = _colorSpr->getContentSize();
-    RenderTexture* saverenderTexture = RenderTexture::create(sprSize.width, sprSize.height, Texture2D::PixelFormat::RGBA8888);
+    RenderTexture* saverenderTexture = RenderTexture::create(sprSize.width, sprSize.height, PixelFormat::RGBA8888);
     saverenderTexture->begin();
     _colorSpr->visit();
     saverenderTexture->end();

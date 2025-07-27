@@ -11,24 +11,24 @@
 #include <stdio.h>
 #include "cocos2d.h"
 
-using namespace cocos2d;
+USING_NS_CC;
 
-class ColoringClippingNode : public CCClippingNode {
+class ColoringClippingNode : public ClippingNode {
 private:
     
     ColoringClippingNode();
     virtual ~ColoringClippingNode();
     
 public:
-    static ColoringClippingNode* create(CCNode *pStencil);
+    static ColoringClippingNode* create(Node *pStencil);
     
-//    CCSprite* testBrush;
-//    CCRenderTexture* testRender;
+//    Sprite* testBrush;
+//    RenderTexture* testRender;
     
     void initClippingNode();
-    void toolsBrushing(CCPoint _brushPos, CCPoint _lastPos);
-    bool isTouched(cocos2d::CCTouch *pTouch);
-    bool CheckAlpha(CCPoint point);
+    void toolsBrushing(Vec2 _brushPos, Vec2 _lastPos);
+    bool isTouched(cocos2d::Touch *pTouch);
+    bool CheckAlpha(Vec2 point);
 };
 
 #endif /* ColoringClippingNode_h */

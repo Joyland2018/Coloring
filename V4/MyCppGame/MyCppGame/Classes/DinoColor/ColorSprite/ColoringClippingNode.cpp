@@ -8,7 +8,7 @@
 #include "ColoringClippingNode.h"
 #include "ColorSprite.h"
 
-ColoringClippingNode* ColoringClippingNode::create(CCNode *pStencil)
+ColoringClippingNode* ColoringClippingNode::create(Node *pStencil)
 {
     ColoringClippingNode *pRet = new ColoringClippingNode();
     if (pRet && pRet->init(pStencil))
@@ -34,18 +34,18 @@ ColoringClippingNode::~ColoringClippingNode()
 
 void ColoringClippingNode::initClippingNode()
 {
-        CCSize sprSize = this->getContentSize();
+        Size sprSize = this->getContentSize();
     ////    ColorSprite* colorSpr = (ColorSprite*)this->getStencil();
     ////    if (colorSpr != NULL) {
     ////
-    //        testRender = CCRenderTexture::create(sprSize.width, sprSize.height, kCCTexture2DPixelFormat_RGBA8888);
+    //        testRender = RenderTexture::create(sprSize.width, sprSize.height, Texture2D::PixelFormat::RGBA8888);
     //        CC_SAFE_RETAIN(testRender);
-    //        testRender->setPosition(ccp(sprSize.width/2, sprSize.height/2));
+    //        testRender->setPosition(Vec2(sprSize.width/2, sprSize.height/2));
     //        this->addChild(testRender);
     //
-    //        testBrush = CCSprite::create("DinoColor/paint_brush/paint_brush_1.png");
+    //        testBrush = Sprite::create("DinoColor/paint_brush/paint_brush_1.png");
     //        CC_SAFE_RETAIN(testBrush);
-    //        testBrush->setColor(ccRED);
+    //        testBrush->setColor(Color3B::RED);
     //        testBrush->setOpacity(20);
     //        testBrush->setScale(0.5);
     ////        this->addChild(testBrush);
@@ -54,47 +54,47 @@ void ColoringClippingNode::initClippingNode()
     
 }
 
-void ColoringClippingNode::toolsBrushing(CCPoint _brushPos, CCPoint _lastPos)
+void ColoringClippingNode::toolsBrushing(Vec2 _brushPos, Vec2 _lastPos)
 {
     ColorSprite* colorSpr = (ColorSprite*)this->getChildByTag(20);
     if (colorSpr != NULL) {
         colorSpr->toolsBrushing(_brushPos,_lastPos);
-//        CCPoint touchPoint = this->convertToNodeSpace(_testPos);
+//        Vec2 touchPoint = this->convertToNodeSpace(_testPos);
 //        
 //        testRender->begin();
 ////        colorSpr->testBrushing(_testPos);
 ////        colorSpr->visit();
-//        testBrush->setPosition(ccp(touchPoint.x, touchPoint.y));
+//        testBrush->setPosition(Vec2(touchPoint.x, touchPoint.y));
 //        testBrush->visit();
 //        testRender->end();
     }
 }
 
-bool ColoringClippingNode::isTouched(cocos2d::CCTouch *pTouch)
+bool ColoringClippingNode::isTouched(cocos2d::Touch *pTouch)
 {
     bool isTouched = false;
-    CCPoint touchPointInView = pTouch->getLocationInView();
-    CCPoint glPoint = CCDirector::sharedDirector()->convertToGL(touchPointInView);
+    Vec2 touchPointInView = pTouch->getLocationInView();
+    Vec2 glPoint = Director::getInstance()->convertToGL(touchPointInView);
     isTouched = this->CheckAlpha(glPoint);
     return isTouched;
 }
 
-bool ColoringClippingNode::CheckAlpha(CCPoint point)
+bool ColoringClippingNode::CheckAlpha(Vec2 point)
 {
     bool isTouched = false;
-//    CCPoint posInParent = ((CCSprite*)this->getParent())->convertToNodeSpace(point);
+//    Vec2 posInParent = ((Sprite*)this->getParent())->convertToNodeSpace(point);
     ColorSprite* stencilSpr = (ColorSprite*)this->getStencil();
-    if (this->boundingBox().containsPoint(point) && stencilSpr) {
+    if (this->getBoundingBox().containsPoint(point) && stencilSpr) {
         //this->setOpacity(100);
         int8_t data[4];
-        CCPoint touchPoint = this->convertToNodeSpace(point);
-        CCPoint location = CCPoint((touchPoint.x), (touchPoint.y) );
-        CCRenderTexture* renderTexture = CCRenderTexture::create(1,1,kCCTexture2DPixelFormat_RGBA8888);
+        Vec2 touchPoint = this->convertToNodeSpace(point);
+        Vec2 location = Vec2((touchPoint.x), (touchPoint.y) );
+        RenderTexture* renderTexture = RenderTexture::create(1,1,PixelFormat::RGBA8888);
         renderTexture->beginWithClear(0,0,0,0);//只保存渲染一个像素的数据
-        CCPoint oldPos = stencilSpr->getPosition();
-        CCPoint oldAnchor = stencilSpr->getAnchorPoint();
-        stencilSpr->setAnchorPoint(CCPoint(0,0));
-        stencilSpr->setPosition(ccp(-location.x, -location.y));
+        Vec2 oldPos = stencilSpr->getPosition();
+        Vec2 oldAnchor = stencilSpr->getAnchorPoint();
+        stencilSpr->setAnchorPoint(Vec2(0,0));
+        stencilSpr->setPosition(Vec2(-location.x, -location.y));
         stencilSpr->visit();
         stencilSpr->setAnchorPoint(oldAnchor);
         stencilSpr->setPosition(oldPos);

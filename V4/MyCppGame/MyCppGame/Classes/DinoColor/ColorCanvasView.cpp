@@ -430,10 +430,10 @@ void ColorCanvasView::MakeContent()
                 this->addChild(sprite,1);
 //                m_ClipDrawArray.pushBack(sprite);
             }else{
-                ColorSprite* stencilSpr = ColorSprite::CreateColor(pngName, Vec2::ZERO, this, m_DrawArray.size());
+                ColorSprite* stencilSpr = ColorSprite::CreateColor(pngName.c_str(), Vec2::ZERO, this, m_DrawArray.size());
                 stencilSpr->setAnchorPoint(Vec2(0.0, 0.0));
                 stencilSpr->setPosition(Vec2::ZERO);
-                ColorSprite* sp = ColorSprite::CreateColor(pngName, Vec2(stencilSpr->getContentSize().width/2, stencilSpr->getContentSize().height/2), this, m_DrawArray.size());
+                ColorSprite* sp = ColorSprite::CreateColor(pngName.c_str(), Vec2(stencilSpr->getContentSize().width/2, stencilSpr->getContentSize().height/2), this, m_DrawArray.size());
 //                ColorNode* sp = ColorNode::createColorNode(Size(stencilSpr->getContentSize().width, stencilSpr->getContentSize().height));
 //                sp->setAnchorPoint(Vec2(0.0, 0.0));
 //                sp->setPosition(Vec2::ZERO);
@@ -900,11 +900,11 @@ void ColorCanvasView::showColorBoard(){
 //        layer->SetMenuItem(color);
         this->addChild(layer,3);
 //        color->selected();
-        CCLOG("---当前画笔%s---",ColorManager::shared()->curPenName.c_str());
+        CCLOG("---当前画笔%s---",ColorManager::shared()->curPenName);
     }else{
         layer->removeFromParent();
 //        color->unselected();
-        CCLOG("---当前画笔%s---",ColorManager::shared()->curPenName.c_str());
+        CCLOG("---当前画笔%s---",ColorManager::shared()->curPenName);
     }
 }
 
@@ -952,7 +952,7 @@ void ColorCanvasView::clickPenButton(Ref *sender){
         ColorManager::shared()->SelectBrushTag = penIndex;
         
         ColorManager::shared()->curPenName  = ButtonNames[penIndex-100].c_str() ;
-        CCLOG("---当前画笔%s---",ColorManager::shared()->curPenName.c_str());
+        CCLOG("---当前画笔%s---",ColorManager::shared()->curPenName);
         ChooseColorLayer* layer = (ChooseColorLayer*)this->getChildByTag(999);
         if (layer != NULL) {
             layer->removeFromParent();

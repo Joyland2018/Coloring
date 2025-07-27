@@ -14,19 +14,19 @@
 
 using namespace cocos2d;
 
-class ChooseColorLayer : public CCLayer {
+class ChooseColorLayer : public Layer {
     
     
 public:
-    CCSize v_size ;
-    CCPoint poszero;
+    Size v_size ;
+    Vec2 poszero;
     CREATE_FUNC(ChooseColorLayer);
     virtual bool init();
     bool buyState;
     void setButton();
-    void colorClick(CCObject* obj);
-    CCMenuItemSprite* color;
-    CCSprite* bg;
+    void colorClick(Ref* obj);
+    MenuItemSprite* color;
+    Sprite* bg;
     
     int colorMaxDis;
     int colorMinDis;
@@ -34,18 +34,17 @@ public:
     int colorDisY;
     float scaleColor;
     
-    void SetMenuItem(CCMenuItemSprite* item);
+    void SetMenuItem(MenuItemSprite* item);
     
-    virtual void registerWithTouchDispatcher();                 //注册单点触摸点击事件
-    virtual bool ccTouchBegan(CCTouch* touch,CCEvent* event);
-    virtual void ccTouchEnded(CCTouch* touch,CCEvent* event);
-    virtual void ccTouchMoved(CCTouch* touch,CCEvent* event);
+    virtual bool onTouchBegan(Touch* touch, Event* event);
+    virtual void onTouchEnded(Touch* touch, Event* event);
+    virtual void onTouchMoved(Touch* touch, Event* event);
     
     void resetColorPos();
-    void cacheCayonTexture(CCObject* _parent);
+    void cacheCayonTexture(Ref* _parent);
     void canClickPen();
     
-    void addLock(cocos2d::CCObject* _parent,int _index);
+    void addLock(cocos2d::Ref* _parent,int _index);
     
     int beginY;
     int endY;
@@ -63,7 +62,13 @@ public:
     int colorPenPos[40] ;
 
     bool clickPen;
-    CCSprite* touchColorBg;
+    Sprite* touchColorBg;
+    
+    virtual void onEnter() override;
+    virtual void onExit() override;
+    
+private:
+    EventListenerTouchOneByOne* _touchListener;
     
 };
 

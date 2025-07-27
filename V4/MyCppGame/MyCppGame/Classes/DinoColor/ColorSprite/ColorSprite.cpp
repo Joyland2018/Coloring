@@ -6,12 +6,12 @@
 //
 
 #include "ColorSprite.h"
-#include "ColorManager.hpp"
+#include "../ColorManager.hpp"
 #include "GameManager.h"
 
 #define LAST_TEXTURE 131
 
-ColorSprite* ColorSprite::CreateColor(const char* spName, CCPoint pos, CCNode *parent, int ptag)
+ColorSprite* ColorSprite::CreateColor(const char* spName, Vec2 pos, Node *parent, int ptag)
 {
     ColorSprite* sprite = new ColorSprite();
     
@@ -23,14 +23,14 @@ ColorSprite* ColorSprite::CreateColor(const char* spName, CCPoint pos, CCNode *p
         sprite->brushRender = NULL;
         sprite->m_EraserDrawer = NULL;
         sprite->clippingBrushSpr = NULL;
-//        sprite->testRender = CCRenderTexture::create(sprite->getContentSize().width, sprite->getContentSize().height, kCCTexture2DPixelFormat_RGBA8888);
-//        CC_SAFE_RETAIN(sprite->testRender);
-//        sprite->testRender->setPosition(ccp(sprite->getContentSize().width/2, sprite->getContentSize().height/2));
+//        sprite->testRender = RenderTexture::create(sprite->getContentSize().width, sprite->getContentSize().height, Texture2D::PixelFormat::RGBA8888);
+//        sprite->testRender->retain();
+//        sprite->testRender->setPosition(Vec2(sprite->getContentSize().width/2, sprite->getContentSize().height/2));
 //        sprite->addChild(sprite->testRender);
 //
-//        sprite->testBrush = CCSprite::create("DinoColor/paint_brush/paint_brush_1.png");
-//        CC_SAFE_RETAIN(sprite->testBrush);
-//        sprite->testBrush->setColor(ccRED);
+//        sprite->testBrush = Sprite::create("DinoColor/paint_brush/paint_brush_1.png");
+//        sprite->testBrush->retain();
+//        sprite->testBrush->setColor(Color3B::RED);
 //        sprite->testBrush->setOpacity(20);
 //        sprite->testBrush->setScale(0.5);
 //
@@ -38,14 +38,14 @@ ColorSprite* ColorSprite::CreateColor(const char* spName, CCPoint pos, CCNode *p
         return sprite;
     }
     
-    CC_SAFE_DELETE(sprite);
+    delete sprite;
     sprite = NULL;
     return NULL ;
 }
 
-//void ColorSprite::PlatingSprite(ccColor3B color, CCRenderTexture *canvas)
+//void ColorSprite::PlatingSprite(Color3B color, RenderTexture *canvas)
 //{
-//    this->setColor(ccRED);
+//    this->setColor(Color3B::RED);
 //    this->setOpacity(255);
 //    canvas->begin();
 //    this->visit();
@@ -53,30 +53,30 @@ ColorSprite* ColorSprite::CreateColor(const char* spName, CCPoint pos, CCNode *p
 //    this->setOpacity(0);
 //}
 //
-//bool ColorSprite::isTouched(cocos2d::CCTouch *pTouch)
+//bool ColorSprite::isTouched(cocos2d::Touch *pTouch)
 //{
 //    bool isTouched = false;
-//    CCPoint touchPointInView = pTouch->getLocationInView();
-//    CCPoint glPoint = CCDirector::sharedDirector()->convertToGL(touchPointInView);
+//    Vec2 touchPointInView = pTouch->getLocationInView();
+//    Vec2 glPoint = Director::getInstance()->convertToGL(touchPointInView);
 //    isTouched = this->CheckAlpha(glPoint);
 //    return isTouched;
 //}
 //
-//bool ColorSprite::CheckAlpha(CCPoint point)
+//bool ColorSprite::CheckAlpha(Vec2 point)
 //{
 //    bool isTouched = false;
-//    CCPoint posInParent = ((CCSprite*)this->getParent())->convertToNodeSpace(point);
-//    if (this->boundingBox().containsPoint(posInParent)) {
+//    Vec2 posInParent = ((Sprite*)this->getParent())->convertToNodeSpace(point);
+//    if (this->getBoundingBox().containsPoint(posInParent)) {
 //        //this->setOpacity(100);
 //        int8_t data[4];
-//        CCPoint touchPoint = this->convertToNodeSpace(point);
-//        CCPoint location = CCPoint((touchPoint.x), (touchPoint.y) );
-//        CCRenderTexture* renderTexture = CCRenderTexture::create(1,1,kCCTexture2DPixelFormat_RGBA8888);
+//        Vec2 touchPoint = this->convertToNodeSpace(point);
+//        Vec2 location = Vec2((touchPoint.x), (touchPoint.y) );
+//        RenderTexture* renderTexture = RenderTexture::create(1,1,Texture2D::PixelFormat::RGBA8888);
 //        renderTexture->beginWithClear(0,0,0,0);//只保存渲染一个像素的数据
-//        CCPoint oldPos = this->getPosition();
-//        CCPoint oldAnchor = this->getAnchorPoint();
-//        this->setAnchorPoint(CCPoint(0,0));
-//        this->setPosition(ccp(-location.x, -location.y));
+//        Vec2 oldPos = this->getPosition();
+//        Vec2 oldAnchor = this->getAnchorPoint();
+//        this->setAnchorPoint(Vec2(0,0));
+//        this->setPosition(Vec2(-location.x, -location.y));
 //        this->visit();
 //        this->setAnchorPoint(oldAnchor);
 //        this->setPosition(oldPos);
@@ -101,19 +101,19 @@ ColorSprite::ColorSprite()
 ColorSprite::~ColorSprite()
 {
     if (m_EraserDrawer != NULL) {
-        CC_SAFE_RELEASE(m_EraserDrawer);
+        m_EraserDrawer->release();
         m_EraserDrawer = NULL;
     }
     if (clippingBrushSpr != NULL) {
-        CC_SAFE_RELEASE(clippingBrushSpr);
+        clippingBrushSpr->release();
         clippingBrushSpr = NULL;
     }
     if (pencilNode != NULL) {
-//        CC_SAFE_RELEASE(pencilNode);
+//        pencilNode->release();
         pencilNode = NULL;
     }
     if (brushNode != NULL) {
-//        CC_SAFE_RELEASE(brushNode);
+//        brushNode->release();
         brushNode = NULL;
     }
     
@@ -121,91 +121,91 @@ ColorSprite::~ColorSprite()
 
 void ColorSprite::initBrushNode()
 {
-    CCSize sprSize = this->getContentSize();
+    Size sprSize = this->getContentSize();
 //    ColorSprite* colorSpr = (ColorSprite*)this->getStencil();
 //    if (colorSpr != NULL) {
-//
+
 //    clippingNode = NULL;
     
 
     if (ColorManager::shared()->m_DrawType == Draw_Eraser && m_EraserDrawer == NULL) {
-        m_EraserDrawer = CCDrawNode::create();
-        m_EraserDrawer->drawDot(CCPointZero, 30, ccc4f(1.0, 1.0, 1.0, 1.0));
-        CC_SAFE_RETAIN(m_EraserDrawer);
+        m_EraserDrawer = DrawNode::create();
+        m_EraserDrawer->drawDot(Vec2::ZERO, 30, Color4F(1.0, 1.0, 1.0, 1.0));
+        m_EraserDrawer->retain();
     }
     
     pencilNode = NULL;
-    pencilNode = CCDrawNode::create();
+    pencilNode = DrawNode::create();
     this->addChild(pencilNode);
-    lastDotPos = CCPointZero;
-//    pencilNode = CCDrawNode::create();
-//    pencilNode->drawDot(CCPointZero, 5, ccc4f(1.0, 1.0, 1.0, 1.0));
+    lastDotPos = Vec2::ZERO;
+//    pencilNode = DrawNode::create();
+//    pencilNode->drawDot(Vec2::ZERO, 5, Color4F(1.0, 1.0, 1.0, 1.0));
 ////    this->addChild(pencilNode);
-//    CC_SAFE_RETAIN(pencilNode);
+//    pencilNode->retain();
 //    this->addChild(testBrush);
 //    }
     
     paintNode = NULL;
-    paintNode = CCDrawNode::create();
+    paintNode = DrawNode::create();
     this->addChild(paintNode);
-//    CC_SAFE_RETAIN(paintNode);
+//    paintNode->retain();
     
     brushNode = NULL;
-    brushNode = CCDrawNode::create();
-//    CC_SAFE_RETAIN(brushNode);
+    brushNode = DrawNode::create();
+//    brushNode->retain();
 //    this->addChild(paintNode);
     
-    CCNode* twoNode = CCNode::create();
+    Node* twoNode = Node::create();
     this->addChild(twoNode);
     
-    CCRenderTexture* firstRender = CCRenderTexture::create(sprSize.width, sprSize.height, kCCTexture2DPixelFormat_RGBA8888);
-    firstRender->setPosition(ccp(sprSize.width/2, sprSize.height/2));
+    RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, PixelFormat::RGBA8888);
+    firstRender->setPosition(Vec2(sprSize.width/2, sprSize.height/2));
     twoNode->addChild(firstRender);
     
     brushRender = firstRender;
     
     if (clippingBrushSpr == NULL) {
         
-        clippingBrushSpr = CCSprite::create("DinoColor/brushs/normal_brush.png");
+        clippingBrushSpr = Sprite::create("DinoColor/brushs/normal_brush.png");
         int curColorIndex = ColorManager::shared()->SelectColorTag[ColorManager::shared()->SelectBrushTag-100];
         ColorManager::shared()->getCurColor(curColorIndex);
         
         clippingBrushSpr->setColor(ColorManager::shared()->m_pColor);
-        CC_SAFE_RETAIN(clippingBrushSpr);
+        clippingBrushSpr->retain();
     }
 //    m_Drawer->drawDot(start, line_w, color);
     
 }
 
 void ColorSprite::showLastSceneImage(){
-//    CCImage* lastSceneImage = ColorManager::shared()->loadImageFromBinaryFile(this->curSprName);
+//    Image* lastSceneImage = ColorManager::shared()->loadImageFromBinaryFile(this->curSprName);
 
 //    if (lastSceneImage != NULL) {
 
-        CCTexture2D* lastSceneTexture = new CCTexture2D();
+        Texture2D* lastSceneTexture = new Texture2D();
 //        if (lastSceneTexture && lastSceneTexture->initWithImage(lastSceneImage)) {
             
-            CCSprite* lastSceneSpr = CCSprite::createWithTexture(lastSceneTexture);
-            lastSceneSpr->setPosition(ccp(this->getContentSize().width/2, this->getContentSize().height/2));
+            Sprite* lastSceneSpr = Sprite::createWithTexture(lastSceneTexture);
+            lastSceneSpr->setPosition(Vec2(this->getContentSize().width/2, this->getContentSize().height/2));
             lastSceneSpr->setTag(LAST_TEXTURE);
             this->addChild(lastSceneSpr);
             
-            CC_SAFE_RELEASE(lastSceneTexture);
+            lastSceneTexture->release();
 //        }
 
-//        CC_SAFE_RELEASE(lastSceneImage);
+//        lastSceneImage->release();
 //    }
 }
 
-void ColorSprite::toolsBrushing(CCPoint _brushPos, CCPoint _lastPos)
+void ColorSprite::toolsBrushing(Vec2 _brushPos, Vec2 _lastPos)
 {
-    CCPoint touchPoint = this->convertToNodeSpace(_brushPos);
-    CCPoint lastTouchPoint = this->convertToNodeSpace(_lastPos);
+    Vec2 touchPoint = this->convertToNodeSpace(_brushPos);
+    Vec2 lastTouchPoint = this->convertToNodeSpace(_lastPos);
     clippingBrushSpr->setColor(ColorManager::shared()->m_pColor);
     if (ColorManager::shared()->m_DrawType == Draw_Eraser) {
         brushRender->begin();
-        m_EraserDrawer->setPosition(ccp(touchPoint.x, touchPoint.y));
-        m_EraserDrawer->visit();
+        m_EraserDrawer->setPosition(Vec2(touchPoint.x, touchPoint.y));
+//        m_EraserDrawer->visit();
         brushRender->end();
     } else {
         
@@ -217,9 +217,9 @@ void ColorSprite::toolsBrushing(CCPoint _brushPos, CCPoint _lastPos)
             {
 //                brushRender->begin();
                 if (!touchPoint.equals(lastTouchPoint)) {
-                    pencilNode->drawSegment(lastTouchPoint, touchPoint, 5, ccc4FFromccc3B(ColorManager::shared()->m_pColor));
+                    pencilNode->drawSegment(lastTouchPoint, touchPoint, 5, Color4F(ColorManager::shared()->m_pColor));
                 }
-                pencilNode->drawDot(touchPoint, 5, ccc4FFromccc3B(ColorManager::shared()->m_pColor));
+                pencilNode->drawDot(touchPoint, 5, Color4F(ColorManager::shared()->m_pColor));
 //                pencilNode->visit();
 //                brushRender->end();
 //                lastDotPos = touchPoint;
@@ -229,13 +229,13 @@ void ColorSprite::toolsBrushing(CCPoint _brushPos, CCPoint _lastPos)
             {
                 
 //                brushRender->begin();
-//                paintNode->setBlendFunc((ccBlendFunc){GL_ONE,GL_DST_ALPHA});
+//                paintNode->setBlendFunc(BlendFunc{GL_ONE,GL_DST_ALPHA});
                 if (!touchPoint.equals(lastTouchPoint)) {
-                    paintNode->drawSegment(lastTouchPoint, touchPoint, 20, ccc4FFromccc3B(ColorManager::shared()->m_pColor));
+                    paintNode->drawSegment(lastTouchPoint, touchPoint, 20, Color4F(ColorManager::shared()->m_pColor));
                 }
-                paintNode->drawDot(touchPoint, 20, ccc4FFromccc3B(ColorManager::shared()->m_pColor));
+                paintNode->drawDot(touchPoint, 20, Color4F(ColorManager::shared()->m_pColor));
 //                paintNode->visit();
-//                clippingBrushSpr->setPosition(ccp(touchPoint.x, touchPoint.y));
+//                clippingBrushSpr->setPosition(Vec2(touchPoint.x, touchPoint.y));
 //                clippingBrushSpr->visit();
 //                brushRender->end();
 //                brushRender->getSprite()->getTexture()->setAntiAliasTexParameters();
@@ -243,14 +243,14 @@ void ColorSprite::toolsBrushing(CCPoint _brushPos, CCPoint _lastPos)
                 break;
             case Brush_Largebrush:
             {
-                CCPoint curSprPoint = clippingBrushSpr->getPosition();
-                float distance = ccpDistance(touchPoint, curSprPoint);
+                Vec2 curSprPoint = clippingBrushSpr->getPosition();
+                float distance = touchPoint.distance(curSprPoint);
                 if (distance > 13.0) {
                     
                     brushRender->begin();
-                    clippingBrushSpr->setPosition(ccp(touchPoint.x, touchPoint.y));
+                    clippingBrushSpr->setPosition(Vec2(touchPoint.x, touchPoint.y));
                     clippingBrushSpr->visit();
-                    CCLog("testSimpleBrush ======> %d",ColorManager::shared()->SelectBrushTag);
+                    CCLOG("testSimpleBrush ======> %d",ColorManager::shared()->SelectBrushTag);
                     brushRender->end();
                 }
             }
@@ -259,23 +259,23 @@ void ColorSprite::toolsBrushing(CCPoint _brushPos, CCPoint _lastPos)
             {
 //                brushRender->begin();
 //                if (!touchPoint.equals(lastTouchPoint)) {
-////                    brushNode->drawSegment(lastTouchPoint, touchPoint, 20, ccc4f(1.0, 1.0, 1.0, 1.0));
-//                    brushNode->drawSegment(lastTouchPoint, touchPoint, 20,  ccc4FFromccc3B(ColorManager::shared()->m_pColor));
+////                    brushNode->drawSegment(lastTouchPoint, touchPoint, 20, Color4F(1.0, 1.0, 1.0, 1.0));
+//                    brushNode->drawSegment(lastTouchPoint, touchPoint, 20,  Color4F(ColorManager::shared()->m_pColor));
 //                }
-////                brushNode->drawDot(touchPoint, 20, ccc4f(1.0, 1.0, 1.0, 1.0));
-//                brushNode->drawDot(touchPoint, 20,  ccc4FFromccc3B(ColorManager::shared()->m_pColor));
-////                brushNode->setPosition(ccp(touchPoint.x, touchPoint.y));
+////                brushNode->drawDot(touchPoint, 20, Color4F(1.0, 1.0, 1.0, 1.0));
+//                brushNode->drawDot(touchPoint, 20,  Color4F(ColorManager::shared()->m_pColor));
+////                brushNode->setPosition(Vec2(touchPoint.x, touchPoint.y));
 //                brushNode->visit();
 //                brushRender->end();
                 
-                CCPoint curSprPoint = clippingBrushSpr->getPosition();
-                float distance = ccpDistance(touchPoint, curSprPoint);
+                Vec2 curSprPoint = clippingBrushSpr->getPosition();
+                float distance = touchPoint.distance(curSprPoint);
                 if (distance > 13.0) {
                     
                     brushRender->begin();
-                    clippingBrushSpr->setPosition(ccp(touchPoint.x, touchPoint.y));
+                    clippingBrushSpr->setPosition(Vec2(touchPoint.x, touchPoint.y));
                     clippingBrushSpr->visit();
-                    CCLog("testSimpleBrush ======> %d",ColorManager::shared()->SelectBrushTag);
+                    CCLOG("testSimpleBrush ======> %d",ColorManager::shared()->SelectBrushTag);
                     brushRender->end();
                 }
             }
@@ -286,25 +286,25 @@ void ColorSprite::toolsBrushing(CCPoint _brushPos, CCPoint _lastPos)
 
 void ColorSprite::changeBrush()
 {
-    CCSize sprSize = this->getContentSize();
+    Size sprSize = this->getContentSize();
     if (ColorManager::shared()->m_DrawType == Draw_Eraser) {
         if (m_EraserDrawer != NULL) {
-            CC_SAFE_RELEASE(m_EraserDrawer);
+            m_EraserDrawer->release();
             m_EraserDrawer = NULL;
         }
         
             
-            m_EraserDrawer = CCDrawNode::create();
-            m_EraserDrawer->drawDot(CCPointZero, 30, ccc4f(1.0, 1.0, 1.0, 1.0));
-            CC_SAFE_RETAIN(m_EraserDrawer);
+            m_EraserDrawer = DrawNode::create();
+            m_EraserDrawer->drawDot(Vec2::ZERO, 30, Color4F(1.0, 1.0, 1.0, 1.0));
+            m_EraserDrawer->retain();
         
         brushRender = NULL;
-        CCNode* twoNode = CCNode::create();
+        Node* twoNode = Node::create();
         this->addChild(twoNode);
         
-        CCRenderTexture* firstRender = CCRenderTexture::create(sprSize.width, sprSize.height, kCCTexture2DPixelFormat_RGBA8888);
-//        CC_SAFE_RETAIN(firstRender);
-        firstRender->setPosition(ccp(sprSize.width/2, sprSize.height/2));
+        RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, PixelFormat::RGBA8888);
+//        firstRender->retain();
+        firstRender->setPosition(Vec2(sprSize.width/2, sprSize.height/2));
         twoNode->addChild(firstRender);
         
         brushRender = firstRender;
@@ -314,15 +314,15 @@ void ColorSprite::changeBrush()
             {
     //            brushRender = NULL;
                 pencilNode = NULL;
-                pencilNode = CCDrawNode::create();
+                pencilNode = DrawNode::create();
                 this->addChild(pencilNode);
                 brushRender = NULL;
-                CCNode* twoNode = CCNode::create();
+                Node* twoNode = Node::create();
                 this->addChild(twoNode);
                 
-                CCRenderTexture* firstRender = CCRenderTexture::create(sprSize.width, sprSize.height, kCCTexture2DPixelFormat_RGBA8888);
-//                CC_SAFE_RETAIN(firstRender);
-                firstRender->setPosition(ccp(sprSize.width/2, sprSize.height/2));
+                RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, PixelFormat::RGBA8888);
+//                firstRender->retain();
+                firstRender->setPosition(Vec2(sprSize.width/2, sprSize.height/2));
                 twoNode->addChild(firstRender);
                 
                 brushRender = firstRender;
@@ -331,21 +331,21 @@ void ColorSprite::changeBrush()
             case Brush_Paint:
             {
                 paintNode = NULL;
-                paintNode = CCDrawNode::create();
+                paintNode = DrawNode::create();
                 this->addChild(paintNode);
-//                CC_SAFE_RETAIN(paintNode);
+//                paintNode->retain();
                 brushRender = NULL;
                 
-//                CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("DinoColor/brushs/normal_brush.png");
+//                Texture2D* texture = Director::getInstance()->getTextureCache()->addImage("DinoColor/brushs/normal_brush.png");
 //                clippingBrushSpr->setScale(1.0);
 //                clippingBrushSpr->setTexture(texture);
 //                clippingBrushSpr->setColor(ColorManager::shared()->m_pColor);
-                CCNode* twoNode = CCNode::create();
+                Node* twoNode = Node::create();
                 this->addChild(twoNode);
                 
-                CCRenderTexture* firstRender = CCRenderTexture::create(sprSize.width, sprSize.height, kCCTexture2DPixelFormat_RGBA8888);
-//                CC_SAFE_RETAIN(firstRender);
-                firstRender->setPosition(ccp(sprSize.width/2, sprSize.height/2));
+                RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, PixelFormat::RGBA8888);
+//                firstRender->retain();
+                firstRender->setPosition(Vec2(sprSize.width/2, sprSize.height/2));
                 twoNode->addChild(firstRender);
                 
                 brushRender = firstRender;
@@ -356,16 +356,16 @@ void ColorSprite::changeBrush()
             {
                 brushRender = NULL;
                 
-                CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("DinoColor/brushs/paint_brush.png");
+                Texture2D* texture = Director::getInstance()->getTextureCache()->addImage("DinoColor/brushs/paint_brush.png");
                 clippingBrushSpr->setTexture(texture);
-                ccColor3B colorVal = ColorManager::shared()->m_pColor;
+                Color3B colorVal = ColorManager::shared()->m_pColor;
                 clippingBrushSpr->setColor(ColorManager::shared()->m_pColor);
-                CCNode* twoNode = CCNode::create();
+                Node* twoNode = Node::create();
                 this->addChild(twoNode);
                 
-                CCRenderTexture* firstRender = CCRenderTexture::create(sprSize.width, sprSize.height, kCCTexture2DPixelFormat_RGBA8888);
-//                CC_SAFE_RETAIN(firstRender);
-                firstRender->setPosition(ccp(sprSize.width/2, sprSize.height/2));
+                RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, PixelFormat::RGBA8888);
+//                firstRender->retain();
+                firstRender->setPosition(Vec2(sprSize.width/2, sprSize.height/2));
                 twoNode->addChild(firstRender);
                 
                 brushRender = firstRender;
@@ -378,32 +378,32 @@ void ColorSprite::changeBrush()
     //            if (clippingNode == NULL) {
                 brushRender = NULL;
                 
-                CCTexture2D* texture = CCTextureCache::sharedTextureCache()->addImage("DinoColor/brushs/crayon_brush.png");
+                Texture2D* texture = Director::getInstance()->getTextureCache()->addImage("DinoColor/brushs/crayon_brush.png");
                 clippingBrushSpr->setTexture(texture);
-                ccColor3B colorVal = ColorManager::shared()->m_pColor;
+                Color3B colorVal = ColorManager::shared()->m_pColor;
                 clippingBrushSpr->setColor(ColorManager::shared()->m_pColor);
-                CCNode* twoNode = CCNode::create();
+                Node* twoNode = Node::create();
                 this->addChild(twoNode);
                 
-                CCRenderTexture* firstRender = CCRenderTexture::create(sprSize.width, sprSize.height, kCCTexture2DPixelFormat_RGBA8888);
-//                CC_SAFE_RETAIN(firstRender);
-                firstRender->setPosition(ccp(sprSize.width/2, sprSize.height/2));
+                RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, PixelFormat::RGBA8888);
+//                firstRender->retain();
+                firstRender->setPosition(Vec2(sprSize.width/2, sprSize.height/2));
                 twoNode->addChild(firstRender);
 //                brushNode = NULL;
-//                brushNode = CCDrawNode::create();
-////                brushNode->drawDot(CCPointZero, 20, ccc4f(1.0, 1.0, 1.0, 1.0));
-//                CC_SAFE_RETAIN(brushNode);
+//                brushNode = DrawNode::create();
+////                brushNode->drawDot(Vec2::ZERO, 20, Color4F(1.0, 1.0, 1.0, 1.0));
+//                brushNode->retain();
 //
-//                CCPoint centerPosInWorld = GameManager::sharedManager()->getCenter();
+//                Vec2 centerPosInWorld = GameManager::sharedManager()->getCenter();
 //
-//                CCPoint texturePos = this->convertToNodeSpace(centerPosInWorld);
+//                Vec2 texturePos = this->convertToNodeSpace(centerPosInWorld);
 //                CCLOG("---%d---",ColorManager::shared()->SelectColorTag[2]);
-//                CCString* crayonTextNameStr = CCString::createWithFormat("DinoColor/crayon_texture/crayon_texture_%d.png",ColorManager::shared()->SelectColorTag[2]);
-//                CCSprite* texture = CCSprite::create(crayonTextNameStr->getCString());
-//                texture->setPosition(ccp(texturePos.x, texturePos.y));
-//                CCNode* newNode = CCNode::create();
+//                StringUtils::format* crayonTextNameStr = StringUtils::format("DinoColor/crayon_texture/crayon_texture_%d.png",ColorManager::shared()->SelectColorTag[2]);
+//                Sprite* texture = Sprite::create(crayonTextNameStr->getCString());
+//                texture->setPosition(Vec2(texturePos.x, texturePos.y));
+//                Node* newNode = Node::create();
 //
-//                CCClippingNode* clippingNode = CCClippingNode::create(newNode);
+//                ClippingNode* clippingNode = ClippingNode::create(newNode);
 //                    clippingNode->setInverted(false);
 //                    clippingNode->setAlphaThreshold(0.0f);
 //
@@ -411,9 +411,9 @@ void ColorSprite::changeBrush()
 //                    this->addChild(clippingNode);
 //                //    clippingNode->setVisible(false);
 //
-//                        CCRenderTexture* testRender = CCRenderTexture::create(sprSize.width, sprSize.height, kCCTexture2DPixelFormat_RGBA8888);
-//                        CC_SAFE_RETAIN(testRender);
-//                        testRender->setPosition(ccp(sprSize.width/2, sprSize.height/2));
+//                        RenderTexture* testRender = RenderTexture::create(sprSize.width, sprSize.height, Texture2D::PixelFormat::RGBA8888);
+//                        testRender->retain();
+//                        testRender->setPosition(Vec2(sprSize.width/2, sprSize.height/2));
 //                        newNode->addChild(testRender);
                     
                 brushRender = firstRender;
@@ -421,7 +421,7 @@ void ColorSprite::changeBrush()
                 break;
         }
     }
-//    CCRenderTexture* render = CCRenderTexture::create(sprSize.width, sprSize.height, kCCTexture2DPixelFormat_RGBA8888);
+//    RenderTexture* render = RenderTexture::create(sprSize.width, sprSize.height, Texture2D::PixelFormat::RGBA8888);
 ////    clippingNode->setVisible(false);
 //    render->begin();
 //    testRender->visit();
@@ -435,55 +435,55 @@ void ColorSprite::changeBrush()
 
 void ColorSprite::changeColor()
 {
-    CCSize sprSize = this->getContentSize();
+    Size sprSize = this->getContentSize();
     switch (ColorManager::shared()->SelectBrushTag) {
         case Brush_Pencil:
         {
-            pencilNode->drawDot(CCPointZero, 5, ccc4FFromccc3B(ColorManager::shared()->m_pColor));
+            pencilNode->drawDot(Vec2::ZERO, 5, Color4F(ColorManager::shared()->m_pColor));
         }
             break;
         case Brush_Paint:
         {
-            paintNode->drawDot(CCPointZero, 20, ccc4FFromccc3B(ColorManager::shared()->m_pColor));
+            paintNode->drawDot(Vec2::ZERO, 20, Color4F(ColorManager::shared()->m_pColor));
         }
             break;
         case Brush_Largebrush:
         {
-            ccColor3B newColor = ColorManager::shared()->m_pColor;
+            Color3B newColor = ColorManager::shared()->m_pColor;
             
             clippingBrushSpr->setColor(newColor);
         }
             break;
         case Brush_Crayon:
         {
-            ccColor3B newColor = ColorManager::shared()->m_pColor;
+            Color3B newColor = ColorManager::shared()->m_pColor;
             
             clippingBrushSpr->setColor(newColor);
 //            if (clippingNode != NULL) {
 //            brushRender = NULL;
 //            brushNode = NULL;
-//            brushNode = CCDrawNode::create();
-////            brushNode->drawDot(CCPointZero, 20, ccc4f(1.0, 1.0, 1.0, 1.0));
-//            CC_SAFE_RETAIN(brushNode);
-//            CCNode* newNode = CCNode::create();
-//            CCPoint centerPosInWorld = GameManager::sharedManager()->getCenter();
+//            brushNode = DrawNode::create();
+////            brushNode->drawDot(Vec2::ZERO, 20, Color4F(1.0, 1.0, 1.0, 1.0));
+//            brushNode->retain();
+//            Node* newNode = Node::create();
+//            Vec2 centerPosInWorld = GameManager::sharedManager()->getCenter();
 //
-//            CCPoint texturePos = this->convertToNodeSpace(centerPosInWorld);
-//            CCString* crayonTextNameStr = CCString::createWithFormat("DinoColor/crayon_texture/crayon_texture_%d.png",ColorManager::shared()->SelectColorTag[2]);
+//            Vec2 texturePos = this->convertToNodeSpace(centerPosInWorld);
+//            StringUtils::format* crayonTextNameStr = StringUtils::format("DinoColor/crayon_texture/crayon_texture_%d.png",ColorManager::shared()->SelectColorTag[2]);
 //
-//            CCSprite* texture = CCSprite::create(crayonTextNameStr->getCString());
-//            texture->setPosition(ccp(texturePos.x, texturePos.y));
+//            Sprite* texture = Sprite::create(crayonTextNameStr->getCString());
+//            texture->setPosition(Vec2(texturePos.x, texturePos.y));
 //
-//            CCClippingNode* clippingNode = CCClippingNode::create(newNode);
+//            ClippingNode* clippingNode = ClippingNode::create(newNode);
 //            clippingNode->setInverted(false);
 //            clippingNode->setAlphaThreshold(0.0f);
 //
 //            clippingNode->addChild(texture);
 //            this->addChild(clippingNode);
 //
-//            CCRenderTexture* testRender = CCRenderTexture::create(sprSize.width, sprSize.height, kCCTexture2DPixelFormat_RGBA8888);
-//            CC_SAFE_RETAIN(testRender);
-//            testRender->setPosition(ccp(sprSize.width/2, sprSize.height/2));
+//            RenderTexture* testRender = RenderTexture::create(sprSize.width, sprSize.height, Texture2D::PixelFormat::RGBA8888);
+//            testRender->retain();
+//            testRender->setPosition(Vec2(sprSize.width/2, sprSize.height/2));
 //            newNode->addChild(testRender);
 //
 //            brushRender = testRender;
@@ -495,7 +495,7 @@ void ColorSprite::changeColor()
 
 void ColorSprite::clearColorSpr()
 {
-    CCSprite* lastSceneSpr = (CCSprite*)this->getChildByTag(LAST_TEXTURE);
+    Sprite* lastSceneSpr = (Sprite*)this->getChildByTag(LAST_TEXTURE);
     if (lastSceneSpr != NULL) {
         lastSceneSpr->removeFromParentAndCleanup(true);
     }
@@ -503,19 +503,19 @@ void ColorSprite::clearColorSpr()
     this->removeAllChildrenWithCleanup(true);
     
     if (m_EraserDrawer != NULL) {
-        CC_SAFE_RELEASE(m_EraserDrawer);
+        m_EraserDrawer->release();
         m_EraserDrawer = NULL;
     }
     if (clippingBrushSpr != NULL) {
-        CC_SAFE_RELEASE(clippingBrushSpr);
+        clippingBrushSpr->release();
         clippingBrushSpr = NULL;
     }
     if (pencilNode != NULL) {
-//        CC_SAFE_RELEASE(pencilNode);
+//        pencilNode->release();
         pencilNode = NULL;
     }
     if (brushNode != NULL) {
-//        CC_SAFE_RELEASE(brushNode);
+//        brushNode->release();
         brushNode = NULL;
     }
     
