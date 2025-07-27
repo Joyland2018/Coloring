@@ -15,8 +15,8 @@
 using namespace cocos2d;
 
 //class SelectAnimalScene : public Layer {
-class SelectAnimalScene : public cocos2d::Layer, public extension::ui::ScrollViewDelegate{
-    extension::ui::ScrollView *scrollView;
+class SelectAnimalScene : public cocos2d::Layer, public cocos2d::extension::ScrollViewDelegate{
+    cocos2d::extension::ScrollView *scrollView;
 private:
     void addLock(cocos2d::Ref* _parent,int _index);
     void selectAdsOrIAP(int _pageIndex);
@@ -25,8 +25,8 @@ public:
     Size s;
     Vec2 poszero;
 //    int xDis=0;
-    virtual void scrollViewDidScroll(extension::ui::ScrollView *view);
-    virtual void scrollViewDidZoom(extension::ui::ScrollView *view);
+    virtual void scrollViewDidScroll(cocos2d::extension::ScrollView *view);
+    virtual void scrollViewDidZoom(cocos2d::extension::ScrollView *view);
     
     virtual bool init();
     static cocos2d::Scene* scene();

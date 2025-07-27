@@ -40,7 +40,7 @@ public:
     virtual void onTouchesMoved(const std::vector<Touch*>& touches, Event* event);
     
     void clickBack();
-    void showTheme();
+    void showTheme(float dt);
     void goNext();
     void resetThemePos();
     void canTouchTheme();

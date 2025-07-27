@@ -68,6 +68,7 @@ list(APPEND GAME_SOURCE
      Classes/DinoColor/ColorSprite/ColorSprite.cpp
      Classes/DinoColor/SelectBrushLayer.cpp
      Classes/DinoColor/SelectColorAniScene.cpp
+     Classes/DinoColor/SelectColorTheme.cpp
      Classes/DinoColor/ColorManager.cpp
 #     Classes/DinoColor/BrushTools.cpp
 #     Classes/DinoColor/DinoColorScene.cpp
@@ -87,6 +88,7 @@ list(APPEND GAME_HEADER
      Classes/DinoColor/ColorSprite/ColorSprite.h
      Classes/DinoColor/SelectBrushLayer.hpp
      Classes/DinoColor/SelectColorAniScene.hpp
+     Classes/DinoColor/SelectColorTheme.hpp
      Classes/DinoColor/ColorManager.hpp
 #     Classes/DinoColor/BrushTools.hpp
 #     Classes/DinoColor/DinoColorScene.h

@@ -167,7 +167,7 @@ void ColorCanvasView::selectAdsOrIAP() {
             Vec2 center = GameManager::sharedManager()->getCenter();
 
             LayerColor *blacklayer = LayerColor::create(Color4B(0, 0, 0, 180), _winSize.width, _winSize.height);
-            blacklayer->ignoreAnchorPointForPosition(false);
+            blacklayer->setAnchorPoint(Vec2(0.5, 0.5));
             blacklayer->setPosition(Vec2(center.x,center.y));
             buyLayer->addChild(blacklayer, -1);
         }

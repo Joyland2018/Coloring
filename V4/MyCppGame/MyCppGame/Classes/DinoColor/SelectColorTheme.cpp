@@ -86,7 +86,7 @@ bool SelectColorTheme::init(){
     return true;
 }
 
-void SelectColorTheme::showTheme(){
+void SelectColorTheme::showTheme(float dt){
     int xIndex=0;
 
     themeX=0;
@@ -298,7 +298,7 @@ void SelectColorTheme::onTouchesEnded(const std::vector<Touch*>& touches, Event*
             if (colorThemes!=NULL && colorThemes->getBoundingBox().containsPoint(location) && clickTheme==false && touchMoveDis==0  && touchMoveTheme==false) {
                 AudioEngine::play2d("mp3/touchItem.mp3");
                 if ( ColorManager::shared()->curColorTheme==i) {
-                    GameManager::sharedManager()->trackMixpanel(StringUtils::format("Click ColorTheme%d Game Times",i));
+                    GameManager::sharedManager()->trackMixpanel(StringUtils::format("Click ColorTheme%d Game Times",i).c_str());
                     //                ColorManager::shared()->curColorTheme=i;
                     clickTheme=true;
                     ColorManager::shared()->selectedColorTheme=true;

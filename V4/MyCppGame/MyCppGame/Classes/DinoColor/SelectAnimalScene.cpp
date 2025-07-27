@@ -339,14 +339,14 @@ void SelectAnimalScene::resetContainerPos(){
 //    }
 //}
 
-void SelectAnimalScene::scrollViewDidScroll(extension::ui::ScrollView *view){
+void SelectAnimalScene::scrollViewDidScroll(cocos2d::extension::ScrollView *view){
     log("---%f---",containerLayer->getPosition().y);
     ColorManager::shared()->yDis = containerLayer->getPosition().y;
    
     return;
 }
 
-void SelectAnimalScene::scrollViewDidZoom(extension::ui::ScrollView *view){
+void SelectAnimalScene::scrollViewDidZoom(cocos2d::extension::ScrollView *view){
     return;
 }
 
@@ -368,7 +368,7 @@ void SelectAnimalScene::selectAdsOrIAP(int _pageIndex) {
             Vec2 center = GameManager::sharedManager()->getCenter();
 
             LayerColor *blacklayer = LayerColor::create(Color4B(0, 0, 0, 180), _winSize.width, _winSize.height);
-            blacklayer->ignoreAnchorPointForPosition(false);
+            blacklayer->setAnchorPoint(Vec2(0.5, 0.5));
             blacklayer->setPosition(Vec2(center.x,center.y));
             buyLayer->addChild(blacklayer, -1);
         }
