@@ -608,12 +608,12 @@ void ChooseColorLayer::onTouchEnded(Touch *touch, Event *event){
             Vec2 penPos = colorBg->convertToNodeSpace(location);
             buyState=ColorManager::shared()->buyState;
             if (penColor!=NULL && penColor->getBoundingBox().containsPoint(penPos) && clickPen==false && clickPenIndexArr[i] == 0&&!buyState) {
-                SimpleAudioEngine::getInstance()->playEffect("mp3/touchItem.mp3");
+                AudioEngine::play2d("mp3/touchItem.mp3");
 //                ColorManager::shared()->firstTouchPencil = true;
                 if (adLock!=NULL) {
     //                ScaleBy* scaleBy = ScaleBy::create(0.1, 1.2);
     //                adLock->runAction(Sequence::createWithTwoActions(scaleBy, scaleBy->reverse()));
-                     NotificationCenter::getInstance()->postNotification("colorcanvas.showpeniap");
+                     Director::getInstance()->getEventDispatcher()->dispatchCustomEvent("colorcanvas.showpeniap");
                      ColorManager::shared()->buyState= true;
                 }else{
 

@@ -7,7 +7,7 @@
 
 #include "SelectColorAniScene.hpp"
 #include "audio/include/AudioEngine.h"
-#include "GameManager.h"
+#include "../GameManager.h"
 //#include "DeviceManager.h"
 
 #include "ColorManager.hpp"
@@ -67,7 +67,7 @@ bool SelectColorAniScene::init(){
     
     this->scheduleOnce(CC_SCHEDULE_SELECTOR(SelectColorAniScene::showAllTheme), 0.3);
     
-    SimpleAudioEngine::getInstance()->playBackgroundMusic("mp3/sink/sinkBg.mp3", true);
+    AudioEngine::play2d("mp3/sink/sinkBg.mp3", true);
     
     // Setup touch listener for Cocos2d-x 4.0
     touchListener = EventListenerTouchOneByOne::create();
@@ -104,13 +104,13 @@ void SelectColorAniScene::selectAdsOrIAP(int _pageIndex) {
             Vec2 center = GameManager::sharedManager()->getCenter();
 
             LayerColor *blacklayer = LayerColor::create(Color4B(0, 0, 0, 180), _winSize.width, _winSize.height);
-            blacklayer->ignoreAnchorPointForPosition(false);
+            blacklayer->setAnchorPoint(Vec2(0.5, 0.5));
             blacklayer->setPosition(Vec2(center.x,center.y));
             buyLayer->addChild(blacklayer, -1);
         }
 }
 
-void SelectColorAniScene::showAllTheme(){
+void SelectColorAniScene::showAllTheme(float dt){
     
     Size curWinSize = GameManager::sharedManager()->getViewVisibleSize();
     Vec2 lastscenePos = GameManager::sharedManager()->getLeftBottomPos();
@@ -288,7 +288,7 @@ void SelectColorAniScene::clickBack(){
 }
 
 void SelectColorAniScene::goNext(){
-    SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+    AudioEngine::stopAll();
     Director::getInstance()->replaceScene(TransitionFade::create(0.5, ColorCanvasView::scene(), Color3B::BLACK));
 }
 
@@ -300,9 +300,9 @@ bool SelectColorAniScene::onTouchBegan(Touch *touch, Event *event){
     if (back!= NULL && back->getBoundingBox().containsPoint(location) && backClick==false&&!buyLayer) {
         backClick = true;
         ScaleBy* scaleBy = ScaleBy::create(0.1, 1.2);
-        SimpleAudioEngine::getInstance()->playEffect("mp3/touchItem.mp3");
+        AudioEngine::play2d("mp3/touchItem.mp3");
         back->runAction(Sequence::createWithTwoActions(Sequence::createWithTwoActions(scaleBy, scaleBy->reverse()), CallFunc::create(CC_CALLBACK_0(SelectColorAniScene::clickBack, this))));
-        SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+        AudioEngine::stopAll();
     }
 
     for (int i=0; i<8; i++) {
@@ -311,7 +311,7 @@ bool SelectColorAniScene::onTouchBegan(Touch *touch, Event *event){
         Sprite* adLock = (Sprite*)board->getChildByTag(kLockTag);
 //        Vec2 themePos =board->convertToNodeSpace(location);
         if (board!=NULL && board->getBoundingBox().containsPoint(location) && clickTheme==false &&!buyLayer) {
-            SimpleAudioEngine::getInstance()->playEffect("mp3/touchItem.mp3");
+            AudioEngine::play2d("mp3/touchItem.mp3");
             if (adLock!=NULL) {
 //                ScaleBy* scaleBy = ScaleBy::create(0.1, 1.2);
 //                adLock->runAction(Sequence::createWithTwoActions(scaleBy, scaleBy->reverse()));
@@ -356,7 +356,7 @@ void SelectColorAniScene::aniAction(){
     if (board!=NULL) {
         Sprite* colorThemes = (Sprite*)board->getChildByTag(kColorAniTag+selectAniIndex);
         if(colorThemes!=NULL){
-            SimpleAudioEngine::getInstance()->playEffect("mp3/hairSalon/takeBrush.mp3");
+            AudioEngine::play2d("mp3/hairSalon/takeBrush.mp3");
             Spawn* actionSpawn = Spawn::create(JumpBy::create(0.3, Vec2(0, 0), 5, 2),
                                                    CallFunc::create(CC_CALLBACK_0(SelectColorAniScene::aniJumpMp3, this)),
                                                    NULL);
@@ -373,5 +373,5 @@ void SelectColorAniScene::aniAction(){
 
 
 void SelectColorAniScene::aniJumpMp3(){
-    SimpleAudioEngine::getInstance()->playEffect("mp3/changing/buttonJump.mp3");
+    AudioEngine::play2d("mp3/changing/buttonJump.mp3");
 }

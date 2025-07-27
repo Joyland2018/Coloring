@@ -29,7 +29,7 @@ public:
     virtual void onTouchMoved(Touch* touch, Event* event);
     
     void clickBack();
-    void showAllTheme();
+    void showAllTheme(float dt);
     void goNext();
     void aniAction();
     void aniJumpMp3();
