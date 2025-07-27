@@ -829,8 +829,8 @@ Texture2D* ColorManager::maskedWithSpriteTexture(Sprite* texturesp, Sprite* mask
     masksp->setPosition(Vec2(masksp->getContentSize().width*location.x, masksp->getContentSize().height*location.y));
     texturesp->setPosition(Vec2(masksp->getContentSize().width*location.x, masksp->getContentSize().height*location.y));
     
-    masksp->setBlendFunc(BlendFunc{GL_ONE, GL_ZERO});
-    texturesp->setBlendFunc(BlendFunc{GL_DST_ALPHA, GL_ZERO});
+    masksp->setBlendFunc(BlendFunc{backend::BlendFactor::ONE, backend::BlendFactor::ZERO});
+    texturesp->setBlendFunc(BlendFunc{backend::BlendFactor::DST_ALPHA, backend::BlendFactor::ZERO});
     
     newRendertexture->begin();
     masksp->visit();
@@ -866,7 +866,7 @@ Image* ColorManager::loadImageFromBinaryFile(const std::string &_fileName)
 
     // Create a Image from the binary data
     Image* image = new Image();
-    if (!image->initWithImageData(buffer, static_cast<int>(bytesRead))) {
+    if (!image->initWithImageData(reinterpret_cast<const unsigned char*>(buffer), static_cast<int>(bytesRead))) {
         // Handle error
         delete[] buffer;
         delete image;
@@ -885,16 +885,17 @@ Image* ColorManager::loadImageFromBinaryFile(const std::string &_fileName)
 void ColorManager::saveTextureToFile(std::string _fileName, ColorSprite *_colorSpr)
 {
     Size sprSize = _colorSpr->getContentSize();
-    RenderTexture* saverenderTexture = RenderTexture::create(sprSize.width, sprSize.height, PixelFormat::RGBA8888);
+    RenderTexture* saverenderTexture = RenderTexture::create(sprSize.width, sprSize.height, backend::PixelFormat::RGBA8888);
     saverenderTexture->begin();
     _colorSpr->visit();
     saverenderTexture->end();
     
     std::string localPath = FileUtils::getInstance()->getWritablePath()+_fileName+".bin";
-    Image* saveImage = saverenderTexture->newImage();
-    saveImage->saveToFile(localPath.c_str());
-    saveImage->release();
-    
+    saverenderTexture->newImage([localPath](Image* saveImage) {
+        if (saveImage) {
+            saveImage->saveToFile(localPath.c_str());
+        }
+    });
 }
 
 

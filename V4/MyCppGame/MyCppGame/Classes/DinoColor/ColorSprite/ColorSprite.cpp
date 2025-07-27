@@ -23,7 +23,7 @@ ColorSprite* ColorSprite::CreateColor(const char* spName, Vec2 pos, Node *parent
         sprite->brushRender = NULL;
         sprite->m_EraserDrawer = NULL;
         sprite->clippingBrushSpr = NULL;
-//        sprite->testRender = RenderTexture::create(sprite->getContentSize().width, sprite->getContentSize().height, Texture2D::PixelFormat::RGBA8888);
+//        sprite->testRender = RenderTexture::create(sprite->getContentSize().width, sprite->getContentSize().height, backend::PixelFormat::RGBA8888);
 //        sprite->testRender->retain();
 //        sprite->testRender->setPosition(Vec2(sprite->getContentSize().width/2, sprite->getContentSize().height/2));
 //        sprite->addChild(sprite->testRender);
@@ -71,7 +71,7 @@ ColorSprite* ColorSprite::CreateColor(const char* spName, Vec2 pos, Node *parent
 //        int8_t data[4];
 //        Vec2 touchPoint = this->convertToNodeSpace(point);
 //        Vec2 location = Vec2((touchPoint.x), (touchPoint.y) );
-//        RenderTexture* renderTexture = RenderTexture::create(1,1,Texture2D::PixelFormat::RGBA8888);
+//        RenderTexture* renderTexture = RenderTexture::create(1,1,backend::PixelFormat::RGBA8888);
 //        renderTexture->beginWithClear(0,0,0,0);//只保存渲染一个像素的数据
 //        Vec2 oldPos = this->getPosition();
 //        Vec2 oldAnchor = this->getAnchorPoint();
@@ -158,7 +158,7 @@ void ColorSprite::initBrushNode()
     Node* twoNode = Node::create();
     this->addChild(twoNode);
     
-    RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, PixelFormat::RGBA8888);
+    RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, backend::PixelFormat::RGBA8888);
     firstRender->setPosition(Vec2(sprSize.width/2, sprSize.height/2));
     twoNode->addChild(firstRender);
     
@@ -229,7 +229,7 @@ void ColorSprite::toolsBrushing(Vec2 _brushPos, Vec2 _lastPos)
             {
                 
 //                brushRender->begin();
-//                paintNode->setBlendFunc(BlendFunc{GL_ONE,GL_DST_ALPHA});
+//                paintNode->setBlendFunc(BlendFunc{backend::BlendFactor::ONE, backend::BlendFactor::DST_ALPHA});
                 if (!touchPoint.equals(lastTouchPoint)) {
                     paintNode->drawSegment(lastTouchPoint, touchPoint, 20, Color4F(ColorManager::shared()->m_pColor));
                 }
@@ -302,7 +302,7 @@ void ColorSprite::changeBrush()
         Node* twoNode = Node::create();
         this->addChild(twoNode);
         
-        RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, PixelFormat::RGBA8888);
+        RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, backend::PixelFormat::RGBA8888);
 //        firstRender->retain();
         firstRender->setPosition(Vec2(sprSize.width/2, sprSize.height/2));
         twoNode->addChild(firstRender);
@@ -320,7 +320,7 @@ void ColorSprite::changeBrush()
                 Node* twoNode = Node::create();
                 this->addChild(twoNode);
                 
-                RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, PixelFormat::RGBA8888);
+                RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, backend::PixelFormat::RGBA8888);
 //                firstRender->retain();
                 firstRender->setPosition(Vec2(sprSize.width/2, sprSize.height/2));
                 twoNode->addChild(firstRender);
@@ -343,7 +343,7 @@ void ColorSprite::changeBrush()
                 Node* twoNode = Node::create();
                 this->addChild(twoNode);
                 
-                RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, PixelFormat::RGBA8888);
+                RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, backend::PixelFormat::RGBA8888);
 //                firstRender->retain();
                 firstRender->setPosition(Vec2(sprSize.width/2, sprSize.height/2));
                 twoNode->addChild(firstRender);
@@ -363,7 +363,7 @@ void ColorSprite::changeBrush()
                 Node* twoNode = Node::create();
                 this->addChild(twoNode);
                 
-                RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, PixelFormat::RGBA8888);
+                RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, backend::PixelFormat::RGBA8888);
 //                firstRender->retain();
                 firstRender->setPosition(Vec2(sprSize.width/2, sprSize.height/2));
                 twoNode->addChild(firstRender);
@@ -385,7 +385,7 @@ void ColorSprite::changeBrush()
                 Node* twoNode = Node::create();
                 this->addChild(twoNode);
                 
-                RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, PixelFormat::RGBA8888);
+                RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, backend::PixelFormat::RGBA8888);
 //                firstRender->retain();
                 firstRender->setPosition(Vec2(sprSize.width/2, sprSize.height/2));
                 twoNode->addChild(firstRender);
@@ -411,7 +411,7 @@ void ColorSprite::changeBrush()
 //                    this->addChild(clippingNode);
 //                //    clippingNode->setVisible(false);
 //
-//                        RenderTexture* testRender = RenderTexture::create(sprSize.width, sprSize.height, Texture2D::PixelFormat::RGBA8888);
+//                        RenderTexture* testRender = RenderTexture::create(sprSize.width, sprSize.height, backend::PixelFormat::RGBA8888);
 //                        testRender->retain();
 //                        testRender->setPosition(Vec2(sprSize.width/2, sprSize.height/2));
 //                        newNode->addChild(testRender);
@@ -421,7 +421,7 @@ void ColorSprite::changeBrush()
                 break;
         }
     }
-//    RenderTexture* render = RenderTexture::create(sprSize.width, sprSize.height, Texture2D::PixelFormat::RGBA8888);
+//    RenderTexture* render = RenderTexture::create(sprSize.width, sprSize.height, backend::PixelFormat::RGBA8888);
 ////    clippingNode->setVisible(false);
 //    render->begin();
 //    testRender->visit();
@@ -481,7 +481,7 @@ void ColorSprite::changeColor()
 //            clippingNode->addChild(texture);
 //            this->addChild(clippingNode);
 //
-//            RenderTexture* testRender = RenderTexture::create(sprSize.width, sprSize.height, Texture2D::PixelFormat::RGBA8888);
+//            RenderTexture* testRender = RenderTexture::create(sprSize.width, sprSize.height, backend::PixelFormat::RGBA8888);
 //            testRender->retain();
 //            testRender->setPosition(Vec2(sprSize.width/2, sprSize.height/2));
 //            newNode->addChild(testRender);

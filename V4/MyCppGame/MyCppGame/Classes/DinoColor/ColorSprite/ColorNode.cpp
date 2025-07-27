@@ -42,7 +42,7 @@ void ColorNode::initBrushNode()
     Node* twoNode = Node::create();
     this->addChild(twoNode);
     
-    RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, PixelFormat::RGBA8888);
+    RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, backend::PixelFormat::RGBA8888);
     firstRender->retain();
     firstRender->setPosition(Vec2(sprSize.width/2, sprSize.height/2));
     twoNode->addChild(firstRender);
@@ -95,7 +95,7 @@ void ColorNode::testBrushing(Vec2 _testPos)
 void ColorNode::changeTestBrush()
 {
     Size sprSize = this->getContentSize();
-//    RenderTexture* render = RenderTexture::create(sprSize.width, sprSize.height, Texture2D::PixelFormat::RGBA8888);
+//    RenderTexture* render = RenderTexture::create(sprSize.width, sprSize.height, backend::PixelFormat::RGBA8888);
 ////    clippingNode->setVisible(false);
 //    render->begin();
 //    testRender->visit();
@@ -117,7 +117,7 @@ void ColorNode::changeTestBrush()
             Node* twoNode = Node::create();
             this->addChild(twoNode);
             
-            RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, PixelFormat::RGBA8888);
+            RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, backend::PixelFormat::RGBA8888);
             firstRender->retain();
             firstRender->setPosition(Vec2(sprSize.width/2, sprSize.height/2));
             twoNode->addChild(firstRender);
@@ -139,7 +139,7 @@ void ColorNode::changeTestBrush()
             Node* twoNode = Node::create();
             this->addChild(twoNode);
             
-            RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, PixelFormat::RGBA8888);
+            RenderTexture* firstRender = RenderTexture::create(sprSize.width, sprSize.height, backend::PixelFormat::RGBA8888);
             firstRender->retain();
             firstRender->setPosition(Vec2(sprSize.width/2, sprSize.height/2));
             twoNode->addChild(firstRender);
@@ -167,7 +167,7 @@ void ColorNode::changeTestBrush()
                 this->addChild(clippingNode);
             //    clippingNode->setVisible(false);
                 
-                    RenderTexture* testRender = RenderTexture::create(sprSize.width, sprSize.height, PixelFormat::RGBA8888);
+                    RenderTexture* testRender = RenderTexture::create(sprSize.width, sprSize.height, backend::PixelFormat::RGBA8888);
                     testRender->retain();
                     testRender->setPosition(Vec2(sprSize.width/2, sprSize.height/2));
                     newNode->addChild(testRender);

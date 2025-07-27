@@ -38,7 +38,7 @@ void ColoringClippingNode::initClippingNode()
     ////    ColorSprite* colorSpr = (ColorSprite*)this->getStencil();
     ////    if (colorSpr != NULL) {
     ////
-    //        testRender = RenderTexture::create(sprSize.width, sprSize.height, Texture2D::PixelFormat::RGBA8888);
+    //        testRender = RenderTexture::create(sprSize.width, sprSize.height, backend::PixelFormat::RGBA8888);
     //        CC_SAFE_RETAIN(testRender);
     //        testRender->setPosition(Vec2(sprSize.width/2, sprSize.height/2));
     //        this->addChild(testRender);
@@ -89,7 +89,7 @@ bool ColoringClippingNode::CheckAlpha(Vec2 point)
         int8_t data[4];
         Vec2 touchPoint = this->convertToNodeSpace(point);
         Vec2 location = Vec2((touchPoint.x), (touchPoint.y) );
-        RenderTexture* renderTexture = RenderTexture::create(1,1,PixelFormat::RGBA8888);
+        RenderTexture* renderTexture = RenderTexture::create(1,1,backend::PixelFormat::RGBA8888);
         renderTexture->beginWithClear(0,0,0,0);//只保存渲染一个像素的数据
         Vec2 oldPos = stencilSpr->getPosition();
         Vec2 oldAnchor = stencilSpr->getAnchorPoint();

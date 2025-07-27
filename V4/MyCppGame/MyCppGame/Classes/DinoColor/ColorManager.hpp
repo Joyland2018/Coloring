@@ -13,7 +13,7 @@
 #include "ColorSprite/ColorSprite.h"
 class ColorCanvasView ;
 
-using namespace cocos2d;
+USING_NS_CC;
 
 typedef enum {
     Draw_Point = 1,
