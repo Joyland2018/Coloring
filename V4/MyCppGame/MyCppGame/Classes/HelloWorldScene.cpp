@@ -1,132 +1,164 @@
-/****************************************************************************
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
- http://www.cocos2d-x.org
- 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
- ****************************************************************************/
-
+//#include <platform/android/jni/JniHelper.h>
+//#include <CocosDenshion/ios/SimpleAudioEngine_objc.h>
 #include "HelloWorldScene.h"
+//#include "HospitalScene.h"
+//#include "SecondScene.h"
+#include "AudioEngine.h"
+#include "ui/CocosGUI.h"
+#include "LogoScene.h"
+#include "GameManager.h"
+#include "base/CCEventListenerKeyboard.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+
+#include <jni.h>
+#include "platform/android/jni/JniHelper.h"
+#include <android/log.h>
+
+#endif
 
 USING_NS_CC;
+using namespace ui;
 
-Scene* HelloWorld::createScene()
+enum {
+    kBackLayerTag = 499,
+    kLockBackTag = 599,
+    kLockMenuTag = 699,
+    kDownloadLayerTag = 750,
+    kMoreGameTag = 999,
+    kFlagTag = 399,
+    ksTitle = 299,
+};
+
+Scene* HelloWorld::scene()
 {
-    return HelloWorld::create();
+    // 'scene' is an autorelease object
+    Scene *scene = Scene::create();
+    
+    // 'layer' is an autorelease object
+    HelloWorld *layer = HelloWorld::create();
+
+    // add layer as a child to scene
+    scene->addChild(layer);
+
+    // return the scene
+    return scene;
 }
 
-// Print useful error message instead of segfaulting when files are not there.
-static void problemLoading(const char* filename)
-{
-    printf("Error while loading: %s\n", filename);
-    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
+void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
+    // 留空 - 按键按下事件处理
+}
+
+void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event) {
+    if (keyCode == EventKeyboard::KeyCode::KEY_BACK) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)         //判断当前是否为Andriod平台
+        JniMethodInfo minfo;                                //定义
+        bool isHave = JniHelper::getStaticMethodInfo(minfo,
+                                                     "com/jptang/dino/DinoHospital",   //类的路径
+                                                     "rtnActivity",                    //方法名
+                                                     "()Ljava/lang/Object;");          //括号里的是参数，后面的是返回
+        jobject jobj;
+        if (isHave){
+            jobj = minfo.env->CallStaticObjectMethod(minfo.classID, minfo.methodID);
+            CCLOG("jobj--");
+        }
+        isHave = JniHelper::getMethodInfo(minfo,
+                                          "com/jptang/dino/Drdino",                     //类的路径
+                                          "exitGame1",                                 //方法名
+                                          "()V");                                      //括号里的是参数，后面的是返回值
+        if (isHave) {
+            CCLOG("isHave--");
+            minfo.env->CallVoidMethod(jobj, minfo.methodID);
+            CCLOG("isHave");
+        }
+        CCLOG("jni-java函数执行完毕");
+#endif
+    }
 }
 
 // on "init" you need to initialize your instance
 bool HelloWorld::init()
 {
-    //////////////////////////////
-    // 1. super init first
-    if ( !Scene::init() )
-    {
+    if (!Layer::init()){
         return false;
     }
+    winsize = Director::getInstance()->getVisibleSize();
+    poszero = Director::getInstance()->getVisibleOrigin();
+    
+    // Setup keyboard event listener
+    auto keyboardListener = EventListenerKeyboard::create();
+    keyboardListener->onKeyPressed = CC_CALLBACK_2(HelloWorld::onKeyPressed, this);
+    keyboardListener->onKeyReleased = CC_CALLBACK_2(HelloWorld::onKeyReleased, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, this);
+    
+    //背景
+    Sprite* bg = Sprite::create("DinoColor/background/game_bg.png");
+    bg->setPosition(Vec2(winsize.width/2+poszero.x,winsize.height/2));
+    this->addChild(bg);
 
-    auto visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
-
-    /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
-
-    // add a "close" icon to exit the progress. it's an autorelease object
-    auto closeItem = MenuItemImage::create(
-                                           "CloseNormal.png",
-                                           "CloseSelected.png",
-                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
-
-    if (closeItem == nullptr ||
-        closeItem->getContentSize().width <= 0 ||
-        closeItem->getContentSize().height <= 0)
-    {
-        problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
-    }
-    else
-    {
-        float x = origin.x + visibleSize.width - closeItem->getContentSize().width/2;
-        float y = origin.y + closeItem->getContentSize().height/2;
-        closeItem->setPosition(Vec2(x,y));
+    if (GameManager::sharedManager()->isIphoneX()){
+        bg->setScale(1.3);
     }
 
-    // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
+    //play button
+    auto playbut = ui::Button::create("DinoColor/background/beginButton.png");
+    playbut->setPosition(Vec2(winsize.width-130+poszero.x, 100));
+    playbut->setScale9Enabled(true);
+    playbut->setContentSize(Size(137,139));
+    this->addChild(playbut);
+    
+    // Animation for button
+    auto scaleUp = ScaleTo::create(0.4f, 1.1f);
+    auto delay = DelayTime::create(0.1f);
+    auto scaleDown = ScaleTo::create(0.4f, 0.9f);
+    auto sequence = Sequence::create(scaleUp, delay, scaleDown, nullptr);
+    auto repeat = RepeatForever::create(sequence);
+    playbut->runAction(repeat);
+    
+    playbut->addClickEventListener([this](Ref* sender){
+        this->menuCloseCallback(sender);
+    });
 
-    /////////////////////////////
-    // 3. add your codes below...
-
-    // add a label shows "Hello World"
-    // create and initialize a label
-
-    auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
-    if (label == nullptr)
-    {
-        problemLoading("'fonts/Marker Felt.ttf'");
+    //标题
+    Sprite* titleSprite;
+    LanguageType la = Application::getInstance()->getCurrentLanguage();
+    switch (la){
+        case LanguageType::FRENCH:
+            titleSprite = Sprite::create("DinoColor/background/gameName_fr.png");
+            break;
+        case LanguageType::GERMAN:
+            titleSprite = Sprite::create("DinoColor/background/gameName_de.png");
+            break;
+        case LanguageType::SPANISH:
+            titleSprite = Sprite::create("DinoColor/background/gameName_es.png");
+            break;
+        default:
+            titleSprite = Sprite::create("DinoColor/background/gameName_en.png");
+            break;
     }
-    else
-    {
-        // position the label on the center of the screen
-        label->setPosition(Vec2(origin.x + visibleSize.width/2,
-                                origin.y + visibleSize.height - label->getContentSize().height));
+    titleSprite->setPosition(Vec2(winsize.width/2+poszero.x, winsize.height/3*2+30));
+    this->addChild(titleSprite);
 
-        // add the label as a child to this layer
-        this->addChild(label, 1);
-    }
-
-    // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png");
-    if (sprite == nullptr)
-    {
-        problemLoading("'HelloWorld.png'");
-    }
-    else
-    {
-        // position the sprite on the center of the screen
-        sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
-        // add the sprite as a child to this layer
-        this->addChild(sprite, 0);
-    }
+    AudioEngine::play2d("dinohospital/mp3/Begin_sound.mp3", true);
+    UserDefault::getInstance()->setBoolForKey("blackGround", true);
     return true;
 }
 
+void HelloWorld::clearLock(){
+    Layer *blacklayer = (Layer*)this->getChildByTag(kBackLayerTag);
+    blacklayer->removeFromParentAndCleanup(true);
+}
 
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
-    //Close the cocos2d-x game scene and quit the application
-    Director::getInstance()->end();
+//       auto trans = TransitionCrossFade::create(0.5, HospitalScene::scene());   //场景切换效果
+//       Director::getInstance()->replaceScene(trans);                                           //场景切换
+}
 
-    /*To navigate back to native iOS screen(if present) without quitting the application  ,do not use Director::getInstance()->end() as given above,instead trigger a custom event created in RootViewController.mm as below*/
+void HelloWorld::onEnter() {
+    Layer::onEnter();
+}
 
-    //EventCustom customEndEvent("game_scene_close_event");
-    //_eventDispatcher->dispatchEvent(&customEndEvent);
-
-
+void HelloWorld::onExit() {
+    Director::getInstance()->getTextureCache()->removeUnusedTextures();
+    Layer::onExit();
 }
