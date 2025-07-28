@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>transport_train_part</key>
+	<string>{-80,-6}</string>
+	<key>transport_train_board</key>
+	<string>{-80,-6}</string>
+	<key>transport_train_door</key>
+	<string>{-80,-6}</string>
+	<key>transport_train_window</key>
+	<string>{-80,-6}</string>
+	<key>transport_train_head</key>
+	<string>{-80,-6}</string>
+	<key>transport_train_wheel</key>
+	<string>{-80,-6}</string>
+	<key>transport_train_wheels</key>
+	<string>{-80,-6}</string>
+	<key>transport_train_circle</key>
+	<string>{-80,-6}</string>
+	<key>coloringType_line</key>
+	<string>{-80,-6}</string>
+</dict>
+</plist>

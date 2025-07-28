@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>dino_sp_body</key>
+	<string>{-69,-3}</string>
+	<key>dino_sp_head</key>
+	<string>{-69,-3}</string>
+	<key>dino_sp_eye</key>
+	<string>{-69,-3}</string>
+	<key>dino_sp_spine</key>
+	<string>{-69,-3}</string>
+	<key>dino_sp_tongue</key>
+	<string>{-69,-3}</string>
+	<key>coloringType_line</key>
+	<string>{-69,-3}</string>
+</dict>
+</plist>

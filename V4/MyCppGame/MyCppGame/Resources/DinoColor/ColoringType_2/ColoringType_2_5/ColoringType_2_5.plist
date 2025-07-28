@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>nature_flower_face</key>
+	<string>{-50,-6}</string>
+	<key>nature_flower_huaban</key>
+	<string>{-50,-6}</string>
+	<key>nature_flower_gan</key>
+	<string>{-50,-6}</string>
+	<key>nature_flower_gans</key>
+	<string>{-50,-6}</string>
+	<key>nature_flower_eye</key>
+	<string>{-50,-6}</string>
+	<key>coloringType_line</key>
+	<string>{-50,-6}</string>
+</dict>
+</plist>
