@@ -29,14 +29,10 @@ public:
     virtual void onEnter();
     virtual void onExit();
     
-    bool onTouchBegan(Touch* touch, Event* event);
-    void gotoGameScene();
-    
     CREATE_FUNC(LogoScene);
     
 private:
-    bool isSetBackground;
-    int clickCount;
+    void runGame(float dt);
 };
 
 #endif /* LogoScene_h */
