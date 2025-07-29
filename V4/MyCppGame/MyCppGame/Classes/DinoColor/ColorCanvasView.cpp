@@ -476,12 +476,11 @@ void ColorCanvasView::MakeToolBar()
 
     Button* back = Button::create("universal/back.png");
     back->setPosition(Vec2(poszero.x+ 50,v_size.height-50));
-    this->addChild(back, 3);
+    back->setContentSize(Size(137,139));
+    this->addChild(back, 4);
     buyState=ColorManager::shared()->buyState;
-    back->addTouchEventListener([this](Ref* sender, Widget::TouchEventType type){
-        if(type == Widget::TouchEventType::ENDED){
-            this->backClick();
-        }
+    back->addClickEventListener([this](Ref* sender){
+        this->backClick();
     });
 
 //    Button* camerabtu = Button::create("universal/camera.png");
