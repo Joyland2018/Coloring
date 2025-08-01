@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="app_name">Dino Coloring</string>
+<string name="game_view_content_description">Game view</string>
+<string name="review_title">Thanks for play</string>
+<!--<string name="review_message">If you like it, please give us a good review. Thanks and you will earn 100 coins!</string>-->
+<string name="review_message">Your review will inspire us to make it better. Please rate it.</string>
+</resources>

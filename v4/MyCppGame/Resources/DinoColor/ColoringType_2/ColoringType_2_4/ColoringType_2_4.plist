@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>nature_bee_face</key>
+	<string>{-90,-6}</string>
+	<key>nature_bee_nose</key>
+	<string>{-90,-6}</string>
+	<key>nature_bee_body</key>
+	<string>{-90,-6}</string>
+	<key>nature_bee_back</key>
+	<string>{-90,-6}</string>
+	<key>nature_bee_fly1</key>
+	<string>{-90,-6}</string>
+	<key>nature_bee_fly2</key>
+	<string>{-90,-6}</string>
+	<key>nature_bee_eye</key>
+	<string>{-90,-6}</string>
+	<key>nature_bee_eyeboard</key>
+	<string>{-90,-6}</string>
+	<key>coloringType_line</key>
+	<string>{-90,-6}</string>
+</dict>
+</plist>

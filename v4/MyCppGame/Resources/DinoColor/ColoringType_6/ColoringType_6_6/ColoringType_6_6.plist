@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>transport_car_part</key>
+	<string>{-90,-6}</string>
+	<key>transport_car_body</key>
+	<string>{-90,-6}</string>
+	<key>transport_car_light</key>
+	<string>{-90,-6}</string>
+	<key>transport_car_wheel</key>
+	<string>{-90,-6}</string>
+	<key>transport_car_circle</key>
+	<string>{-90,-6}</string>
+	<key>transport_car_window</key>
+	<string>{-90,-6}</string>
+	<key>coloringType_line</key>
+	<string>{-90,-6}</string>
+</dict>
+</plist>

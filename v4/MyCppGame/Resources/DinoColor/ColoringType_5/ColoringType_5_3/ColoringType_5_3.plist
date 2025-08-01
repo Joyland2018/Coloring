@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ocean_turtle_leg</key>
+	<string>{-90,-6}</string>
+	<key>ocean_turtle_body</key>
+	<string>{-90,-6}</string>
+	<key>ocean_turtle_back</key>
+	<string>{-90,-6}</string>
+	<key>ocean_turtle_head</key>
+	<string>{-90,-6}</string>
+	<key>ocean_turtle_eye</key>
+	<string>{-90,-6}</string>
+	<key>coloringType_line</key>
+	<string>{-90,-6}</string>
+</dict>
+</plist>
