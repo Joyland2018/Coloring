@@ -2,15 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>zoo_horse_head</key>
+	<key>zoo_horse_1</key>
 	<string>{-50,-6}</string>
-	<key>zoo_horse_belly</key>
+	<key>zoo_horse_2</key>
 	<string>{-50,-6}</string>
-	<key>zoo_horse_hair</key>
+	<key>zoo_horse_3</key>
 	<string>{-50,-6}</string>
-	<key>zoo_horse_eye</key>
-	<string>{-50,-6}</string>
-	<key>zoo_horse_body</key>
+	<key>zoo_horse_4</key>
 	<string>{-50,-6}</string>
 	<key>coloringType_line</key>
 	<string>{-50,-6}</string>

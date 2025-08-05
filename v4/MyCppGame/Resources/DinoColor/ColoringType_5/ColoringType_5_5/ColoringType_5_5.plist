@@ -4,6 +4,8 @@
 <dict>
 	<key>ocean_clownfish_body</key>
 	<string>{-80,-6}</string>
+	<key>ocean_clownfish_body2</key>
+	<string>{-80,-6}</string>
 	<key>ocean_clownfish_back</key>
 	<string>{-80,-6}</string>
 	<key>ocean_clownfish_fins</key>

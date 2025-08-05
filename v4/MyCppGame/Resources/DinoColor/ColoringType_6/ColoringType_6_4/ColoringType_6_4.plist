@@ -8,13 +8,9 @@
 	<string>{-80,-6}</string>
 	<key>transport_train_door</key>
 	<string>{-80,-6}</string>
-	<key>transport_train_window</key>
-	<string>{-80,-6}</string>
 	<key>transport_train_head</key>
 	<string>{-80,-6}</string>
 	<key>transport_train_wheel</key>
-	<string>{-80,-6}</string>
-	<key>transport_train_wheels</key>
 	<string>{-80,-6}</string>
 	<key>transport_train_circle</key>
 	<string>{-80,-6}</string>

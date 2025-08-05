@@ -14,7 +14,9 @@
 	<string>{-90,-6}</string>
 	<key>ocean_crab_eye</key>
 	<string>{-90,-6}</string>
-	<key>ocean_crab_eyeLeg</key>
+	<key>ocean_crab_leg2</key>
+	<string>{-90,-6}</string>
+	<key>ocean_crab_leg3</key>
 	<string>{-90,-6}</string>
 	<key>coloringType_line</key>
 	<string>{-90,-6}</string>

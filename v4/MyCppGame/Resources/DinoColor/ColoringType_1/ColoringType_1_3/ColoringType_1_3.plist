@@ -2,17 +2,19 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>zoo_ostrich_mouse</key>
+	<key>zoo_ostrich_1</key>
 	<string>{-50,-6}</string>
-	<key>zoo_ostrich_eyes</key>
+	<key>zoo_ostrich_2</key>
 	<string>{-50,-6}</string>
-	<key>zoo_ostrich_leg</key>
+	<key>zoo_ostrich_3</key>
 	<string>{-50,-6}</string>
-	<key>zoo_ostrich_neck</key>
+	<key>zoo_ostrich_4</key>
 	<string>{-50,-6}</string>
-	<key>zoo_ostrich_body</key>
+	<key>zoo_ostrich_5</key>
 	<string>{-50,-6}</string>
-	<key>zoo_ostrich_eye</key>
+	<key>zoo_ostrich_6</key>
+	<string>{-50,-6}</string>
+	<key>zoo_ostrich_7</key>
 	<string>{-50,-6}</string>
 	<key>coloringType_line</key>
 	<string>{-50,-6}</string>

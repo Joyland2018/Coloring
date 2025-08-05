@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>transport_sailboat_down</key>
+	<string>{-90,-6}</string>
+	<key>transport_sailboat_left</key>
+	<string>{-90,-6}</string>
+	<key>transport_sailboat_mid</key>
+	<string>{-90,-6}</string>
+	<key>transport_sailboat_right</key>
+	<string>{-90,-6}</string>
+	<key>transport_sailboat_up</key>
+	<string>{-90,-6}</string>
+	<key>coloringType_line</key>
+	<string>{-90,-6}</string>
+</dict>
+</plist>

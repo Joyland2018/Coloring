@@ -10,8 +10,6 @@
 	<string>{-90,-6}</string>
 	<key>transport_bus_wheel</key>
 	<string>{-90,-6}</string>
-	<key>transport_bus_wheels</key>
-	<string>{-90,-6}</string>
 	<key>transport_bus_board</key>
 	<string>{-90,-6}</string>
 	<key>coloringType_line</key>

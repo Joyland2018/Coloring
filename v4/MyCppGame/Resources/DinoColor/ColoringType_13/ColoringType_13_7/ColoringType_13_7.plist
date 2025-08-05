@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>dog_eye</key>
+	<string>{-70,-3}</string>
+	<key>dog_ear</key>
+	<string>{-70,-3}</string>
+	<key>dog_face</key>
+	<string>{-70,-3}</string>
+	<key>dog_tongue</key>
+	<string>{-70,-3}</string>
+	<key>coloringType_line</key>
+	<string>{-70,-3}</string>
+</dict>
+</plist>

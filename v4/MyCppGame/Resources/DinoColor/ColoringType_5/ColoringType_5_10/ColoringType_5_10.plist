@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ocean_conch_1</key>
+	<string>{-90,-6}</string>
+	<key>ocean_conch_2</key>
+	<string>{-90,-6}</string>
+	<key>ocean_conch_3</key>
+	<string>{-90,-6}</string>
+	<key>ocean_conch_4</key>
+	<string>{-90,-6}</string>
+	<key>ocean_conch_5</key>
+	<string>{-90,-6}</string>
+	<key>ocean_conch_6</key>
+	<string>{-90,-6}</string>
+	<key>ocean_conch_7</key>
+	<string>{-90,-6}</string>
+	<key>coloringType_line</key>
+	<string>{-90,-6}</string>
+</dict>
+</plist>

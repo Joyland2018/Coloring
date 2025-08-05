@@ -2,21 +2,9 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>pet_cat4_body</key>
+	<key>pet_cat4_1</key>
 	<string>{-50,-6}</string>
-	<key>pet_cat4_ear</key>
-	<string>{-50,-6}</string>
-	<key>pet_cat4_belly</key>
-	<string>{-50,-6}</string>
-	<key>pet_cat4_foot</key>
-	<string>{-50,-6}</string>
-	<key>pet_cat4_mouth</key>
-	<string>{-50,-6}</string>
-	<key>pet_cat4_beard</key>
-	<string>{-50,-6}</string>
-	<key>pet_cat4_face</key>
-	<string>{-50,-6}</string>
-	<key>pet_cat4_part</key>
+	<key>pet_cat4_2</key>
 	<string>{-50,-6}</string>
 	<key>coloringType_line</key>
 	<string>{-50,-6}</string>

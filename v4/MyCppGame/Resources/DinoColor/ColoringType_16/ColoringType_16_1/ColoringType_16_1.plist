@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>dinoprincess1_head</key>
+	<string>{-75,-3}</string>
+	<key>dinoprincess1_skirt</key>
+	<string>{-75,-3}</string>
+	<key>dinoprincess1_body</key>
+	<string>{-75,-3}</string>
+	<key>dinoprincess1_face</key>
+	<string>{-75,-3}</string>
+	<key>coloringType_line</key>
+	<string>{-75,-3}</string>
+</dict>
+</plist>

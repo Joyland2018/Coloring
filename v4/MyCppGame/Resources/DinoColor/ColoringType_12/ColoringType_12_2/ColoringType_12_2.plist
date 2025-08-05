@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>animal_dino2_1</key>
+	<string>{-50,-6}</string>
+	<key>animal_dino2_2</key>
+	<string>{-50,-6}</string>
+	<key>animal_dino2_3</key>
+	<string>{-50,-6}</string>
+	<key>animal_dino2_4</key>
+	<string>{-50,-6}</string>
+	<key>coloringType_line</key>
+	<string>{-50,-6}</string>
+</dict>
+</plist>

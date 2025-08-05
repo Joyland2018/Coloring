@@ -2,15 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>pet_dog3_ear</key>
+	<key>pet_dog3_1</key>
 	<string>{-50,-6}</string>
-	<key>pet_dog3_yellow</key>
+	<key>pet_dog3_2</key>
 	<string>{-50,-6}</string>
-	<key>pet_dog3_body</key>
+	<key>pet_dog3_3</key>
 	<string>{-50,-6}</string>
-	<key>pet_dog3_foot</key>
+	<key>pet_dog3_4</key>
 	<string>{-50,-6}</string>
-	<key>pet_dog3_eyes</key>
+	<key>pet_dog3_5</key>
 	<string>{-50,-6}</string>
 	<key>coloringType_line</key>
 	<string>{-50,-6}</string>

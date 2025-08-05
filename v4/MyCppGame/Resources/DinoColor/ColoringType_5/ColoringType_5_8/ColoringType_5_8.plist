@@ -10,6 +10,8 @@
 	<string>{-90,-6}</string>
 	<key>ocean_lobster_eye</key>
 	<string>{-90,-6}</string>
+	<key>ocean_lobster_body2</key>
+	<string>{-90,-6}</string>
 	<key>coloringType_line</key>
 	<string>{-90,-6}</string>
 </dict>

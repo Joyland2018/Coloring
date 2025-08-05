@@ -2,21 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>zoo_rabbit_head</key>
+	<key>zoo_rabbit_1</key>
 	<string>{-50,-6}</string>
-	<key>zoo_rabbit_hair</key>
+	<key>zoo_rabbit_2</key>
 	<string>{-50,-6}</string>
-	<key>zoo_rabbit_mouth</key>
+	<key>zoo_rabbit_3</key>
 	<string>{-50,-6}</string>
-	<key>zoo_rabbit_ear</key>
+	<key>zoo_rabbit_4</key>
 	<string>{-50,-6}</string>
-	<key>zoo_rabbit_body</key>
-	<string>{-50,-6}</string>
-	<key>zoo_rabbit_belly</key>
-	<string>{-50,-6}</string>
-	<key>zoo_rabbit_eye</key>
-	<string>{-50,-6}</string>
-	<key>zoo_rabbit_tooth</key>
+	<key>zoo_rabbit_5</key>
 	<string>{-50,-6}</string>
 	<key>coloringType_line</key>
 	<string>{-50,-6}</string>

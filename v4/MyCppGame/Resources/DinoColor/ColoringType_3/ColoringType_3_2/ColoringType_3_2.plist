@@ -2,17 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>pet_cat2_body</key>
+	<key>pet_cat2_1</key>
 	<string>{-50,-6}</string>
-	<key>pet_cat2_foot</key>
+	<key>pet_cat2_2</key>
 	<string>{-50,-6}</string>
-	<key>pet_cat2_ear</key>
-	<string>{-50,-6}</string>
-	<key>pet_cat2_face</key>
-	<string>{-50,-6}</string>
-	<key>pet_cat2_belly</key>
-	<string>{-50,-6}</string>
-	<key>pet_cat2_eye</key>
+	<key>pet_cat2_3</key>
 	<string>{-50,-6}</string>
 	<key>coloringType_line</key>
 	<string>{-50,-6}</string>

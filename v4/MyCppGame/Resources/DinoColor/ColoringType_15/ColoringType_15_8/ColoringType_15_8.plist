@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>dino_pizza_1</key>
+	<string>{-75,-3}</string>
+	<key>dino_pizza_2</key>
+	<string>{-75,-3}</string>
+	<key>dino_pizza_3</key>
+	<string>{-75,-3}</string>
+	<key>dino_pizza_4</key>
+	<string>{-75,-3}</string>
+	<key>dino_pizza_5</key>
+	<string>{-75,-3}</string>
+	<key>dino_pizza_6</key>
+	<string>{-75,-3}</string>
+	<key>dino_pizza_7</key>
+	<string>{-75,-3}</string>
+	<key>dino_pizza_8</key>
+	<string>{-75,-3}</string>
+	<key>coloringType_line</key>
+	<string>{-75,-3}</string>
+</dict>
+</plist>
